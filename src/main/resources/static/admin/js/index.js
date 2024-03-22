@@ -44,18 +44,11 @@ function selectFile(file) {
     event.preventDefault();
     const imgElement = $("#img-preview");
     var reader = new FileReader();
-    console.log(file.type);
-// Kiểm tra định dạng của file
-    if (file.type === 'image/jpeg' || file.type === 'image/png' || file.type === 'image/bmp') {
         reader.onload = function (event) {
             imgElement.attr("src", event.target.result);
             $('#img-hidden').val(event.target.result);
         };
         reader.readAsDataURL(file);
-    } else {
-        alert("Chỉ chấp nhận các tệp ảnh JPEG, PNG, hoặc BMP.");
-    }
-
     // }
 }
 
@@ -82,6 +75,8 @@ function submitBrandForm(form) {
 
 function submitForm(form,redirect) {
     if (validateForm()){
+        var button = $('#save-button');
+        button.html(`<div class="loader"></div>`)
         var formData = $(form).serialize();
         $.ajax({
             type: 'POST',
@@ -93,6 +88,7 @@ function submitForm(form,redirect) {
             },
             error: function (xhr, status, error) {
                 alert(xhr.responseText);
+                button.html('Lưu');
             },
         });
     }

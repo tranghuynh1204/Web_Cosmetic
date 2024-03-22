@@ -27,23 +27,27 @@
                 <div class="col">
                     <input type="hidden" th:field="*{id}">
                     <label for="name">Tên thương hiệu:</label>
-                    <input id="name" placeholder="Nhập tên thương hiệu"  type="text" th:field="*{name}"/>
+                    <input id="name" placeholder="Nhập tên thương hiệu" type="text" th:field="*{name}" required/>
                     <label for="description">Mô tả thương hiệu:</label>
                     <textarea id="description" placeholder="Nhập mô tả thương hiệu"
-                              th:field="*{description}"></textarea>
+                              th:field="*{description}" required></textarea>
                 </div>
                 <div class="col">
-                    <input type="file" id="file-select" name="fileInput" accept="image/jpeg, image/png, image/bmp"
+                    <input type="file" id="file-select" name="fileInput" accept="image/*"
                            onchange="selectFile(this.files[0])"/>
                     <div id="image-drop" ondrop="selectFile(event.dataTransfer.files[0])">
                         <p id="img-label">Kéo và thả ảnh vào đây hoặc</p>
-                        <img id="img-preview" th:src="${brand.logo}"/>
+                        <img id="img-preview" th:src="${brand.logo}" loading="lazy" decoding="async"
+                             referrerpolicy="no-referrer"/>
                         <input id="img-hidden" name="image" type="hidden"/>
                     </div>
                 </div>
             </div>
             <div class="row-button">
-                <button id="save-button" class="button"  onclick="submitBrandForm(this.form)">Lưu</button>
+                <button id="save-button" class="button" onclick="submitBrandForm(this.form)">
+                    Lưu
+
+                </button>
                 <button id="cancel-button" class="button">Huỷ</button>
             </div>
         </form>
