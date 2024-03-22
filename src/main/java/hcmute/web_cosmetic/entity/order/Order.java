@@ -17,6 +17,7 @@ import java.util.List;
 public class Order extends IdBasedEntity {
 
     private Date orderTime;
+    private Date timeReceived;
 
     private String nameCustomer;
 
@@ -32,6 +33,8 @@ public class Order extends IdBasedEntity {
     @OneToMany
     private List<OrderDetail> details;
 
+    @Enumerated(EnumType.STRING)
+    private PaymentMethod method;
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
 }
