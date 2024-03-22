@@ -15,8 +15,8 @@ public class CloudinaryUtil {
 
     public static void uploadImage(String base64Image,Long id) {
         try {
-            byte[] imageBytes = Base64ImageUtil.getBytesFromBase64(base64Image);
-            Map uploadResult = cloudinary.uploader().upload(imageBytes, ObjectUtils.asMap(
+            byte[] imageBytes = Base64ImageUtil.getBytes(base64Image);
+            cloudinary.uploader().upload(imageBytes, ObjectUtils.asMap(
                     "public_id","brand_"+id,
                     "overwrite", true,
                     "format", "png",
