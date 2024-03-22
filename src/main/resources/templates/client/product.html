@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+
+<div th:each="c, iterStat : ${classifications}">
+    <div th:text="${c}" th:id="'container-'+${iterStat.index}"></div>
+</div>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    var products = /*[[${products}]]*/ {};
+    const keys = /*[[${keys}]]*/ [];
+    document.addEventListener("DOMContentLoaded", function () {
+        for (let columnIndex = 0; columnIndex < keys[0].length; columnIndex++) {
+            const uniqueValuesInColumn = new Set();
+            const fragment = document.createDocumentFragment();
+            for (let rowIndex = 0; rowIndex < keys.length; rowIndex++) {
+                const cellValue = keys[rowIndex][columnIndex];
+                if (!uniqueValuesInColumn.has(cellValue)) {
+                    const button = document.createElement("button");
+                    button.type = "button";
+                    button.innerHTML = cellValue;
+                    button.classList.add('button-' + columnIndex);
+                    fragment.appendChild(button);
+                    uniqueValuesInColumn.add(cellValue);
+                }
+            }
+            $('#container-'+columnIndex).append(fragment);
+            $('.button-' + columnIndex).on('click', function () {
+                $('.button-' + columnIndex).removeClass('active');
+                $(this).addClass('active');
+                const activeButtons = $('.active');
+                if (activeButtons.length===keys[0].length){
+                    const result = activeButtons.map(function() {
+                        return $(this).text();
+                    }).get().join('-');
+                    console.log(products[result]);
+                }
+            });
+        }
+    });
+    /*]]>*/
+</script>
+</body>
+</html>

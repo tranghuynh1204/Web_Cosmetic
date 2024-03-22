@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div id="list-category" th:each="category : ${categories}">
+        <p th:text="${category.name}"></p>
+</div>
+<div id="nestedListContainer"></div>
+<p th:text="${message}"></p>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    const categories = /*[[${categories}]]*/ [];
+
+    document.addEventListener("DOMContentLoaded", function() {
+        const rootUl = document.createElement("ul");
+        let currentUl = rootUl;
+        let currentDepth = 0;
+
+        categories.forEach(function(category) {
+
+            const depth = (category.name.lastIndexOf("-") + 1) / 2;
+            const categoryName = category.name.trim().replace(/^-+/, "");
+
+            const li = document.createElement("li");
+            li.innerHTML = '<a th:href="@{' + categoryName + '}">' + categoryName + '</a><ul></ul>';
+
+            if (depth > currentDepth) {
+                currentUl = currentUl.lastElementChild.querySelector("ul");
+            } else if (depth < currentDepth) {
+                for (let i = currentDepth; i > depth; i--) {
+                    currentUl = currentUl.parentNode.parentNode;
+                }
+            }
+            currentUl.appendChild(li);
+            currentDepth = depth;
+        });
+
+        document.getElementById("nestedListContainer").appendChild(rootUl);
+    });
+    /*]]>*/
+</script>
+</body>
+</html>

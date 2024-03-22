@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<header id="header" th:fragment="header">
+    <div id="expand-icon">☰</div>
+    <div id="avatar-container">
+        <img th:src="@{/../admin/images/kubo.png}" alt="Avatar">
+        <div id="dropdown-menu">
+            <div class="menu-item">
+                <i class="fas fa-user"></i><a href="#">Account</a>
+            </div>
+            <div class="menu-item">
+                <i class="fas fa-arrow-alt-circle-right"></i><a href="#">Logout</a>
+            </div>
+        </div>
+    </div>
+</header>
+</body>
+</html>
