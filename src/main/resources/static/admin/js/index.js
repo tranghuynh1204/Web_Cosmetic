@@ -44,11 +44,18 @@ function selectFile(file) {
     event.preventDefault();
     const imgElement = $("#img-preview");
     var reader = new FileReader();
-    reader.onload = function (event) {
-        imgElement.attr("src", event.target.result);
-        $('#img-hidden').val(event.target.result);
-    };
-    reader.readAsDataURL(file);
+    console.log(file.type);
+// Kiểm tra định dạng của file
+    if (file.type === 'image/jpeg' || file.type === 'image/png' || file.type === 'image/bmp') {
+        reader.onload = function (event) {
+            imgElement.attr("src", event.target.result);
+            $('#img-hidden').val(event.target.result);
+        };
+        reader.readAsDataURL(file);
+    } else {
+        alert("Chỉ chấp nhận các tệp ảnh JPEG, PNG, hoặc BMP.");
+    }
+
     // }
 }
 
@@ -102,22 +109,4 @@ function validateForm() {
         }
     });
     return isValid;
-}
-function convertToPNG(file) {
-    var reader = new FileReader();
-    reader.onload = function(event) {
-        var img = new Image();
-        img.onload = function() {
-            var canvas = document.createElement('canvas');
-            canvas.width = img.width;
-            canvas.height = img.height;
-            var ctx = canvas.getContext('2d');
-            ctx.drawImage(img, 0, 0);
-            var pngDataUrl = canvas.toDataURL('image/png');
-            // Đoạn mã ở đây sẽ làm gì đó với pngDataUrl, ví dụ: hiển thị hình ảnh hoặc lưu nó
-            console.log(pngDataUrl);
-        };
-        img.src = event.target.result;
-    };
-    reader.readAsDataURL(file);
 }
