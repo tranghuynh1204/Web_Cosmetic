@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form th:action="@{/categories/save}" th:object="${category}" method="post">
+    <input type="text" th:field="*{name}">
+    <select th:field="*{parent}">
+        <option value="0">[No Parent]</option>
+        <th:block th:each="cate : ${categories}">
+            <option th:value="${cate.id}">[[${cate.name}]]</option>
+        </th:block>
+    </select>
+    <button type="submit"></button>
+</form>
+</body>
+</html>

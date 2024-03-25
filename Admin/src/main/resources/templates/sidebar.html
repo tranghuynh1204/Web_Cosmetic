@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" type="text/css" href="../../../../../../../Web_Cosmetic/src/main/resources/static/css/main.css"/>
+    <title></title>
+</head>
+<body>
+<div id="sidebar" th:fragment="sidebar">
+    <div id="logo">
+        <img th:src="@{/images/logo.png}" alt="Logo" id="img-logo"/>
+    </div>
+    <ul>
+        <li>
+            <a href="#"><img th:src="@{/images/dashboard-icon.png}" alt="Dashboard"/>
+                <span>Dashboard</span>
+            </a>
+        </li>
+        <li>
+            <a href="#"><img th:src="@{/images/category-icon.png}" alt="Category"/>
+                <span>Danh mục</span>
+            </a>
+        </li>
+        <li>
+            <a th:href="@{/brands}"><img th:src="@{/images/brand-icon.png}" alt="Brand"/>
+                <span>Thương hiệu</span>
+            </a>
+        </li>
+        <li>
+            <a href="#"><img th:src="@{/images/product-icon.png}" alt="Product"/>
+                <span>Sản phẩm</span>
+            </a>
+        </li>
+        <li>
+            <a href="#"><img th:src="@{/images/customer-icon.png}" alt="Customer"/>
+                <span>Khách hàng</span>
+            </a>
+        </li>
+        <li>
+            <a href="#"><img th:src="@{/images/order-icon.png}" alt="Order"/>
+                <span>Đơn hàng</span>
+            </a>
+        </li>
+        <li>
+            <a href="#"><img th:src="@{/images/report-icon.png}" alt="Report"/>
+                <span>Báo cáo doanh thu</span>
+            </a>
+        </li>
+    </ul>
+</div>
+</body>
+</html>

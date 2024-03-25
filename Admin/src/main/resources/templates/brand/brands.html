@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments :: page_head('Thương hiệu')">
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+</head>
+<body>
+<th:block th:replace="sidebar :: sidebar"></th:block>
+<div id="main-content">
+    <th:block th:replace="header :: header"></th:block>
+    <div id="crumbs">
+        <ul>
+            <li>
+                <a th:href="@{/admin}"><i class="fas fa-home"></i></a>
+            </li>
+            <li>
+                <a>Thương hiệu</a>
+            </li>
+        </ul>
+    </div>
+    <main>
+        <div id="brands">
+            <div class="brand-container" th:each="brand : ${brands}">
+                <img th:src="${brand.logo}" alt="Logo" class="brand-logo"/>
+                <span class="brand-name" th:text="${brand.name}"></span>
+                <div class="edit-delete">
+                    <span class="edit-brand">Chỉnh Sửa</span>
+                    <span class="delete-brand">Xoá</span>
+                </div>
+            </div>
+        </div>
+        <th:block th:with="moduleURL='/brands',sortField='name',sortDir='asc'">
+            <div th:replace="fragments :: pagination('Thương hiệu')"></div>
+        </th:block>
+
+
+    </main>
+    <th:block th:replace="footer :: footer"></th:block>
+</div>
+</body>
+</html>

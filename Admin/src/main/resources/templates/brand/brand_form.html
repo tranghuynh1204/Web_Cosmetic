@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments :: page_head(${title})">
+    <title></title>
+</head>
+<body>
+<th:block th:replace="sidebar :: sidebar"></th:block>
+<div id="main-content">
+    <th:block th:replace="header :: header"></th:block>
+    <div id="crumbs">
+        <ul>
+            <li>
+                <a th:href="@{/admin}"><i class="fas fa-home"></i></a>
+            </li>
+            <li>
+                <a th:href="@{/brands}">Thương hiệu</a>
+            </li>
+            <li>
+                <a href="">Thêm thương hiệu</a>
+            </li>
+        </ul>
+    </div>
+    <main>
+        <form method="post" th:action="@{/brands/save}" th:object="${brand}" id="form-brand">
+
+            <div class="row">
+                <div class="col">
+                    <input type="hidden" th:field="*{id}">
+                    <label for="name">Tên thương hiệu:</label>
+                    <input id="name" placeholder="Nhập tên thương hiệu" type="text" th:field="*{name}" required/>
+                    <label for="description">Mô tả thương hiệu:</label>
+                    <textarea id="description" placeholder="Nhập mô tả thương hiệu"
+                              th:field="*{description}" required></textarea>
+                </div>
+                <div class="col">
+                    <input type="file" id="file-select" name="fileInput" accept="image/*"
+                           onchange="selectFile(this.files[0])"/>
+                    <div id="image-drop" ondrop="selectFile(event.dataTransfer.files[0])">
+                        <p id="img-label">Kéo và thả ảnh vào đây hoặc</p>
+                        <img id="img-preview" th:src="${brand.logo}" loading="lazy" decoding="async"
+                             referrerpolicy="no-referrer"/>
+                        <input id="img-hidden" name="image" type="hidden"/>
+                    </div>
+                </div>
+            </div>
+            <div class="row-button">
+                <button id="save-button" class="button" onclick="submitBrandForm(this.form)">
+                    Lưu
+
+                </button>
+                <button id="cancel-button" class="button">Huỷ</button>
+            </div>
+        </form>
+    </main>
+    <th:block th:replace="footer :: footer"></th:block>
+</div>
+</body>
+</html>
