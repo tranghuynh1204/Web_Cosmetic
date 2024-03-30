@@ -40,7 +40,7 @@ body {
     content: "";
     border-top: 25px solid transparent;
     border-bottom: 25px solid transparent;
-    border-left: 25px solid #fdfcfc;
+    border-left: 25px solid #86d5fd;
     position: absolute;
     left: 0;
     top: 0;
@@ -76,7 +76,97 @@ body {
     border-left-color: #fdc335;
     color: #fff;
 }
+/*pagination*/
+.disable-click {
+    pointer-events: none;
+    cursor: default;
+}
+.container-pagination * {
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+}
+.container-pagination {
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+    position: relative;
+    width: 100%;
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+.go-page{
+    position: relative;
+    height:50px;
+    top:60px;
+    width:468px;
+    opacity:0;
+    transition: top 0.3s, opacity 0.3s;
+}
+.go-page.active {
+    top: -5px;
+    opacity: 1;
+}
+.go-page form{
+    width:100%;
+    height:100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+.go-page form button{
+    width:60px;
+    height:100%;
+    border:none;
+    border-top-right-radius: 50px;
+    border-bottom-right-radius: 50px;
+}
+.go-page form input{
+    flex: 1;
+    font-size: 20px;
+    height:100%;
+    border:none;
+    border-top-left-radius: 50px;
+    border-bottom-left-radius: 50px;
+}
 
+.container-pagination .pagination {
+    position: relative;
+    height: 50px;
+    background: rgba(255, 255, 255, 0.05);
+    box-shadow: 5px 5px 30px rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(3px);
+    border-radius: 2px;
+}
+.container-pagination .pagination li {
+    list-style-type: none;
+    display: inline-block;
+    cursor: pointer;
+}
+.container-pagination .pagination li a{
+    position: relative;
+    padding: 15px 20px;
+    text-decoration: none;
+    color: #fff;
+    font-weight: 500;
+}
+
+.container-pagination .pagination li a:hover,
+.container-pagination .pagination li.active a {
+    background: rgba(255, 255, 255, 0.2);
+}
+footer {
+    text-align: right;
+    padding-right:30px;
+    padding-bottom:30px;
+}
 /*sidebar*/
 
 #sidebar {
@@ -145,7 +235,69 @@ body {
 #logo {
     margin-bottom: 20px;
 }
+/*search bar*/
+#search-bar {
+    margin: 0;
+    padding-top:10px ;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    padding-left:80px;
+}
 
+.search-box {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.search-box .input-box {
+    background: rgb(33, 82, 115);
+    padding: 15px;
+    border-radius: 30px;
+    width: 0;
+    transition: 0.55s;
+}
+.search-box .input-box.active {
+    width: 500px;
+}
+
+.search-box .input-box input {
+    width: 100%;
+    background: transparent;
+    padding-right: 50px;
+    border: none;
+    outline: none;
+    color: white;
+    font-size: 17px;
+}
+.search-box .input-box input::placeholder {
+    color: rgb(170, 170, 179);
+}
+.search-box .search-button {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgb(53, 157, 158);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    right: 0;
+    box-shadow: 0 0 0 10px aliceblue;;
+    cursor: pointer;
+}
+
+.search-box .search-button img {
+    width: 22px;
+    height: 22px;
+}
+
+.search-box:hover > .input-box {
+    width: 500px;
+}
 /*header*/
 
 #header {
@@ -216,6 +368,7 @@ body {
 #main-content {
     margin-left: 70px;
     transition: margin 0.5s;
+    background-color: #86d5fd;
 }
 
 #main-content.expanded {
@@ -270,7 +423,7 @@ main {
 #img-preview {
     width: 100%;
     height: 100%;
-    position: absolute; /* Ãƒâ€žÃ‚ÂÃƒÂ¡Ã‚ÂºÃ‚Â£m bÃƒÂ¡Ã‚ÂºÃ‚Â£o hÃƒÆ’Ã‚Â¬nh ÃƒÂ¡Ã‚ÂºÃ‚Â£nh nÃƒÂ¡Ã‚ÂºÃ‚Â±m trong phÃƒÂ¡Ã‚ÂºÃ‚Â§n tÃƒÂ¡Ã‚Â»Ã‚Â­ cha */
+    position: absolute;
     z-index: 1;
     top: 0;
 
@@ -333,7 +486,7 @@ main {
     filter: brightness(0.9);
 }
 
-/*cái xoay xoay lúc load*/
+
 .loader {
     width: 48px;
     height: 48px;
@@ -370,8 +523,8 @@ main {
 /*brand*/
 .brand-container {
     position: relative;
-    width: 200px; /* Thay đổi kích thước tùy ý */
-    height: 230px; /* Thay đổi kích thước tùy ý */
+    width: 200px;
+    height: 230px;
     border: 1px solid #ccc;
     padding: 10px;
     overflow: hidden;
@@ -379,7 +532,7 @@ main {
 }
 
 .brand-logo {
-    width: 200px; /* Thay đổi kích thước tùy ý */
+    width: 200px;
     height: 200px;
 }
 
@@ -397,23 +550,26 @@ main {
     display: flex;
     width: 100%;
     bottom: -140px;
+    flex-direction: column;
     left: 0;
-    flex-direction: column; /* Hiển thị các phần tử theo chiều dọc */
-    justify-content: center; /* Căn giữa các phần tử theo chiều dọc */
     align-items: center;
+    justify-content: center;
     padding: 0 0 50px 0;
     transition: bottom 0.5s ease;
 }
 
-.brand-container span {
+.edit-delete * {
     cursor: pointer;
     margin: 0;
     font-size: 20px;
     width: 100%;
-    display: flex; /* Đặt phần tử span là flex container */
-    justify-content: center; /* Căn giữa theo chiều ngang */
+    display: flex;
+    justify-content: center;
     align-items: center;
     padding: 10px 0 10px 0;
+    text-decoration: none;
+    color: white;
+    transition: background-color 0.3s ease, font-size 0.3s ease;
 }
 
 .brand-container:hover .edit-delete {
@@ -429,4 +585,17 @@ main {
     flex-wrap: wrap;
     width: 100%;
     justify-content:center;
+}
+#add-icon img, #sort-icon img{
+    width:40px;
+    transition: transform 0.3s ease;
+}
+#add-icon, #sort-icon{
+    margin:10px;
+}
+#sort-icon{
+    margin-right:60px;
+}
+#add-icon:hover img {
+    transform: scale(1.3); /* Phóng to hình ảnh lên 1.2 lần kích thước ban đầu */
 }

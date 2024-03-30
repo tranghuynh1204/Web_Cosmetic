@@ -25,9 +25,8 @@ public class CloudinaryUtil {
             throw new RuntimeException(e);
         }
     }
-    public static void deleteImage(String imageUrl) {
+    public static void deleteImage(String publicId) {
         try {
-            String publicId = imageUrl.substring(imageUrl.lastIndexOf('/') + 1);
             cloudinary.uploader().destroy(publicId, ObjectUtils.emptyMap());
         } catch (IOException e) {
             throw new RuntimeException(e);

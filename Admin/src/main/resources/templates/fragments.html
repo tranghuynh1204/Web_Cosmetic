@@ -8,7 +8,6 @@
     <link rel="stylesheet" th:href="@{/css/main.css}">
     <script th:src="@{/js/index.js}"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-
     <script th:inline="javascript">
         $(document).ready(function () {
             /*<![CDATA[*/
@@ -18,44 +17,57 @@
             }
             /*]]>*/
         });
-
     </script>
-
 </head>
 <body>
-<div th:fragment="pagination(entityName)">
-    <div class="text-center m-1" th:if="${totalItems > 0}">
+<div th:fragment="pagination(entityName,moduleURL)">
+    <div class="row"  th:if="${totalItems > 0}">
         <span>[[${entityName}]] # [[${startCount}]] to [[${endCount}]] of [[${totalItems}]]</span>
     </div>
-    <div class="text-center m-1" th:unless="${totalItems > 0}">
+    <div class="row" th:unless="${totalItems > 0}">
         <span>Không tìm thấy</span>
     </div>
 
-    <div th:if="${totalPages > 1}">
-        <nav aria-label="Page navigation example">
-            <ul class="pagination pagination-danger justify-content-center">
-                <li th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}">
-                    <a th:replace="fragments :: page_link(${moduleURL}, 1, 'First')"></a>
-                </li>
-                <li th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}">
-                    <a th:replace="fragments :: page_link(${moduleURL}, ${currentPage - 1}, '&laquo;')"></a>
-                </li>
-                <li th:class="${currentPage != i ? 'page-item': 'page-item active'}"
-                    th:each="i : ${#numbers.sequence(1, totalPages)}">
-                    <a th:replace="fragments :: page_link(${moduleURL}, ${i}, ${i})"></a>
-                </li>
-                <li th:class="${currentPage < totalPages ? 'page-item' : 'page-item disabled'}">
-                    <a th:replace="fragments :: page_link(${moduleURL}, ${currentPage + 1}, '&raquo;')"></a>
-                </li>
-                <li th:class="${currentPage < totalPages ? 'page-item' : 'page-item disabled'}">
-                    <a th:replace="fragments :: page_link(${moduleURL}, ${totalPages}, 'Last')"></a>
-                </li>
-            </ul>
-        </nav>
+    <div th:if="${totalPages > 1}" class="container-pagination">
+        <div class="go-page">
+            <form action='/admin/brands/page/' id="form-go">
+                <input type="hidden" name="sortField" th:value="${sortField}" />
+                <input type="hidden" name="sortDir" th:value="${sortDir}" />
+                <input th:if="${keyword!=null}" type="hidden" name="keyword" th:value="${keyword}" />
+                <input type="number" placeholder="Nhập page cần đến" id="input-go" min="1" th:max="${totalPages}" th:value="${currentPage}">
+                <button type="submit" id="button-go">Go</button>
+            </form>
+        </div>
+        <ul class="pagination">
+            <li th:classappend="${currentPage == 1} ? 'disable-click'">
+                <a th:replace="fragments :: page_link(${moduleURL}, 1, 'First')"></a>
+            </li>
+            <li th:if="${currentPage > 2}">
+                <a th:replace="fragments :: page_link(${moduleURL}, ${currentPage - 2}, ${currentPage - 2})"></a>
+            </li>
+            <li th:if="${currentPage > 1}">
+                <a th:replace="fragments :: page_link(${moduleURL}, ${currentPage - 1}, ${currentPage - 1})"></a>
+            </li>
+            <li class="disable-click active">
+                <a th:replace="fragments :: page_link(${moduleURL}, ${currentPage}, ${currentPage})"></a>
+            </li>
+            <li th:if="${currentPage < totalPages}">
+                <a th:replace="fragments :: page_link(${moduleURL}, ${currentPage + 1}, ${currentPage + 1})"></a>
+            </li>
+            <li th:if="${currentPage < totalPages - 1}">
+                <a th:replace="fragments :: page_link(${moduleURL}, ${currentPage + 2}, ${currentPage + 2})"></a>
+            </li>
+            <li>
+                <a id="go">Go</a>
+            </li>
+            <li th:classappend="${currentPage == totalPages} ? 'disable-click'">
+                <a th:replace="fragments :: page_link(${moduleURL}, ${totalPages}, 'Last')"></a>
+            </li>
+        </ul>
     </div>
 </div>
-<a th:href="@{${moduleURL} + '/page/' + ${pageNum} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + ${keyword != null ? '&keyword=' + keyword : ''}}"
-        th:fragment="page_link(moduleURL, pageNum, label)" class="page-link">
+<a th:href="@{${moduleURL} + '/page/' + ${pageNum} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + ${keyWord != null ? '&keyWord=' + keyWord : ''}}"
+   th:fragment="page_link(moduleURL, pageNum, label)" class="page-link">
     [[${label}]]
 </a>
 </body>

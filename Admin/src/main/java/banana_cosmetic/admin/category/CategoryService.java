@@ -69,7 +69,7 @@ public class CategoryService {
             categories = pageCategories.getContent();
         }
 
-        pageInfo.addAttribute(pageCategories);
+        pageInfo.addAttribute(pageCategories, sortDir, "name", keyWord);
 
         return categories.stream()
                 .map(category -> mapper.map(category, CategoryDto.class))

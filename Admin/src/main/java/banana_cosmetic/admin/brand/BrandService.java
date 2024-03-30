@@ -18,13 +18,13 @@ import java.util.stream.Collectors;
 @Service
 public class BrandService {
 
-    private static final int BRAND_PER_PAGE = 10;
+    private static final int BRAND_PER_PAGE = 15;
     @Autowired
     private BrandRepository repository;
     @Autowired
     private ModelMapper mapper;
 
-    public List<BrandDto> listByPage(PaginationUtil pageInfo, int pageNum, String sortDir, String keyWord) {
+    public List<BrandDto> listByPage(PaginationUtil<Brand> pageInfo, int pageNum, String sortDir, String keyWord) {
 
         Sort sort = Sort.by("name");
 
@@ -46,7 +46,7 @@ public class BrandService {
         }
         brands = pageBrands.getContent();
 
-        pageInfo.addAttribute(pageBrands);
+        pageInfo.addAttribute(pageBrands,sortDir,"name",keyWord);
 
         return brands.stream()
                 .map(brand -> mapper.map(brand, BrandDto.class))

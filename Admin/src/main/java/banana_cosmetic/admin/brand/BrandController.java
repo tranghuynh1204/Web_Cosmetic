@@ -29,16 +29,19 @@ public class BrandController {
     @GetMapping("/page/{pageNum}")
     public String listByPage(@PathVariable int pageNum, String sortDir, String keyWord, Model model) {
 
+        if (sortDir == null || sortDir.isEmpty()) {
+            sortDir = "asc";
+        }
         PaginationUtil<Brand> pageInfo = new PaginationUtil<>(model);
         List<BrandDto> brands = service.listByPage(pageInfo, pageNum, sortDir, keyWord);
-        model.addAttribute("brands",brands);
+        model.addAttribute("brands", brands);
         return "brand/brands";
     }
 
     @GetMapping("/add")
     public String addBrand(Model model) {
         model.addAttribute("brand", new Brand());
-        model.addAttribute("title","Thêm thương hiệu");
+        model.addAttribute("title", "Thêm thương hiệu");
         return "brand/brand_form";
     }
 
@@ -51,7 +54,7 @@ public class BrandController {
             red.addFlashAttribute("message", e.getMessage());
             return "redirect:/brands";
         }
-        model.addAttribute("title","Sửa thương hiệu");
+        model.addAttribute("title", "Sửa thương hiệu");
         return "brand/brand_form";
     }
 
@@ -69,14 +72,15 @@ public class BrandController {
         }
     }
 
-    @GetMapping("/delete/{id}")
-    public String deleteBrand(@PathVariable Long id, RedirectAttributes red) {
+    @PostMapping("/delete/{id}")
+    @ResponseBody
+    public ResponseEntity<String> deleteBrand(@PathVariable Long id) {
         try {
             service.delete(id);
-            red.addFlashAttribute("message", "Xoá thành công");
+            CloudinaryUtil.deleteImage("brand_" + id);
+            return new ResponseEntity<>("Xoá thành công", HttpStatus.OK);
         } catch (Exception e) {
-            red.addFlashAttribute("message", e.getMessage());
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
-        return "redirect:/brands";
     }
 }

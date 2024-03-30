@@ -10,11 +10,12 @@ public class PaginationUtil<T> {
         this.model = model;
     }
 
-    public void addAttribute(Page<T> page) {
+    public void addAttribute(Page<T> page, String sortDir, String sortField, String keyWord) {
         int pageSize = page.getSize();
 
         long startCount = (long) page.getNumber() * page.getSize() + 1;
         long endCount = startCount + pageSize - 1;
+
         if (endCount > page.getTotalElements()) {
             endCount = page.getTotalElements();
         }
@@ -22,6 +23,10 @@ public class PaginationUtil<T> {
         model.addAttribute("totalPages", page.getTotalPages());
         model.addAttribute("startCount", startCount);
         model.addAttribute("endCount", endCount);
+        model.addAttribute("sortDir", sortDir);
+        model.addAttribute("sortField", sortField);
+        model.addAttribute("keyWord", keyWord);
         model.addAttribute("totalItems", page.getTotalElements());
+
     }
 }
