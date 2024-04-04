@@ -24,10 +24,12 @@
     <main>
         <form th:action="@{/categories/save}" th:object="${category}" method="post">
             <div class="row-category">
+                <input type="text" th:field="*{id}">
                 <label for="name">Tên thương hiệu:</label>
                 <input type="text" th:field="*{name}" id="name">
                 <label for="category-parent">Danh mục cha:</label>
-                <input type="text" id="category-parent" readonly>
+                <input type="text" id="category-parent" readonly
+                       th:value="${category.parent != null ? category.parent.name : ''}">
                 <input type="hidden" th:field="*{parent}" id="parent-id" >
             </div>
             <p>Nháy đúp chuột để chọn danh mục cha.</p>
