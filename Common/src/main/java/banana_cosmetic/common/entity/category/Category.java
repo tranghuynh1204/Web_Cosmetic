@@ -11,7 +11,7 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-public class Category extends IdBasedEntity {
+public class Category extends IdBasedEntity implements Cloneable {
 
     private String name;
     private String allParentIds;
@@ -23,5 +23,14 @@ public class Category extends IdBasedEntity {
     private List<Category> children;
 
     public Category() {
+    }
+
+    @Override
+    public Category clone() {
+        try {
+            return (Category) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
     }
 }

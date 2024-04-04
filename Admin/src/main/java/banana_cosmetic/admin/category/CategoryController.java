@@ -51,12 +51,12 @@ public class CategoryController {
     public String editCategory(@PathVariable Long id, Model model, RedirectAttributes red) {
 
         try {
-            List<CategoryDto> categories = service.getAll();
             Category category = service.get(id);
-
-            model.addAttribute("category", category);
+            Category cateClone = category.clone();
+            List<CategoryDto> categories = service.getAll();
+            model.addAttribute("category", cateClone);
             model.addAttribute("categories", categories);
-
+            model.addAttribute("title", "Sửa danh mục");
             return "category/category_form";
         } catch (Exception ex) {
             red.addFlashAttribute("message", ex.getMessage());
