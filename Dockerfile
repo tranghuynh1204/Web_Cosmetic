@@ -2,7 +2,7 @@
 FROM maven:3.8.5-openjdk-17 AS admin-build
 WORKDIR /app/admin
 COPY Admin /app/admin
-RUN mvn clean package -DskipTests
+RUN mvn -f /app/admin/pom.xml clean package -DskipTests
 
 
 FROM openjdk:17-jdk-slim
