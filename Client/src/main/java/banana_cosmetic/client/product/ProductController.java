@@ -16,15 +16,15 @@ public class ProductController {
     @GetMapping("/product/{nameProductLine}")
     public String viewProduct(@PathVariable String nameProductLine, Model model){
 
-        ProductLine productLine = service.get(nameProductLine);
-        String[] classifications = productLine.getClassifications().split("-");
-        String[][] keys = productLine.getProducts().keySet().stream()
-                .map(key -> key.split("-"))
-                .toArray(String[][]::new);
-        model.addAttribute("productLine",productLine);
-        model.addAttribute("products",productLine.getProducts());
-        model.addAttribute("classifications",classifications);
-        model.addAttribute("keys",keys);
-        return "client/product";
+//        ProductLine productLine = service.get(nameProductLine);
+//        String[] classifications = productLine.getClassifications().split("-");
+//        String[][] keys = productLine.getProducts().keySet().stream()
+//                .map(key -> key.split("-"))
+//                .toArray(String[][]::new);
+//        model.addAttribute("productLine",productLine);
+//        model.addAttribute("products",productLine.getProducts());
+//        model.addAttribute("classifications",classifications);
+//        model.addAttribute("keys",keys);
+        return "product";
     }
 }

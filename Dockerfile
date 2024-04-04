@@ -19,4 +19,4 @@ RUN mvn clean package -DskipTests
 EXPOSE 8080
 
 # Chạy ứng dụng Spring Boot khi container được khởi chạy
-CMD ["java", "-jar", "/app/Admin/target/admin.jar"]
+CMD ["java", "-jar", "/app/Admin/target/*.jar"]
