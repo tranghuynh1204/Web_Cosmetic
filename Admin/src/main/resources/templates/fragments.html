@@ -18,13 +18,16 @@
             /*]]>*/
         });
     </script>
+    <style>/* CSS for ul */
+
+    </style>
 </head>
 <body>
 <div th:fragment="pagination(entityName,moduleURL)">
-    <div class="row"  th:if="${totalItems > 0}">
+    <div class="row-brand" th:if="${totalItems > 0}">
         <span>[[${entityName}]] # [[${startCount}]] to [[${endCount}]] of [[${totalItems}]]</span>
     </div>
-    <div class="row" th:unless="${totalItems > 0}">
+    <div class="row-brand" th:unless="${totalItems > 0}">
         <span>Không tìm thấy</span>
     </div>
 

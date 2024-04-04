@@ -14,12 +14,12 @@ import java.util.Date;
 @Setter
 public class Feedback extends IdBasedEntity{
 
-    @Column(length = 4096)
+    @Column(columnDefinition = "TEXT")
     private String comment;
     private int rate;
     private Date feedbackTime;
     @ManyToOne
     private Product product;
     @ManyToOne
-    private Customer customer;
+    private User customer;
 }

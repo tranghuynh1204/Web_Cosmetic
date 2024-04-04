@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.List;
+
 @Getter
 @Setter
 @Entity
@@ -17,7 +18,7 @@ public class Category extends IdBasedEntity {
     @ManyToOne
     private Category parent;
     @JsonIgnore
-    @OneToMany
+    @OneToMany(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "parent_id")
     private List<Category> children;
 

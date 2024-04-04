@@ -5,6 +5,7 @@ import banana_cosmetic.common.entity.category.CategoryDto;
 import banana_cosmetic.common.util.PaginationUtil;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -36,7 +37,11 @@ public class CategoryService {
 
     public void delete(Long id) throws Exception {
         Category category = get(id);
-        repository.delete(category);
+        try {
+            repository.delete(category);
+        } catch (DataIntegrityViolationException e) {
+            throw new Exception("Vẫn còn sản phẩm mang thương hiệu " + category.getName() + ".");
+        }
     }
 
     public List<CategoryDto> getAll() {
@@ -46,7 +51,7 @@ public class CategoryService {
         return categories.stream().map(category -> mapper.map(category, CategoryDto.class)).collect(Collectors.toList());
     }
 
-    public List<CategoryDto> listByPage(PaginationUtil pageInfo, int pageNum, String sortDir, String keyWord) {
+    public List<CategoryDto> listByPage(PaginationUtil<Category> pageInfo, int pageNum, String sortDir, String keyWord) {
         Sort sort = Sort.by("name");
 
         if (sortDir.equals("asc")) {
@@ -87,7 +92,6 @@ public class CategoryService {
                 categories.addAll(subCategories);
             }
         }
-
         return categories;
     }
 
@@ -99,16 +103,13 @@ public class CategoryService {
 
         for (Category category : subCategories) {
             String name = "--".repeat(subLevel) + category.getName();
-
             categories.add(category);
-
             category.setName(name);
             if (!category.getChildren().isEmpty()) {
                 List<Category> listSubCategories = listSubHierarchicalCategories(category.getChildren(), sortDir, subLevel + 1);
                 categories.addAll(listSubCategories);
             }
         }
-
         return categories;
     }
 

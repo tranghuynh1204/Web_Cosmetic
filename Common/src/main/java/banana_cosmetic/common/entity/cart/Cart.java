@@ -1,7 +1,7 @@
 package banana_cosmetic.common.entity.cart;
 
-import banana_cosmetic.common.entity.Customer;
 import banana_cosmetic.common.entity.IdBasedEntity;
+import banana_cosmetic.common.entity.User;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
@@ -17,14 +17,14 @@ import java.util.List;
 public class Cart extends IdBasedEntity {
 
     @OneToOne
-    private Customer customer;
+    private User customer;
     @JoinColumn(name = "cart_id")
     @OneToMany
     private List<LineItem> items;
 
     public Cart() {}
 
-    public Cart(Customer customer) {
+    public Cart(User customer) {
         this.customer = customer;
         items = new ArrayList<>();
     }

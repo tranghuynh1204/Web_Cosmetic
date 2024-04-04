@@ -8,7 +8,6 @@ import jakarta.persistence.Entity;
 public class ProductImage extends IdBasedEntity {
 
     private String name;
-
     public ProductImage() {}
 
 }

@@ -116,6 +116,7 @@ function submitBrandForm(form) {
 }
 
 function submitForm(form) {
+    event.preventDefault();
     if (validateForm()) {
         var button = $('#save-button');
         button.html(`<div class="loader"></div>`)
@@ -167,7 +168,11 @@ function deleteRequest(brand, nameEntity, action) {
         });
     }
 }
-
+$(document).ready(function() {
+    $("#cancel-button").click(function() {
+        window.history.back(); // Quay lại trang trước đó
+    });
+});
 $(document).ready(function () {
     $('#button-go').click(function (event) {
 
@@ -186,3 +191,6 @@ $(document).ready(function () {
         // Gửi form đi
     });
 });
+
+
+

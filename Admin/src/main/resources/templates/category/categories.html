@@ -1,46 +1,85 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
+<head th:replace="fragments :: page_head('Danh mục')">
     <meta charset="UTF-8">
     <title>Title</title>
+
 </head>
 <body>
-<div id="list-category" th:each="category : ${categories}">
-        <p th:text="${category.name}"></p>
+<th:block th:replace="sidebar :: sidebar"></th:block>
+<div id="main-content">
+    <th:block th:replace="header :: header"></th:block>
+    <div id="crumbs">
+        <ul>
+            <li>
+                <a th:href="@{/}"><i class="fas fa-home"></i></a>
+            </li>
+            <li>
+                <a>Danh mục</a>
+            </li>
+        </ul>
+    </div>
+    <main>
+        <div class="row-brand">
+            <div id="search-bar">
+                <form class="search-box" th:action="@{/categories/page/1}">
+                    <div class="input-box">
+                        <input type="hidden" name="sortField" th:value="${sortField}">
+                        <input type="hidden" name="sortDir" th:value="${sortDir}">
+                        <input type="text" placeholder="Nhập tên danh mục..." name="keyWord" id="input-search"/>
+                    </div>
+                    <div class="search-button">
+                        <button style="background-color: rgba(0,0,0,0);border-radius:50%;border: none">
+                            <img
+                                    th:src="@{/images/search-icon.png}"
+                                    alt="search"/>
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <a id="add-icon" th:href="@{'/categories/add'}">
+                <img th:src="@{/images/add-icon.png}">
+            </a>
+            <a id="sort-icon"
+               th:href="@{'/categories/page/' + ${currentPage} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir == 'asc' ? 'desc' : 'asc'} + ${keyWord != null? '&keyWord=' + keyWord : ''}}">
+                <img th:src="@{${sortDir == 'asc' ? '/images/asc-icon.png' : '/images/desc-icon.png'}}" alt="Icon">
+            </a>
+        </div>
+        <div id="tree-categories"></div>
+    </main>
+    <div th:replace="fragments :: pagination('Danh mục','/categories')"></div>
+    <th:block th:replace="footer :: footer"></th:block>
 </div>
-<div id="nestedListContainer"></div>
-<p th:text="${message}"></p>
 <script th:inline="javascript">
     /*<![CDATA[*/
     const categories = /*[[${categories}]]*/ [];
 
-    document.addEventListener("DOMContentLoaded", function() {
-        const rootUl = document.createElement("ul");
+    $(document).ready(function () {
+        const rootUl = $("<ul></ul>")
         let currentUl = rootUl;
         let currentDepth = 0;
 
-        categories.forEach(function(category) {
-
+        categories.forEach(function (category) {
             const depth = (category.name.lastIndexOf("-") + 1) / 2;
-            const categoryName = category.name.trim().replace(/^-+/, "");
-
-            const li = document.createElement("li");
-            li.innerHTML = '<a th:href="@{' + categoryName + '}">' + categoryName + '</a><ul></ul>';
-
+            const name = category.name.trim().replace(/^-+/, "");
+            const ul = $("<ul></ul>")
+            const span = $("<span></span>").html(name).attr("id",category.id);
+            const li = $("<li></li>").append(span).append(ul); // Thêm thẻ <ul> vào trong thẻ <li>
             if (depth > currentDepth) {
-                currentUl = currentUl.lastElementChild.querySelector("ul");
+                currentUl = currentUl.children("li:last").children("ul");
             } else if (depth < currentDepth) {
                 for (let i = currentDepth; i > depth; i--) {
-                    currentUl = currentUl.parentNode.parentNode;
+                    currentUl = currentUl.parent().parent();
                 }
             }
-            currentUl.appendChild(li);
+            currentUl.append(li);
             currentDepth = depth;
         });
 
-        document.getElementById("nestedListContainer").appendChild(rootUl);
+        $("#tree-categories").append(rootUl);
     });
     /*]]>*/
 </script>
+<script th:src="@{/js/category.js}"></script>
 </body>
 </html>

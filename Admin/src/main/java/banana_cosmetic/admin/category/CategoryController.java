@@ -2,8 +2,11 @@ package banana_cosmetic.admin.category;
 
 import banana_cosmetic.common.entity.category.Category;
 import banana_cosmetic.common.entity.category.CategoryDto;
+import banana_cosmetic.common.util.CloudinaryUtil;
 import banana_cosmetic.common.util.PaginationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -19,29 +22,28 @@ public class CategoryController {
     private CategoryService service;
 
     @GetMapping("")
-    public List<CategoryDto> listFirstPage(String sortDir, Model model) {
-        return listByPage(1, sortDir, null, model);
+    public String listFirstPage(Model model) {
+        return listByPage(1, "asc", null, model);
     }
 
     @GetMapping("/page/{pageNum}")
-    public List<CategoryDto> listByPage(@PathVariable int pageNum, String sortDir, String keyWord, Model model) {
+    public String listByPage(@PathVariable int pageNum, String sortDir, String keyWord, Model model) {
 
         if (sortDir == null || sortDir.isEmpty()) {
             sortDir = "asc";
         }
-        PaginationUtil pageInfo = new PaginationUtil(model);
+        PaginationUtil<Category> pageInfo = new PaginationUtil<>(model);
         List<CategoryDto> categories = service.listByPage(pageInfo, pageNum, sortDir, keyWord);
-        return categories;
+        model.addAttribute("categories",categories);
+        return "category/categories";
     }
 
-    @GetMapping("/new")
-    public String newCategory(Model model) {
-
+    @GetMapping("/add")
+    public String addCategory(Model model) {
         List<CategoryDto> categories = service.getAll();
-
         model.addAttribute("category", new Category());
         model.addAttribute("categories", categories);
-
+        model.addAttribute("title", "Thêm danh mục");
         return "category/category_form";
     }
 
@@ -63,10 +65,14 @@ public class CategoryController {
     }
 
     @PostMapping("/save")
-    public String saveCategory(Category category, RedirectAttributes red) {
-        service.save(category);
-        red.addFlashAttribute("message", "Thêm danh mục thành công");
-        return "redirect:/categories";
+    @ResponseBody
+    public ResponseEntity<String> saveCategory(Category category) {
+        try {
+            service.save(category);
+            return new ResponseEntity<>("Lưu thành công", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping("/delete/{id}")

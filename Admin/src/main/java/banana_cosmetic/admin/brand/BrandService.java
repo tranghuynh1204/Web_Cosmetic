@@ -46,7 +46,7 @@ public class BrandService {
         }
         brands = pageBrands.getContent();
 
-        pageInfo.addAttribute(pageBrands,sortDir,"name",keyWord);
+        pageInfo.addAttribute(pageBrands, sortDir, "name", keyWord);
 
         return brands.stream()
                 .map(brand -> mapper.map(brand, BrandDto.class))
@@ -56,14 +56,14 @@ public class BrandService {
     public void save(Brand brand) throws Exception {
         try {
             repository.save(brand);
-        }catch (DataIntegrityViolationException e) {
-            throw new Exception("Thương hiệu "+brand.getName()+" đã tồn tại.");
+        } catch (DataIntegrityViolationException e) {
+            throw new Exception("Thương hiệu " + brand.getName() + " đã tồn tại.");
         }
     }
 
     public Brand get(Long id) throws Exception {
         return repository.findById(id)
-                .orElseThrow(() -> new Exception("Không tìm thấy thương hiệu với ID: " + id+"."));
+                .orElseThrow(() -> new Exception("Không tìm thấy thương hiệu với ID: " + id + "."));
 
     }
 
@@ -71,8 +71,8 @@ public class BrandService {
         Brand brand = get(id);
         try {
             repository.delete(brand);
-        }catch (DataIntegrityViolationException e){
-            throw new Exception("Vẫn còn sản phẩm mang thương hiệu "+brand.getName()+".");
+        } catch (DataIntegrityViolationException e) {
+            throw new Exception("Vẫn còn sản phẩm mang thương hiệu " + brand.getName() + ".");
         }
     }
 }

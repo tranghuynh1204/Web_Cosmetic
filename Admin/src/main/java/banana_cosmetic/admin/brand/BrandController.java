@@ -66,7 +66,7 @@ public class BrandController {
             if (image != null && !image.isEmpty()) {
                 CloudinaryUtil.uploadImage(image, brand.getId());
             }
-            return new ResponseEntity<>("lưu thành công", HttpStatus.OK); // Trả về brand mới với mã trạng thái 200 OK
+            return new ResponseEntity<>("Lưu thành công", HttpStatus.OK); // Trả về brand mới với mã trạng thái 200 OK
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST); // Trả về thông báo lỗi với mã trạng thái 400 Bad Request
         }

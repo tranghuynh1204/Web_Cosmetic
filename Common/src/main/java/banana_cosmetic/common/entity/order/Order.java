@@ -1,7 +1,7 @@
 package banana_cosmetic.common.entity.order;
 
-import banana_cosmetic.common.entity.Customer;
 import banana_cosmetic.common.entity.IdBasedEntity;
+import banana_cosmetic.common.entity.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,17 +17,13 @@ public class Order extends IdBasedEntity {
 
     private Date orderTime;
     private Date timeReceived;
-
     private String nameCustomer;
-
     private String phone;
-
     private String address;
-
     private Long total;
 
     @ManyToOne
-    private Customer customer;
+    private User customer;
     @JoinColumn(name = "order_id")
     @OneToMany
     private List<OrderDetail> details;

@@ -4,7 +4,6 @@
     <link rel="stylesheet" type="text/css" href="../../static/css/main.css"/>
     <meta charset="UTF-8">
     <title>Title</title>
-
 </head>
 <body>
 <th:block th:replace="sidebar :: sidebar"></th:block>
@@ -21,7 +20,7 @@
         </ul>
     </div>
     <main>
-        <div class="row">
+        <div class="row-brand">
             <div id="search-bar">
                 <form class="search-box" th:action="@{/brands/page/1}">
                     <div class="input-box">
@@ -62,6 +61,5 @@
     <div th:replace="fragments :: pagination('Thương hiệu','/brands')"></div>
     <th:block th:replace="footer :: footer"></th:block>
 </div>
-
 </body>
 </html>

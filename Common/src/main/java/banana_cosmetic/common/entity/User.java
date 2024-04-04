@@ -20,7 +20,7 @@ public class User extends IdBasedEntity {
     private String mail;
     private Date birth;
     private String password;
-    private String photos;
+    private String photo;
     @ManyToMany
     @JoinTable(
             name = "users_roles",
