@@ -6,15 +6,17 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
+@RequestMapping("/product")
 public class ProductController {
 
     @Autowired
     ProductLineService service;
 
-    @GetMapping("/product/{nameProductLine}")
-    public String viewProduct(@PathVariable String nameProductLine, Model model){
+    @GetMapping("")
+    public String viewProduct(){
 
 //        ProductLine productLine = service.get(nameProductLine);
 //        String[] classifications = productLine.getClassifications().split("-");
