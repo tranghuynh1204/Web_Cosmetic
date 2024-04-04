@@ -1,19 +1,22 @@
-# Stage 1: Build Common module
-FROM maven:3.8.5-openjdk-17 AS common-build
-WORKDIR /app/Common
-COPY Common/ .
-RUN mvn clean package -DskipTests
-
-# Stage 3: Build Admin module
+# Sử dụng image chứa Maven và OpenJDK
 FROM maven:3.8.5-openjdk-17 AS admin-build
+
+# Copy mã nguồn ứng dụng vào container
+COPY . /app
+
+# Thiết lập thư mục làm việc
+WORKDIR /app
+
+# Xây dựng mô-đun "common" trước
+WORKDIR /app/Common
+RUN mvn clean install
+
+# Tiếp tục xây dựng mô-đun "admin"
 WORKDIR /app/Admin
-COPY Admin/ .
 RUN mvn clean package -DskipTests
 
-# Stage 5: Create final image
-FROM openjdk:17-jdk-slim AS final
-WORKDIR /app
-COPY --from=common-build /app/Common/target/*.jar common.jar
-COPY --from=admin-build /app/Admin/target/*.jar admin.jar
+# Expose cổng mặc định của Spring Boot (8080)
 EXPOSE 8080
-CMD ["java", "-jar", "admin.jar"]
+
+# Chạy ứng dụng Spring Boot khi container được khởi chạy
+CMD ["java", "-jar", "/app/Admin/target/admin.jar"]
