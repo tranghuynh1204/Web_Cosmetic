@@ -15,17 +15,16 @@ RUN mvn clean install
 WORKDIR /app/Admin
 RUN mvn clean package -DskipTests
 
-# Xây dựng mô-đun "client"
-WORKDIR /app/Client
-RUN mvn clean package -DskipTests
-
 # Expose cổng mặc định của Spring Boot cho module "admin" (8080)
 EXPOSE 8080
-
-# Expose một cổng khác cho module "client" (vd: 9090)
-EXPOSE 9090
 
 # Chạy ứng dụng Spring Boot khi container được khởi chạy
 CMD ["java", "-jar", "/app/Admin/target/Admin-0.0.1-SNAPSHOT.jar"]
 
-CMD ["java", "-jar", "/app/Client/target/Client-0.0.1-SNAPSHOT.jar", "--server.port=9090"]
+# Xây dựng mô-đun "client"
+WORKDIR /app/Client
+RUN mvn clean package -DskipTests
+
+EXPOSE 9090
+
+CMD ["java", "-jar", "/app/Client/target/Client-0.0.1-SNAPSHOT.jar"]
