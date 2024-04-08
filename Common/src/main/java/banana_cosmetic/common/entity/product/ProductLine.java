@@ -17,6 +17,7 @@ import java.util.Map;
 public class ProductLine extends IdBasedEntity {
 
     private String name;
+    private String image;
     private String origin;
     private String classifications;
     @Column(columnDefinition = "TEXT")

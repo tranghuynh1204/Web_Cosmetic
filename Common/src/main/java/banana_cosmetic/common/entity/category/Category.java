@@ -18,7 +18,7 @@ public class Category extends IdBasedEntity implements Cloneable {
     @ManyToOne
     private Category parent;
     @JsonIgnore
-    @OneToMany(cascade = CascadeType.PERSIST)
+    @OneToMany
     @JoinColumn(name = "parent_id")
     private List<Category> children;
 

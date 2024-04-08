@@ -152,11 +152,11 @@ function validateForm() {
     return isValid;
 }
 
-function deleteRequest(brand, nameEntity, action) {
-    var isDelete = confirm("Bạn có chắc chắn muốn xoá " + nameEntity + " " + brand.name + "?");
+function deleteRequest(model, nameEntity, action) {
+    var isDelete = confirm("Bạn có chắc chắn muốn xoá " + nameEntity + " " + model.name + "?");
     if (isDelete) {
         $.ajax({
-            url: "/admin/" + action + "/delete/" + brand.id,
+            url: "/admin/" + action + "/delete/" + model.id,
             type: "POST",
             success: function (response) {
                 alert(response);

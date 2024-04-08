@@ -1,65 +1,86 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments :: page_head('Thương hiệu')">
-    <link rel="stylesheet" type="text/css" href="../../static/css/main.css"/>
-    <meta charset="UTF-8">
+  <head th:replace="fragments :: page_head('Thương hiệu')">
+    <link rel="stylesheet" type="text/css" href="../../static/css/main.css" />
+    <meta charset="UTF-8" />
     <title>Title</title>
-</head>
-<body>
-<th:block th:replace="sidebar :: sidebar"></th:block>
-<div id="main-content">
-    <th:block th:replace="header :: header"></th:block>
-    <div id="crumbs">
+  </head>
+  <body>
+    <th:block th:replace="sidebar :: sidebar"></th:block>
+    <div id="main-content">
+      <th:block th:replace="header :: header"></th:block>
+      <div id="crumbs">
         <ul>
-            <li>
-                <a th:href="@{/}"><i class="fas fa-home"></i></a>
-            </li>
-            <li>
-                <a>Thương hiệu</a>
-            </li>
+          <li>
+            <a th:href="@{/}"><i class="fas fa-home"></i></a>
+          </li>
+          <li>
+            <a>Thương hiệu</a>
+          </li>
         </ul>
-    </div>
-    <main>
+      </div>
+      <main>
         <div class="row-brand">
-            <div id="search-bar">
-                <form class="search-box" th:action="@{/brands/page/1}">
-                    <div class="input-box">
-                        <input type="hidden" name="sortField" th:value="${sortField}">
-                        <input type="hidden" name="sortDir" th:value="${sortDir}">
-                        <input type="text" placeholder="Nhập tên thương hiệu..." name="keyWord" id="input-search"/>
-                    </div>
-                    <div class="search-button">
-                        <button style="background-color: rgba(0,0,0,0);border-radius:50%;border: none">
-                            <img
-                                    th:src="@{/images/search-icon.png}"
-                                    alt="search"/>
-                        </button>
-                    </div>
-                </form>
-            </div>
-            <a id="add-icon" th:href="@{'/brands/add'}">
-                <img th:src="@{/images/add-icon.png}">
-            </a>
-            <a id="sort-icon"
-               th:href="@{'/brands/page/' + ${currentPage} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir == 'asc' ? 'desc' : 'asc'} + ${keyWord != null? '&keyWord=' + keyWord : ''}}">
-                <img th:src="@{${sortDir == 'asc' ? '/images/asc-icon.png' : '/images/desc-icon.png'}}" alt="Icon">
-            </a>
+          <div id="search-bar">
+            <form class="search-box" th:action="@{/brands/page/1}">
+              <div class="input-box">
+                <input type="hidden" name="sortField" th:value="${sortField}" />
+                <input type="hidden" name="sortDir" th:value="${sortDir}" />
+                <input
+                  type="text"
+                  placeholder="Nhập tên thương hiệu..."
+                  name="keyWord"
+                  id="input-search"
+                  th:value="${keyWord}"
+                />
+              </div>
+              <div class="search-button">
+                <button
+                  style="
+                    background-color: rgba(0, 0, 0, 0);
+                    border-radius: 50%;
+                    border: none;
+                  "
+                >
+                  <img th:src="@{/images/search-icon.png}" alt="search" />
+                </button>
+              </div>
+            </form>
+          </div>
+          <a id="add-icon" th:href="@{'/brands/add'}">
+            <img th:src="@{/images/add-icon.png}" />
+          </a>
+          <a
+            id="sort-icon"
+            th:href="@{'/brands/page/' + ${currentPage} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir == 'asc' ? 'desc' : 'asc'} + ${keyWord != null? '&keyWord=' + keyWord : ''}}"
+          >
+            <img
+              th:src="@{${sortDir == 'asc' ? '/images/asc-icon.png' : '/images/desc-icon.png'}}"
+              alt="Icon"
+            />
+          </a>
         </div>
         <div id="brands">
-            <div class="brand-container" th:each="brand : ${brands}">
-                <img th:src="${brand.logo}" alt="Logo" class="brand-logo"/>
-                <span class="brand-name" th:text="${brand.name}"></span>
-                <div class="edit-delete">
-                    <a class="edit-brand" th:href="@{'/brands/edit/' + ${brand.id}}">Chỉnh sửa</a>
-                    <span class="delete-brand" th:data-name="${brand}"
-                          th:onclick="deleteRequest([[${brand}]],'thương hiệu','brands')">Xoá</span>
-                </div>
+          <div class="brand-container" th:each="brand : ${brands}">
+            <img th:src="${brand.logo}" alt="Logo" class="brand-logo" />
+            <span class="brand-name" th:text="${brand.name}"></span>
+            <div class="edit-delete">
+              <a class="edit-brand" th:href="@{'/brands/edit/' + ${brand.id}}"
+                >Chỉnh sửa</a
+              >
+              <span
+                class="delete-brand"
+                th:data-name="${brand}"
+                th:onclick="deleteRequest([[${brand}]],'thương hiệu','brands')"
+                >Xoá</span
+              >
             </div>
+          </div>
         </div>
-    </main>
+      </main>
 
-    <div th:replace="fragments :: pagination('Thương hiệu','/brands')"></div>
-    <th:block th:replace="footer :: footer"></th:block>
-</div>
-</body>
+      <div th:replace="fragments :: pagination('Thương hiệu','/brands')"></div>
+      <th:block th:replace="footer :: footer"></th:block>
+    </div>
+  </body>
 </html>

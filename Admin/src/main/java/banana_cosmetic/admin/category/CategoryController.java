@@ -34,7 +34,7 @@ public class CategoryController {
         }
         PaginationUtil<Category> pageInfo = new PaginationUtil<>(model);
         List<CategoryDto> categories = service.listByPage(pageInfo, pageNum, sortDir, keyWord);
-        model.addAttribute("categories",categories);
+        model.addAttribute("categories", categories);
         return "category/categories";
     }
 
@@ -57,11 +57,11 @@ public class CategoryController {
             model.addAttribute("category", cateClone);
             model.addAttribute("categories", categories);
             model.addAttribute("title", "Sửa danh mục");
-            return "category/category_form";
         } catch (Exception ex) {
             red.addFlashAttribute("message", ex.getMessage());
             return "redirect:/categories";
         }
+        return "category/category_form";
     }
 
     @PostMapping("/save")
@@ -86,6 +86,5 @@ public class CategoryController {
         }
         return "redirect:/categories";
     }
-
 
 }
