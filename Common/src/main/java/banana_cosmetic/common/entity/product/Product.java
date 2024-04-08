@@ -1,5 +1,6 @@
 package banana_cosmetic.common.entity.product;
 
+import banana_cosmetic.common.entity.Feedback;
 import banana_cosmetic.common.entity.IdBasedEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;
@@ -23,6 +24,8 @@ public class Product extends IdBasedEntity {
     @ManyToOne
     @JsonIgnore
     private ProductLine productLine ;
+    @OneToMany
+    private List<Feedback> feedbacks;
 
     public Product() {}
 }

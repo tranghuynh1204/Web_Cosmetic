@@ -19,7 +19,5 @@ public class Feedback extends IdBasedEntity{
     private int rate;
     private Date feedbackTime;
     @ManyToOne
-    private Product product;
-    @ManyToOne
     private User customer;
 }

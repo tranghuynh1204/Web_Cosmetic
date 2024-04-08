@@ -5,7 +5,8 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class ProductLineDto {
-    private String name;
-    private String image;
+public class ProductDto {
+    private int id;
+    private Long price;
+    private Long salePrice;
 }

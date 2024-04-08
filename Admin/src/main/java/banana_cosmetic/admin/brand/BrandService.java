@@ -6,6 +6,7 @@ import banana_cosmetic.common.util.PaginationUtil;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -68,11 +69,12 @@ public class BrandService {
     }
 
     public void delete(Long id) throws Exception {
-        Brand brand = get(id);
         try {
-            repository.delete(brand);
+            repository.deleteById(id);
         } catch (DataIntegrityViolationException e) {
-            throw new Exception("Vẫn còn sản phẩm mang thương hiệu " + brand.getName() + ".");
+            throw new Exception("Vẫn còn sản phẩm mang thương hiệu có ID: " + id);
+        } catch (Exception e) {
+            throw new Exception("Lỗi xóa thương hiệu: " + e.getMessage());
         }
     }
 }

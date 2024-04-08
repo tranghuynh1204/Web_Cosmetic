@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -26,6 +27,25 @@ public class CategoryService {
     private ModelMapper mapper;
 
     public void save(Category category) {
+        Long id = category.getId();
+        if (category.getId() == null) {
+            setAllParentIdsAndSave(category);
+        } else {
+            Optional<Category> oldCategory = repository.findById(id);
+            List<Category> children = oldCategory.get().getChildren();
+            if (children != null && !children.isEmpty()) {
+                category.setChildren(children);
+            }
+            if (category.getParent().getId() != oldCategory.get().getId()) {
+                setAllParentIdsAndSave(category);
+            } else {
+                repository.save(category);
+            }
+        }
+
+    }
+
+    private void setAllParentIdsAndSave(Category category) {
         Category parent = category.getParent();
         if (parent != null) {
             String allParentIds = parent.getAllParentIds() == null ? "-" : parent.getAllParentIds();
@@ -33,14 +53,21 @@ public class CategoryService {
             category.setAllParentIds(allParentIds);
         }
         repository.save(category);
+        List<Category> children = category.getChildren();
+        if (children != null) {
+            for (Category child : children) {
+                setAllParentIdsAndSave(child);
+            }
+        }
     }
 
     public void delete(Long id) throws Exception {
-        Category category = get(id);
         try {
-            repository.delete(category);
+            repository.deleteById(id);
         } catch (DataIntegrityViolationException e) {
-            throw new Exception("Vẫn còn sản phẩm mang thương hiệu " + category.getName() + ".");
+            throw new Exception("Vẫn còn sản phẩm mang danh mục có ID: " + id);
+        } catch (Exception e) {
+            throw new Exception("Lỗi xóa danh mục: " + e.getMessage());
         }
     }
 
@@ -48,10 +75,12 @@ public class CategoryService {
         Sort sort = Sort.by("name");
         List<Category> categories = repository.findByParentIsNull(sort);
         categories = hierarchicalCategories(categories, "asc");
-        return categories.stream().map(category -> mapper.map(category, CategoryDto.class)).collect(Collectors.toList());
+        return categories.stream().map(category -> mapper.map(category, CategoryDto.class))
+                .collect(Collectors.toList());
     }
 
-    public List<CategoryDto> listByPage(PaginationUtil<Category> pageInfo, int pageNum, String sortDir, String keyWord) {
+    public List<CategoryDto> listByPage(PaginationUtil<Category> pageInfo, int pageNum, String sortDir,
+            String keyWord) {
         Sort sort = Sort.by("name");
 
         if (sortDir.equals("asc")) {
@@ -106,7 +135,8 @@ public class CategoryService {
             categories.add(category);
             category.setName(name);
             if (!category.getChildren().isEmpty()) {
-                List<Category> listSubCategories = listSubHierarchicalCategories(category.getChildren(), sortDir, subLevel + 1);
+                List<Category> listSubCategories = listSubHierarchicalCategories(category.getChildren(), sortDir,
+                        subLevel + 1);
                 categories.addAll(listSubCategories);
             }
         }

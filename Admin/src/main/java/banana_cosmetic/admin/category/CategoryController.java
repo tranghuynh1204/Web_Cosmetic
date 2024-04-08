@@ -34,7 +34,7 @@ public class CategoryController {
         }
         PaginationUtil<Category> pageInfo = new PaginationUtil<>(model);
         List<CategoryDto> categories = service.listByPage(pageInfo, pageNum, sortDir, keyWord);
-        model.addAttribute("categories",categories);
+        model.addAttribute("categories", categories);
         return "category/categories";
     }
 
@@ -57,11 +57,11 @@ public class CategoryController {
             model.addAttribute("category", cateClone);
             model.addAttribute("categories", categories);
             model.addAttribute("title", "Sửa danh mục");
-            return "category/category_form";
         } catch (Exception ex) {
             red.addFlashAttribute("message", ex.getMessage());
             return "redirect:/categories";
         }
+        return "category/category_form";
     }
 
     @PostMapping("/save")
@@ -75,17 +75,16 @@ public class CategoryController {
         }
     }
 
-    @GetMapping("/delete/{id}")
-    public String deleteCategory(@PathVariable Long id, RedirectAttributes red) {
+    @PostMapping("/delete/{id}")
+    @ResponseBody
+    public ResponseEntity<String> deleteCategory(@PathVariable Long id, RedirectAttributes red) {
 
         try {
             service.delete(id);
-            red.addFlashAttribute("message", "Danh mục có id là " + id + "Đã bị xoá thành công");
-        } catch (Exception ex) {
-            red.addFlashAttribute("message", ex.getMessage());
+            return new ResponseEntity<>("Xoá thành công", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
-        return "redirect:/categories";
     }
-
 
 }

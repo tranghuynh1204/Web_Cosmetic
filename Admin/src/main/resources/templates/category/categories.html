@@ -63,7 +63,13 @@
             const depth = (category.name.lastIndexOf("-") + 1) / 2;
             const name = category.name.trim().replace(/^-+/, "");
             const ul = $("<ul></ul>")
-            const span = $("<span></span>").html(name).attr("id",category.id);
+            const link = $("<a></a>")
+                .attr("href", "/admin/categories/edit/" + category.id)
+                .html("Chỉnh sửa");
+            const  button = $("<button></button>")
+                .attr("onclick", "deleteRequest("+JSON.stringify(category)+", 'danh mục', 'categories')")
+                .html("Xoá").css('display', 'none');
+            const span = $("<span></span>").html(name).attr("id",category.id).append(button).append(link);
             const li = $("<li></li>").append(span).append(ul); // Thêm thẻ <ul> vào trong thẻ <li>
             if (depth > currentDepth) {
                 currentUl = currentUl.children("li:last").children("ul");

@@ -1,79 +1,91 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments :: page_head(${title})">
-    <meta charset="UTF-8">
+  <head th:replace="fragments :: page_head(${title})">
+    <meta charset="UTF-8" />
     <title>Title</title>
-</head>
-<body>
-<th:block th:replace="sidebar :: sidebar"></th:block>
-<div id="main-content">
-    <th:block th:replace="header :: header"></th:block>
-    <div id="crumbs">
+  </head>
+  <body>
+    <th:block th:replace="sidebar :: sidebar"></th:block>
+    <div id="main-content">
+      <th:block th:replace="header :: header"></th:block>
+      <div id="crumbs">
         <ul>
-            <li>
-                <a th:href="@{/}"><i class="fas fa-home"></i></a>
-            </li>
-            <li>
-                <a th:href="@{/categories}">Danh mục</a>
-            </li>
-            <li>
-                <a href="">[[${title}]]</a>
-            </li>
+          <li>
+            <a th:href="@{/}"><i class="fas fa-home"></i></a>
+          </li>
+          <li>
+            <a th:href="@{/categories}">Danh mục</a>
+          </li>
+          <li>
+            <a href="">[[${title}]]</a>
+          </li>
         </ul>
-    </div>
-    <main>
-        <form th:action="@{/categories/save}" th:object="${category}" method="post">
-            <div class="row-category">
-                <input type="hidden" th:field="*{id}">
-                <label for="name">Tên thương hiệu:</label>
-                <input type="text" th:field="*{name}" id="name">
-                <label for="category-parent">Danh mục cha:</label>
-                <input type="text" id="category-parent" readonly
-                       th:value='${category.parent != null ? category.parent.name.replaceFirst("^-+", "") : ""}'>
-                <input type="hidden" th:field="*{parent}" id="parent-id" >
-            </div>
-            <p>Nháy đúp chuột để chọn danh mục cha.</p>
-            <div id="tree-categories"></div>
-            <div class="row-button">
-                <button id="save-button" class="button" onclick="submitForm(this.form)">
-                    Lưu
-                </button>
-                <button id="cancel-button" class="button" type="button">Huỷ</button>
-            </div>
+      </div>
+      <main>
+        <form
+          th:action="@{/categories/save}"
+          th:object="${category}"
+          method="post"
+        >
+          <div class="row-category">
+            <input type="hidden" th:field="*{id}" id="id" />
+            <label for="name">Tên thương hiệu:</label>
+            <input type="text" th:field="*{name}" id="name" />
+            <label for="category-parent">Danh mục cha:</label>
+            <input
+              type="text"
+              id="category-parent"
+              readonly
+              th:value='${category.parent != null ? category.parent.name.replaceFirst("^-+", "") : ""}'
+            />
+            <input type="hidden" th:field="*{parent}" id="parent-id" />
+          </div>
+          <p>Nháy đúp chuột để chọn danh mục cha.</p>
+          <div id="tree-categories"></div>
+          <div class="row-button">
+            <button
+              id="save-button"
+              class="button"
+              onclick="submitForm(this.form)"
+            >
+              Lưu
+            </button>
+            <button id="cancel-button" class="button" type="button">Huỷ</button>
+          </div>
         </form>
-    </main>
-    <th:block th:replace="footer :: footer"></th:block>
-</div>
-<script th:inline="javascript">
-    /*<![CDATA[*/
-    const categories = /*[[${categories}]]*/ [];
+      </main>
+      <th:block th:replace="footer :: footer"></th:block>
+    </div>
+    <script th:inline="javascript">
+      /*<![CDATA[*/
+      const categories = /*[[${categories}]]*/ [];
 
-    $(document).ready(function () {
-        const rootUl = $("<ul></ul>")
+      $(document).ready(function () {
+        const rootUl = $("<ul></ul>");
         let currentUl = rootUl;
         let currentDepth = 0;
 
         categories.forEach(function (category) {
-            const depth = (category.name.lastIndexOf("-") + 1) / 2;
-            const name = category.name.trim().replace(/^-+/, "");
-            const ul = $("<ul></ul>")
-            const span = $("<span></span>").html(name).attr("id",category.id);
-            const li = $("<li></li>").append(span).append(ul); // Thêm thẻ <ul> vào trong thẻ <li>
-            if (depth > currentDepth) {
-                currentUl = currentUl.children("li:last").children("ul");
-            } else if (depth < currentDepth) {
-                for (let i = currentDepth; i > depth; i--) {
-                    currentUl = currentUl.parent().parent();
-                }
+          const depth = (category.name.lastIndexOf("-") + 1) / 2;
+          const name = category.name.trim().replace(/^-+/, "");
+          const ul = $("<ul></ul>");
+          const span = $("<span></span>").html(name).attr("id", category.id);
+          const li = $("<li></li>").append(span).append(ul); // Thêm thẻ <ul> vào trong thẻ <li>
+          if (depth > currentDepth) {
+            currentUl = currentUl.children("li:last").children("ul");
+          } else if (depth < currentDepth) {
+            for (let i = currentDepth; i > depth; i--) {
+              currentUl = currentUl.parent().parent();
             }
-            currentUl.append(li);
-            currentDepth = depth;
+          }
+          currentUl.append(li);
+          currentDepth = depth;
         });
 
         $("#tree-categories").append(rootUl);
-    });
-    /*]]>*/
-</script>
-<script th:src="@{/js/category.js}"></script>
-</body>
+      });
+      /*]]>*/
+    </script>
+    <script th:src="@{/js/category.js}"></script>
+  </body>
 </html>

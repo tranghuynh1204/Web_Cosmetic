@@ -2,7 +2,7 @@ package banana_cosmetic.client.cart;
 
 import banana_cosmetic.common.entity.cart.Cart;
 import banana_cosmetic.common.entity.product.ProductLine;
-import banana_cosmetic.common.entity.product.ProductLineDto;
+import banana_cosmetic.common.entity.product.ProductWithClassificationsDto;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,7 +20,7 @@ public class CartService {
                 .map(cart -> {
                     cart.getItems().forEach(item -> {
                         ProductLine productLine = item.getProduct().getProductLine();
-                        item.setProductLine(mapper.map(productLine, ProductLineDto.class));
+                        item.setProductLine(mapper.map(productLine, ProductWithClassificationsDto.class));
                     });
                     return cart;
                 })
