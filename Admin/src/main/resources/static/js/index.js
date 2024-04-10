@@ -118,9 +118,11 @@ function submitBrandForm(form) {
 function submitForm(form) {
     event.preventDefault();
     if (validateForm()) {
-        var button = $('#save-button');
-        button.html(`<div class="loader"></div>`)
-        button.attr('disabled', 'disabled');
+        var savebtn = $('#save-button');
+        var cancelbtn = $("cancel-button");
+        savebtn.html(`<div class="loader"></div>`)
+        savebtn.attr('disabled', 'disabled');
+        cancelbtn.attr('disabled', 'disabled');
         var formData = $(form).serialize();
         $.ajax({
             type: 'POST',
@@ -132,8 +134,9 @@ function submitForm(form) {
             },
             error: function (xhr, status, error) {
                 alert(xhr.responseText);
-                button.html('Lưu');
-                button.removeAttr('disabled');
+                savebtn.html('Lưu');
+                savebtn.removeAttr('disabled');
+                cancelbtn.removeAttr('disabled');
             },
         });
     }
@@ -153,7 +156,7 @@ function validateForm() {
 }
 
 function deleteRequest(model, nameEntity, action) {
-    var isDelete = confirm("Bạn có chắc chắn muốn xoá " + nameEntity + " " + model.name + "?");
+    var isDelete = confirm("Bạn có chắc chắn muốn xoá " + nameEntity + " " + model.name.replace(/^[-]+/, "") + "?");
     if (isDelete) {
         $.ajax({
             url: "/admin/" + action + "/delete/" + model.id,
@@ -192,5 +195,8 @@ $(document).ready(function () {
     });
 });
 
-
+function clearParent() {
+    $("#category-parent").val(""); // Gán giá trị rỗng cho input type="text"
+    $("#parent-id").val(""); // Gán giá trị rỗng cho input type="hidden"
+}
 

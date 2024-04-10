@@ -72,7 +72,7 @@ public class BrandService {
         try {
             repository.deleteById(id);
         } catch (DataIntegrityViolationException e) {
-            throw new Exception("Vẫn còn sản phẩm mang thương hiệu có ID: " + id);
+            throw new Exception("Vẫn còn sản phẩm mang thương hiệu này.");
         } catch (Exception e) {
             throw new Exception("Lỗi xóa thương hiệu: " + e.getMessage());
         }

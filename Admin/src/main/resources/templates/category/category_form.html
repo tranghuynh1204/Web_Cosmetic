@@ -38,6 +38,7 @@
               readonly
               th:value='${category.parent != null ? category.parent.name.replaceFirst("^-+", "") : ""}'
             />
+            <button onclick="clearParent()" type="button">Xoá</button>
             <input type="hidden" th:field="*{parent}" id="parent-id" />
           </div>
           <p>Nháy đúp chuột để chọn danh mục cha.</p>

@@ -36,7 +36,7 @@ public class CategoryService {
             if (children != null && !children.isEmpty()) {
                 category.setChildren(children);
             }
-            if (category.getParent().getId() != oldCategory.get().getId()) {
+            if (category.getParent()==null || category.getParent().getId() != oldCategory.get().getId()) {
                 setAllParentIdsAndSave(category);
             } else {
                 repository.save(category);
@@ -65,7 +65,7 @@ public class CategoryService {
         try {
             repository.deleteById(id);
         } catch (DataIntegrityViolationException e) {
-            throw new Exception("Vẫn còn sản phẩm mang danh mục có ID: " + id);
+            throw new Exception("Vẫn còn sản phẩm mang danh mục này.");
         } catch (Exception e) {
             throw new Exception("Lỗi xóa danh mục: " + e.getMessage());
         }

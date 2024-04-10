@@ -451,7 +451,8 @@ main {
 }
 
 #name,
-#description {
+#description,
+#category-parent {
     width: 600px;
     font-size: 25px;
     border-radius: 5px;
