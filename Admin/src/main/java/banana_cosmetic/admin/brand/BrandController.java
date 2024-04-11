@@ -1,7 +1,6 @@
 package banana_cosmetic.admin.brand;
 
 import banana_cosmetic.common.entity.brand.Brand;
-import banana_cosmetic.common.entity.brand.BrandDto;
 import banana_cosmetic.common.util.CloudinaryUtil;
 import banana_cosmetic.common.util.PaginationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,14 +26,14 @@ public class BrandController {
     }
 
     @GetMapping("/page/{pageNum}")
-    public String listByPage(@PathVariable int pageNum, String sortDir, String keyWord, Model model) {
+    public String listByPage(@PathVariable int pageNum, String nameDir, String name, Model model) {
 
-        if (sortDir == null || sortDir.isEmpty()) {
-            sortDir = "asc";
-        }
+        nameDir = (nameDir == null || nameDir.trim().isEmpty()) ? "asc" : nameDir;
         PaginationUtil<Brand> pageInfo = new PaginationUtil<>(model);
-        List<BrandDto> brands = service.listByPage(pageInfo, pageNum, sortDir, keyWord);
+        List<BrandDto> brands = service.listByPage(pageInfo, pageNum, nameDir, name);
         model.addAttribute("brands", brands);
+        model.addAttribute("nameDir", nameDir);
+        model.addAttribute("name", name);
         return "brand/brands";
     }
 

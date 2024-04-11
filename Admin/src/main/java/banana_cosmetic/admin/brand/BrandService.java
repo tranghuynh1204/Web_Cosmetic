@@ -1,12 +1,10 @@
 package banana_cosmetic.admin.brand;
 
 import banana_cosmetic.common.entity.brand.Brand;
-import banana_cosmetic.common.entity.brand.BrandDto;
 import banana_cosmetic.common.util.PaginationUtil;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -25,29 +23,26 @@ public class BrandService {
     @Autowired
     private ModelMapper mapper;
 
-    public List<BrandDto> listByPage(PaginationUtil<Brand> pageInfo, int pageNum, String sortDir, String keyWord) {
+    public List<BrandDto> listByPage(PaginationUtil<Brand> pageInfo, int pageNum, String nameDir, String name) {
 
-        Sort sort = Sort.by("name");
+        Sort sort = Sort.by(nameDir.equals("asc") ?
+                Sort.Order.asc("name") :
+                Sort.Order.desc("name"));
 
-        if (sortDir.equals("asc")) {
-            sort = sort.ascending();
-        } else if (sortDir.equals("desc")) {
-            sort = sort.descending();
-        }
 
         Pageable pageable = PageRequest.of(pageNum - 1, BRAND_PER_PAGE, sort);
 
         Page<Brand> pageBrands;
         List<Brand> brands;
 
-        if (keyWord == null || keyWord.isEmpty()) {
+        if (name == null || name.isEmpty()) {
             pageBrands = repository.findAll(pageable);
         } else {
-            pageBrands = repository.findByNameContainingIgnoreCase(pageable, keyWord);
+            pageBrands = repository.findByNameContainingIgnoreCase(pageable, name);
         }
         brands = pageBrands.getContent();
 
-        pageInfo.addAttribute(pageBrands, sortDir, "name", keyWord);
+        pageInfo.addAttribute(pageBrands);
 
         return brands.stream()
                 .map(brand -> mapper.map(brand, BrandDto.class))

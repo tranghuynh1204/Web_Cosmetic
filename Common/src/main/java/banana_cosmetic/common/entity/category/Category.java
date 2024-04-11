@@ -21,7 +21,8 @@ public class Category extends IdBasedEntity implements Cloneable {
     @OneToMany
     @JoinColumn(name = "parent_id")
     private List<Category> children;
-
+    @Transient
+    private Boolean hasChildren;
     public Category() {
     }
 

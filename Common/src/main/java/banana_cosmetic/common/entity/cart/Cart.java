@@ -19,7 +19,7 @@ public class Cart extends IdBasedEntity {
     @OneToOne
     private User customer;
     @JoinColumn(name = "cart_id")
-    @OneToMany
+    @OneToMany(orphanRemoval = true)
     private List<LineItem> items;
 
     public Cart() {}

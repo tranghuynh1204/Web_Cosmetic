@@ -13,6 +13,6 @@ import java.util.List;
 @Repository
 public interface BrandRepository extends JpaRepository<Brand, Long> {
 
-    Page<Brand> findByNameContainingIgnoreCase(Pageable pageable, String keyWord);
+    Page<Brand> findByNameContainingIgnoreCase(Pageable pageable, String name);
 
 }

@@ -1,7 +1,6 @@
 package banana_cosmetic.admin.category;
 
 import banana_cosmetic.common.entity.category.Category;
-import banana_cosmetic.common.entity.category.CategoryDto;
 import banana_cosmetic.common.util.PaginationUtil;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +35,7 @@ public class CategoryService {
             if (children != null && !children.isEmpty()) {
                 category.setChildren(children);
             }
-            if (category.getParent()==null || category.getParent().getId() != oldCategory.get().getId()) {
+            if (category.getParent() == null || category.getParent().getId() != oldCategory.get().getId()) {
                 setAllParentIdsAndSave(category);
             } else {
                 repository.save(category);
@@ -79,31 +78,30 @@ public class CategoryService {
                 .collect(Collectors.toList());
     }
 
-    public List<CategoryDto> listByPage(PaginationUtil<Category> pageInfo, int pageNum, String sortDir,
-            String keyWord) {
-        Sort sort = Sort.by("name");
-
-        if (sortDir.equals("asc")) {
-            sort = sort.ascending();
-        } else if (sortDir.equals("desc")) {
-            sort = sort.descending();
-        }
+    public List<CategoryDto> listByPage(PaginationUtil<Category> pageInfo, int pageNum, String nameDir,
+                                        String name) {
+        Sort sort = Sort.by(nameDir.equals("asc") ?
+                Sort.Order.asc("name") :
+                Sort.Order.desc("name"));
 
         Pageable pageable = PageRequest.of(pageNum - 1, ROOT_CATEGORIES_PER_PAGE, sort);
 
         Page<Category> pageCategories;
         List<Category> categories;
 
-        if (keyWord == null || keyWord.isEmpty()) {
+        if (name == null || name.isEmpty()) {
             pageCategories = repository.findByParentIsNull(pageable);
             categories = pageCategories.getContent();
-            categories = hierarchicalCategories(categories, sortDir);
+            categories = hierarchicalCategories(categories, nameDir);
         } else {
-            pageCategories = repository.findByNameContainingIgnoreCase(pageable, keyWord);
+            pageCategories = repository.findByNameContainingIgnoreCase(pageable, name);
             categories = pageCategories.getContent();
+            for (Category category : categories) {
+                category.setHasChildren(!category.getChildren().isEmpty());
+            }
         }
 
-        pageInfo.addAttribute(pageCategories, sortDir, "name", keyWord);
+        pageInfo.addAttribute(pageCategories);
 
         return categories.stream()
                 .map(category -> mapper.map(category, CategoryDto.class))
@@ -119,6 +117,9 @@ public class CategoryService {
             if (!category.getChildren().isEmpty()) {
                 List<Category> subCategories = listSubHierarchicalCategories(category.getChildren(), sortDir, 1);
                 categories.addAll(subCategories);
+                category.setHasChildren(true);
+            } else {
+                category.setHasChildren(false);
             }
         }
         return categories;
@@ -138,7 +139,11 @@ public class CategoryService {
                 List<Category> listSubCategories = listSubHierarchicalCategories(category.getChildren(), sortDir,
                         subLevel + 1);
                 categories.addAll(listSubCategories);
+                category.setHasChildren(true);
+            } else {
+                category.setHasChildren(false);
             }
+
         }
         return categories;
     }

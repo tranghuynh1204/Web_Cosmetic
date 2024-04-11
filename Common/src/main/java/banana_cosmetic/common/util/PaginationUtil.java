@@ -1,5 +1,6 @@
 package banana_cosmetic.common.util;
 
+import banana_cosmetic.common.entity.category.Category;
 import org.springframework.data.domain.Page;
 import org.springframework.ui.Model;
 
@@ -10,7 +11,7 @@ public class PaginationUtil<T> {
         this.model = model;
     }
 
-    public void addAttribute(Page<T> page, String sortDir, String sortField, String keyWord) {
+    public void addAttribute(Page<T> page) {
         int pageSize = page.getSize();
 
         long startCount = (long) page.getNumber() * page.getSize() + 1;
@@ -23,9 +24,6 @@ public class PaginationUtil<T> {
         model.addAttribute("totalPages", page.getTotalPages());
         model.addAttribute("startCount", startCount);
         model.addAttribute("endCount", endCount);
-        model.addAttribute("sortDir", sortDir);
-        model.addAttribute("sortField", sortField);
-        model.addAttribute("keyWord", keyWord);
         model.addAttribute("totalItems", page.getTotalElements());
 
     }

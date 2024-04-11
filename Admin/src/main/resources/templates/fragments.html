@@ -33,10 +33,13 @@
 
     <div th:if="${totalPages > 1}" class="container-pagination">
         <div class="go-page">
-            <form action='/admin/brands/page/' id="form-go">
-                <input type="hidden" name="sortField" th:value="${sortField}" />
-                <input type="hidden" name="sortDir" th:value="${sortDir}" />
-                <input th:if="${keyword!=null}" type="hidden" name="keyword" th:value="${keyword}" />
+            <form th:action="@{${moduleURL} + '/page/'}" id="form-go">
+                <input th:if="${nameDir!=null}" type="hidden" name="nameDir" th:value="${nameDir}" />
+                <input th:if="${name!=null}" type="hidden" name="name" th:value="${name}" />
+                <input th:if="${categoryDir!=null}" type="hidden" name="nameDir" th:value="${categoryDir}" />
+                <input th:if="${categoryName!=null}" type="hidden" name="name" th:value="${categoryName}" />
+                <input th:if="${brandDir!=null}" type="hidden" name="nameDir" th:value="${brandDir}" />
+                <input th:if="${brandName!=null}" type="hidden" name="name" th:value="${brandName}" />
                 <input type="number" placeholder="Nhập page cần đến" id="input-go" min="1" th:max="${totalPages}" th:value="${currentPage}">
                 <button type="submit" id="button-go">Go</button>
             </form>
@@ -69,7 +72,12 @@
         </ul>
     </div>
 </div>
-<a th:href="@{${moduleURL} + '/page/' + ${pageNum} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + ${keyWord != null ? '&keyWord=' + keyWord : ''}}"
+<a th:href="@{${moduleURL} + '/page/' + ${pageNum}  + '?nameDir=' + ${nameDir} +
+${name != null && name!='' ? '&name=' + name : ''} +
+${categoryDir != null && categoryDir!='' ? '&categoryDir=' + categoryDir : ''} +
+${categoryName != null && categoryName!='' ? '&categoryName=' + categoryName : ''} +
+${brandDir != null && brandDir!='' ? '&brandDir=' + brandDir : ''} +
+${brandName != null && brandName!='' ? '&brandName=' + brandName : ''}    }"
    th:fragment="page_link(moduleURL, pageNum, label)" class="page-link">
     [[${label}]]
 </a>

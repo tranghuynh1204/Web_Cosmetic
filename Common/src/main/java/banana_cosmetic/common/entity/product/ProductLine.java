@@ -1,5 +1,6 @@
 package banana_cosmetic.common.entity.product;
 
+import banana_cosmetic.common.util.GachaUtil;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import banana_cosmetic.common.entity.IdBasedEntity;
 import banana_cosmetic.common.entity.brand.Brand;
@@ -17,7 +18,6 @@ import java.util.Map;
 public class ProductLine extends IdBasedEntity {
 
     private String name;
-    private String image;
     private String origin;
     private String classifications;
     @Column(columnDefinition = "TEXT")
@@ -30,6 +30,10 @@ public class ProductLine extends IdBasedEntity {
     @JoinColumn(name = "product_line_id")
     @OneToMany
     private Map<String, Product> products;
+
+    public String getImage() {
+        return "https://res.cloudinary.com/bananacosmetic/image/upload/productline_" + id + "?" + GachaUtil.gachaNumber();
+    }
 
     public ProductLine() {}
 }

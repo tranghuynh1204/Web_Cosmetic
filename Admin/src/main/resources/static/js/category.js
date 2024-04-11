@@ -20,7 +20,6 @@ $(document).ready(function () {
     $("#tree-categories li").each(function () {
         if ($(this).find("ul").children().length === 0) {
             $(this).addClass("empty-ul");
-            $(this).find("button").css('display', 'block');
         }
     });
 });

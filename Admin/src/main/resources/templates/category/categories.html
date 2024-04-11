@@ -20,13 +20,12 @@
         </ul>
     </div>
     <main>
-        <div class="row-brand">
+        <div class="row-search">
             <div id="search-bar">
                 <form class="search-box" th:action="@{/categories/page/1}">
                     <div class="input-box">
-                        <input type="hidden" name="sortField" th:value="${sortField}">
-                        <input type="hidden" name="sortDir" th:value="${sortDir}">
-                        <input type="text" placeholder="Nhập tên danh mục..." name="keyWord" id="input-search"/>
+                        <input type="hidden" name="nameDir" th:value="${nameDir}">
+                        <input type="text" placeholder="Nhập tên danh mục..." name="name" id="input-search" th:value="${name}"/>
                     </div>
                     <div class="search-button">
                         <button style="background-color: rgba(0,0,0,0);border-radius:50%;border: none">
@@ -41,8 +40,8 @@
                 <img th:src="@{/images/add-icon.png}">
             </a>
             <a id="sort-icon"
-               th:href="@{'/categories/page/' + ${currentPage} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir == 'asc' ? 'desc' : 'asc'} + ${keyWord != null? '&keyWord=' + keyWord : ''}}">
-                <img th:src="@{${sortDir == 'asc' ? '/images/asc-icon.png' : '/images/desc-icon.png'}}" alt="Icon">
+               th:href="@{'/categories/page/' + ${currentPage} + '?nameDir=' + ${nameDir == 'asc' ? 'desc' : 'asc'} + ${name != null? '&name=' + name : ''}}">
+                <img th:src="@{${nameDir == 'asc' ? '/images/asc-icon.png' : '/images/desc-icon.png'}}" alt="Icon">
             </a>
         </div>
         <div id="tree-categories"></div>
@@ -66,10 +65,14 @@
             const link = $("<a></a>")
                 .attr("href", "/admin/categories/edit/" + category.id)
                 .html("Chỉnh sửa");
-            const  button = $("<button></button>")
-                .attr("onclick", "deleteRequest("+JSON.stringify(category)+", 'danh mục', 'categories')")
-                .html("Xoá").css('display', 'none');
-            const span = $("<span></span>").html(name).attr("id",category.id).append(button).append(link);
+            const span = $("<span></span>").html(name).attr("id",category.id);
+            if (!category.hasChildren){
+                const  button = $("<button></button>")
+                    .attr("onclick", "deleteRequest("+JSON.stringify(category)+", 'danh mục', 'categories')")
+                    .html("Xoá");
+                span.append(button)
+            }
+            span.append(link);
             const li = $("<li></li>").append(span).append(ul); // Thêm thẻ <ul> vào trong thẻ <li>
             if (depth > currentDepth) {
                 currentUl = currentUl.children("li:last").children("ul");

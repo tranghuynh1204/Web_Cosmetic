@@ -2,7 +2,6 @@ package banana_cosmetic.common.entity.cart;
 
 import banana_cosmetic.common.entity.IdBasedEntity;
 import banana_cosmetic.common.entity.product.Product;
-import banana_cosmetic.common.entity.product.ProductWithClassificationsDto;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Transient;
@@ -17,8 +16,8 @@ public class LineItem extends IdBasedEntity {
     private int quantity;
     @ManyToOne
     private Product product;
-    @Transient
-    private ProductWithClassificationsDto productLine;
+//    @Transient
+//    private ProductWithClassificationsDto productLine;
 
     public LineItem() {}
 

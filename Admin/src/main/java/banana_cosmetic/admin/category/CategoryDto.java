@@ -1,4 +1,4 @@
-package banana_cosmetic.common.entity.category;
+package banana_cosmetic.admin.category;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -9,4 +9,5 @@ public class CategoryDto {
 
     private Long id;
     private String name;
+    private Boolean hasChildren;
 }

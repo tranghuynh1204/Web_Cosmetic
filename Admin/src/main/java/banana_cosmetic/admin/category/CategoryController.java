@@ -1,8 +1,6 @@
 package banana_cosmetic.admin.category;
 
 import banana_cosmetic.common.entity.category.Category;
-import banana_cosmetic.common.entity.category.CategoryDto;
-import banana_cosmetic.common.util.CloudinaryUtil;
 import banana_cosmetic.common.util.PaginationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,14 +25,14 @@ public class CategoryController {
     }
 
     @GetMapping("/page/{pageNum}")
-    public String listByPage(@PathVariable int pageNum, String sortDir, String keyWord, Model model) {
+    public String listByPage(@PathVariable int pageNum, String nameDir, String name, Model model) {
 
-        if (sortDir == null || sortDir.isEmpty()) {
-            sortDir = "asc";
-        }
+        nameDir = (nameDir == null || nameDir.trim().isEmpty()) ? "asc" : nameDir;
         PaginationUtil<Category> pageInfo = new PaginationUtil<>(model);
-        List<CategoryDto> categories = service.listByPage(pageInfo, pageNum, sortDir, keyWord);
+        List<CategoryDto> categories = service.listByPage(pageInfo, pageNum, nameDir, name);
         model.addAttribute("categories", categories);
+        model.addAttribute("nameDir", nameDir);
+        model.addAttribute("name", name);
         return "category/categories";
     }
 
@@ -77,7 +75,7 @@ public class CategoryController {
 
     @PostMapping("/delete/{id}")
     @ResponseBody
-    public ResponseEntity<String> deleteCategory(@PathVariable Long id, RedirectAttributes red) {
+    public ResponseEntity<String> deleteCategory(@PathVariable Long id) {
 
         try {
             service.delete(id);

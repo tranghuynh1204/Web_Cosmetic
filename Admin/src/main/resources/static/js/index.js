@@ -186,7 +186,7 @@ $(document).ready(function () {
         var goPageValue = $('#input-go').val();
 
         // Cộng thêm giá trị của thẻ vào action của form
-        var newAction = originalAction + goPageValue;
+        var newAction = originalAction.replace(/\d+$/, '') + goPageValue;
 
         // Thiết lập action mới cho form
         $('#form-go').attr('action', newAction);

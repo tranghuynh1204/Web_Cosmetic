@@ -402,7 +402,7 @@ main {
     min-height: 70vh;
 }
 
-.row-brand {
+.row-brand,.row-search {
     display: flex;
     justify-content: center;
 }

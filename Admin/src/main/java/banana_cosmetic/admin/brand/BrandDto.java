@@ -1,4 +1,4 @@
-package banana_cosmetic.common.entity.brand;
+package banana_cosmetic.admin.brand;
 
 import banana_cosmetic.common.util.GachaUtil;
 import lombok.Getter;
