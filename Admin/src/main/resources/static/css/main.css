@@ -15,21 +15,21 @@ body {
     display: block;
     float: left;
     height: 35px;
-    background: #0045f1;
+    background: rgb(253, 206, 223);
     text-align: center;
     padding: 15px 20px 0 40px;
     position: relative;
     margin: 0 5px 0 0;
     font-size: 20px;
     text-decoration: none;
-    color: #00ff4a;
+    color: rgb(232, 160, 191);
 }
 
 #crumbs ul li a:after {
     content: "";
     border-top: 25px solid transparent;
     border-bottom: 25px solid transparent;
-    border-left: 25px solid #0045f1;
+    border-left: 25px solid rgb(253, 206, 223);
     position: absolute;
     top: 0;
     z-index: 1;
@@ -40,7 +40,7 @@ body {
     content: "";
     border-top: 25px solid transparent;
     border-bottom: 25px solid transparent;
-    border-left: 25px solid #86d5fd;
+    border-left: 25px solid rgb(248, 232, 238);
     position: absolute;
     left: 0;
     top: 0;
@@ -66,14 +66,14 @@ body {
 }
 
 #crumbs ul li:last-child a {
-    background: #fdc335;
+    background: rgb(232, 160, 191);
     color: #fff;
     cursor: default;
     pointer-events: none;
 }
 
 #crumbs ul li:last-child a:after {
-    border-left-color: #fdc335;
+    border-left-color: rgb(232, 160, 191);
     color: #fff;
 }
 
@@ -187,9 +187,9 @@ footer {
     position: fixed;
     left: 0;
     top: 0;
-    background: #db0000;
+    background: rgb(253, 206, 223);
     color: #fff;
-    padding: 20px;
+    padding:20px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -225,13 +225,16 @@ footer {
 #sidebar ul li {
     margin-top: 40px;
 }
-
+#sidebar ul li:hover {
+    background-color:rgb(248, 232, 238);
+}
 #sidebar ul li a {
     font-size: 20px;
     text-decoration: none;
     display: flex;
     align-items: center;
     gap: 20px;
+    color:rgb(25, 24, 37);
     white-space: nowrap;
     transition: all 0.5s;
 }
@@ -267,7 +270,7 @@ footer {
 }
 
 .search-box .input-box {
-    background: rgb(33, 82, 115);
+    background: rgb(248, 232, 238);
     padding: 15px;
     border-radius: 30px;
     width: 0;
@@ -296,7 +299,7 @@ footer {
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    background: rgb(53, 157, 158);
+    background: rgb(232, 160, 191);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -318,7 +321,7 @@ footer {
 /*header*/
 
 #header {
-    background-color: #333;
+    background-color: rgb(253, 206, 223);
     color: #fff;
     padding: 10px;
     display: flex;
@@ -385,7 +388,7 @@ footer {
 #main-content {
     margin-left: 70px;
     transition: margin 0.5s;
-    background-color: #86d5fd;
+    background-color: rgb(248, 232, 238);
 }
 
 #main-content.expanded {
