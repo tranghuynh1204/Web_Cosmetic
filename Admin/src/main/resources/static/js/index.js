@@ -4,22 +4,36 @@ $(document).ready(function () {
         $('#main-content').toggleClass('expanded');
     });
 });
+$(document).ready(function () {
+    // Lấy URL hiện tại
+    var currentUrl = window.location.href;
+
+    // Duyệt qua tất cả các phần tử <li> trong #sidebar
+    $('#sidebar ul li a').each(function () {
+        // Kiểm tra nếu href của thẻ <a> chứa URL hiện tại
+        if (currentUrl.indexOf($(this).attr('href')) !== -1) {
+            $(this).addClass("active");
+            $(this).parent().css("background-color", "rgb(254, 242, 248)");
+        }
+    });
+});
 
 $(document).ready(function () {
-
-    const dropZone = $("#image-drop");
-
-    dropZone.on("dragover", function (e) {
+    $(".drop-zone").on("dragover", function (e) {
         e.preventDefault();
-        dropZone.addClass("dragover");
+        $(this).addClass("dragover");
     });
 
-    dropZone.on("dragleave", function (e) {
+    $(".drop-zone").on("dragleave", function (e) {
         e.preventDefault();
-        dropZone.removeClass("dragover");
+        $(this).removeClass("dragover");
     });
-
+    $(".drop-zone").on("drop", function (e) {
+        e.preventDefault();
+        $(this).removeClass("dragover");
+    });
 });
+
 $(document).ready(function () {
     // Xử lý sự kiện khi nút phân trang được click
     $("#go").click(function () {
@@ -34,16 +48,26 @@ $(document).ready(function () {
     // Xử lý các sự kiện khác ở đây (nếu cần)
 });
 $(document).ready(function () {
-    var element = $(".search-box .input-box input");
-    element.focus(() => {
-        $(".search-box .input-box").addClass("active");
+    // Lấy các phần tử và gọi hàm để thêm và loại bỏ lớp CSS cho mỗi phần tử
+    var elements = [
+        $(".search-box .input-box input"),
+        $("#filter-brand-selectized"),
+        $("#filter-category-selectized")
+    ];
+    elements.forEach(function (element) {
+        element.focus(() => {
+            $(".search-box .input-box").addClass("active");
+
+        });
+        element.blur(() => {
+            $(".search-box .input-box").removeClass("active");
+
+        });
     });
-    element.blur(() => {
-        $(".search-box .input-box").removeClass("active");
-    });
+
 });
 $(document).ready(function () {
-    var sortIcon= $('#sort-icon');
+    var sortIcon = $('#sort-icon');
     var img = $(this).find('#sort-icon img');
     sortIcon.mouseover(function () {
         if (img.attr('src') === '/admin/images/asc-icon.png') {
@@ -65,25 +89,6 @@ $(document).ready(function () {
 
 
 function selectFile(file) {
-    // if (fileInput.multiple) {
-    //     var fragment = $(document.createDocumentFragment());
-    //
-    //     for (var i = 0; i < files.length; i++) {
-    //         var file = files[i];
-    //         var reader = new FileReader();
-    //         reader.onload = function (event) {
-    //             var imgElement = $("<img>").attr({
-    //                 "alt": "img",
-    //                 "src": event.target.result
-    //             });
-    //             // Thêm hình ảnh vào fragment thay vì trực tiếp vào DOM
-    //             fragment.append(imgElement);
-    //         };
-    //         reader.readAsDataURL(file);
-    //     }
-    //
-    //     $("#img-container").append(fragment);
-    // } else {
     event.preventDefault();
     const imgElement = $("#img-preview");
     var reader = new FileReader();
@@ -92,24 +97,13 @@ function selectFile(file) {
         $('#img-hidden').val(event.target.result);
     };
     reader.readAsDataURL(file);
-    // }
 }
 
-$(document).ready(function () {
-    $(".button").click(function () {
-        var button = $(this);
-        button.addClass("clicked");
-        setTimeout(function () {
-            button.removeClass("clicked");
-        }, 300); // Thời gian (millisecond) sau khi loại bỏ lớp "clicked"
-    });
-});
-
-function submitBrandForm(form) {
+function submitFormAndCheckImage(form, name) {
     event.preventDefault();
     var imageSrc = $('#img-preview').attr('src');
     if (!imageSrc || imageSrc.trim() === '') {
-        alert("Thương hiệu phải có 1 ảnh");
+        alert(name + " phải có 1 ảnh");
     } else {
         submitForm(form);
     }
@@ -171,9 +165,16 @@ function deleteRequest(model, nameEntity, action) {
         });
     }
 }
-$(document).ready(function() {
-    $("#cancel-button").click(function() {
-        window.history.back(); // Quay lại trang trước đó
+
+$(document).ready(function () {
+    $("#cancel-button").click(function () {
+        console.log(document.referrer);
+        var defaultLink = $(this).data('default-link');
+        if (document.referrer === '' || window.location.href === document.referrer) {
+            window.location.href = defaultLink;
+        } else {
+            window.location.href = document.referrer;
+        }
     });
 });
 $(document).ready(function () {
@@ -198,5 +199,301 @@ $(document).ready(function () {
 function clearParent() {
     $("#category-parent").val(""); // Gán giá trị rỗng cho input type="text"
     $("#parent-id").val(""); // Gán giá trị rỗng cho input type="hidden"
+}
+
+$(document).ready(function () {
+    $("#select-brand").selectize({
+        maxItems: 1, // Chỉ cho phép chọn một giá trị
+        placeholder: "Chọn thương hiệu",
+
+    });
+    $("#select-category").selectize({
+        maxItems: 1, // Chỉ cho phép chọn một giá trị
+        placeholder: "Chọn danh mục",
+    });
+});
+$(document).ready(function () {
+    $("#table-productLines tbody tr").dblclick(function () {
+        var productLineId = $(this).data("product-line-id");
+        var url = "/admin/product-lines/" + productLineId + "/products";
+        window.location.href = url;
+    });
+});
+
+function addColumn() {
+
+    $("#classification-table thead tr:first").append("<th><button class='fas fa-trash trash-icon' onclick='deleteColumn(this)'></button></th>");
+    $("#classification-table thead tr:last").append("<th>Đơn vị</th>");
+
+    $("#classification-table tbody tr").each(function () {
+        $(this).append('<td></td>');
+    });
+}
+
+function addRow() {
+
+    var numColumns = $('#classification-table th').length / 2;
+
+    var newRow = $('<tr></tr>');
+    newRow.append($('<td contenteditable="false"><button onclick="deleteRow(this)" class="fas fa-trash trash-icon"></button></td>'));
+    for (var i = 0; i < numColumns - 1; i++) {
+        newRow.append('<td></td>');
+    }
+
+    $('#classification-table tbody').append(newRow);
+
+    newRow = $('<tr></tr>');
+    for (let i = 0; i < 2; i++) {
+        newRow.append('<td><input min="1" type="number"></td>');
+    }
+    newRow.append($('<td>').append($('<button>').text('Show Images').click(function () {
+        alert('Sản phẩm chưa lưu không thể chỉnh sửa ảnh!');
+    })));
+    $("#product-table tbody").append(newRow);
+}
+
+function deleteColumn(button) {
+    if ($('#classification-table tr:first-child th').length <= 2) {
+        alert("Phải có ít nhất 1 cột phân loại");
+        return;
+    }
+    if (confirm("Bạn có chắc chắn muốn xoá cột này không?")) {
+        var index = $(button).closest('th').index() + 1;
+        $('#classification-table tr').each(function () {
+            $(this).find('th:nth-child(' + index + ')').remove();
+            $(this).find('td:nth-child(' + index + ')').remove();
+        });
+    }
+}
+
+function deleteRow(button) {
+    var index = $(button).closest('tr').index() + 2;
+    if (index <= 2) {
+        alert("phải có ít nhất 1 sản phẩm trong dòng");
+        return;
+    }
+    if (confirm("Bạn có chắc chắn muốn xoá dòng này không?")) {
+        $('#classification-table tr').eq(index).remove();
+        $('#product-table tr').eq(index).remove();
+    }
+}
+
+$(document).ready(function () {
+    $('#table-container').on('keydown', '[contenteditable="true"]', function (event) {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            $(this).blur();
+        }
+    });
+});
+
+function checkEmptyCells() {
+
+    var emptyCellFound = false;
+
+// Kiểm tra bảng sản phẩm
+    $("#product-table tbody tr").each(function () {
+        var cellText = $(this).find("input[type='number']:first").val();
+        var cellNumber = parseInt(cellText);
+
+        if (cellText === '' || cellText === 'null') {
+            emptyCellFound = true;
+            $(this).find("input[type='number']:first").addClass("red-background").click(function () {
+                $(this).removeClass('red-background');
+            });
+            alert("Có ô trống trong bảng sản phẩm!" + cellText);
+            return false;
+        }
+        if (cellNumber < 1) {
+            emptyCellFound = true;
+            $(this).find("input[type='number']:first").addClass("red-background").click(function () {
+                $(this).removeClass('red-background');
+            });
+            alert("Có sản phẩm giá không hợp lệ!");
+            return false;
+        }
+
+    });
+    if (emptyCellFound) {
+        return false;
+    }
+// Kiểm tra bảng phân loại
+    var seen = {};
+    $("#classification-table thead tr:last").find("th").slice(1).each(function () {
+        var cellText = $(this).text().trim().toLowerCase();
+
+        if (cellText === '') {
+            emptyCellFound = true;
+            $(this).addClass("red-background").click(function () {
+                $(this).removeClass('red-background');
+            });
+            alert("Có ô trống trong hàng đơn vị phân loại!");
+            return false;
+        }
+
+        if (seen[cellText]) {
+            emptyCellFound = true;
+            $(this).addClass("red-background").click(function () {
+                $(this).removeClass('red-background');
+            });
+            alert("Có ô bị trùng trong hàng đơn vị phân loại!");
+            return false;
+        }
+
+        seen[cellText] = true;
+    });
+    if (emptyCellFound) {
+        return false;
+    }
+// Kiểm tra bảng phân loại (tbody)
+    $("#classification-table tbody tr").each(function () {
+        $(this).find("td").slice(1).each(function () {
+            if ($(this).text().trim() === '') {
+                emptyCellFound = true;
+                $(this).addClass("red-background").click(function () {
+                    $(this).removeClass('red-background');
+                });
+                alert("Có ô trống trong bảng phân loại!");
+                return false;
+            }
+        });
+    });
+    if (emptyCellFound) {
+        return false;
+    }
+    var numRows = $('#classification-table tbody tr').length;
+    if (numRows === 0) {
+        alert("phải có ít nhất 1 sản phẩm trong dòng");
+        return false;
+    }
+    return true;
+}
+
+function saveProducts() {
+    if (!checkEmptyCells()) {
+        return;
+    }
+    var classifications = $("#classification-table thead tr:last").find("th").slice(1).map(function () {
+        return $(this).text();
+    }).get().join("-");
+    var idProductLine = $('#idProductLine').val();
+    var products = {};
+    var rows = $("#product-table tbody tr")
+    $("#classification-table tbody tr").each(function (index) {
+        var key = $(this).find("td").slice(1).map(function () {
+            return $(this).text();
+        }).get().join("-");
+        var id = rows.eq(index).find("input[type='hidden']").val();
+        var price = rows.eq(index).find("td:eq(0) input").val();
+        var salePrice = rows.eq(index).find("td:eq(1) input").val();
+        if (salePrice === '') {
+            salePrice = 0;
+        }
+        var images = rows.eq(index).data('images');
+        products[key] = {
+            id: id,
+            price: price,
+            salePrice: salePrice,
+            images: images
+        };
+    });
+
+    $.ajax({
+        url: "products/save",
+        type: "POST",
+        contentType: 'application/json',
+        data: JSON.stringify({
+            'id': idProductLine,
+            'products': products,
+            'classifications': classifications
+        }),
+        success: function (response) {
+            alert(response);
+            location.reload();
+        },
+        error: function (xhr, status, error) {
+            alert(error);
+            alert(xhr.responseText);
+        }
+    });
+}
+
+function showImages(id, images) {
+    var popup = $("#popup-images");
+    $("#id-product").val(id);
+    var imageDrop = $("#images-drop");
+    imageDrop.empty();
+    imageDrop.append("<p>Kéo và thả ảnh vào đây</p>");
+    $.each(images, function (index, image) {
+        var img = $("<div>")
+            .append($("<span>&times;</span>"))
+            .append($("<img>").attr("src", image.link).attr("alt", image.id));
+        imageDrop.append(img);
+    });
+    popup.css("display", "flex");
+}
+
+$(document).ready(function () {
+    $("#images-drop").on("click", "span", function () {
+        var remainingSpans = $("#images-drop span").length;
+        if (remainingSpans === 1) {
+            alert("Sản phẩm phải có 1 ảnh trở lên!");
+        } else {
+            $(this).parent().remove();
+        }
+    });
+    $(".close-popup-image").on("click", function () {
+        $("#popup-images").css("display", "none");
+    });
+});
+
+function selectFiles(files) {
+    event.preventDefault();
+    for (var i = 0; i < files.length; i++) {
+        var file = files[i];
+        var reader = new FileReader();
+        reader.onload = function (event) {
+            var imgElement = $("<div>")
+                .append($("<span>&times;</span>"))
+                .append($("<img>").attr("src", event.target.result).attr("alt", ''));
+            $("#images-drop").append(imgElement);
+        };
+        reader.readAsDataURL(file);
+    }
+}
+
+function saveImages() {
+    var savebtn = $('#save-button-product')
+    savebtn.html(`<div class="loader"></div>`)
+    savebtn.attr('disabled', 'disabled');
+    var id = $("#id-product").val();
+    var images = [];
+    $("#images-drop img").each(function () {
+        var alt = $(this).attr("alt");
+        var src = $(this).attr("src");
+        if (src.startsWith("http")) {
+            src = src.substring(src.indexOf("upload/") + 7, src.lastIndexOf("."));
+        }
+        images.push({id: alt, name: src});
+    });
+    $.ajax({
+        url: "product/save",
+        type: "POST",
+        contentType: 'application/json',
+        data: JSON.stringify({
+            'id': id,
+            'images': images
+        }),
+        success: function (response) {
+            alert(response);
+            location.reload();
+        },
+        error: function (xhr, status, error) {
+            savebtn.html('Lưu');
+            savebtn.removeAttr('disabled');
+            alert(error);
+            alert(xhr.responseText);
+        }
+    });
 }
 

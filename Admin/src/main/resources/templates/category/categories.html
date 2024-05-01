@@ -24,7 +24,8 @@
             <div id="search-bar">
                 <form class="search-box" th:action="@{/categories/page/1}">
                     <div class="input-box">
-                        <input type="hidden" name="nameDir" th:value="${nameDir}">
+                        <input type="hidden" name="sortDir" th:value="${sortDir}">
+                        <input th:if="${sortField!=null}" type="hidden" name="sortField" th:value="${sortField}">
                         <input type="text" placeholder="Nhập tên danh mục..." name="name" id="input-search" th:value="${name}"/>
                     </div>
                     <div class="search-button">
@@ -34,14 +35,21 @@
                                     alt="search"/>
                         </button>
                     </div>
+                    <div class="clear-button">
+                        <a th:href="@{/categories}">
+                            <img
+                                    th:src="@{/images/clear-icon.png}"
+                                    alt="search"/>
+                        </a>
+                    </div>
                 </form>
             </div>
             <a id="add-icon" th:href="@{'/categories/add'}">
                 <img th:src="@{/images/add-icon.png}">
             </a>
             <a id="sort-icon"
-               th:href="@{'/categories/page/' + ${currentPage} + '?nameDir=' + ${nameDir == 'asc' ? 'desc' : 'asc'} + ${name != null? '&name=' + name : ''}}">
-                <img th:src="@{${nameDir == 'asc' ? '/images/asc-icon.png' : '/images/desc-icon.png'}}" alt="Icon">
+               th:href="@{'/categories/page/' + ${currentPage} + '?sortDir=' + ${sortDir == 'asc' ? 'desc' : 'asc'} +${ sortField != null && sortField!='' ?'&sortField=' + sortField:''} + ${name != null? '&name=' + name : ''}}">
+                <img th:src="@{${sortDir == 'asc' ? '/images/asc-icon.png' : '/images/desc-icon.png'}}" alt="Icon">
             </a>
         </div>
         <div id="tree-categories"></div>
@@ -59,17 +67,17 @@
         let currentDepth = 0;
 
         categories.forEach(function (category) {
-            const depth = (category.name.lastIndexOf("-") + 1) / 2;
+            const depth = (category.name.match(/^(-+)/)?.[0].length || 0) / 2;
             const name = category.name.trim().replace(/^-+/, "");
             const ul = $("<ul></ul>")
             const link = $("<a></a>")
                 .attr("href", "/admin/categories/edit/" + category.id)
-                .html("Chỉnh sửa");
+                .addClass("fas fa-edit edit-icon");
             const span = $("<span></span>").html(name).attr("id",category.id);
             if (!category.hasChildren){
-                const  button = $("<button></button>")
+                const button = $("<button></button>")
                     .attr("onclick", "deleteRequest("+JSON.stringify(category)+", 'danh mục', 'categories')")
-                    .html("Xoá");
+                    .addClass("fas fa-trash trash-icon");
                 span.append(button)
             }
             span.append(link);
@@ -90,5 +98,6 @@
     /*]]>*/
 </script>
 <script th:src="@{/js/category.js}"></script>
+<script th:src="@{/js/index.js}"></script>
 </body>
 </html>

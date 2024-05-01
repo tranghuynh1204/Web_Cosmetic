@@ -1,10 +1,13 @@
 package banana_cosmetic.admin.category;
 
+import banana_cosmetic.admin.product.ProductLineRepository;
 import banana_cosmetic.common.entity.category.Category;
 import banana_cosmetic.common.util.PaginationUtil;
+import org.javatuples.Pair;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -19,13 +22,15 @@ import java.util.stream.Collectors;
 @Service
 public class CategoryService {
 
-    private static final int ROOT_CATEGORIES_PER_PAGE = 5;
+    private static final int ROOT_CATEGORIES_PER_PAGE = 9;
     @Autowired
     private CategoryRepository repository;
     @Autowired
     private ModelMapper mapper;
+    @Autowired
+    private ProductLineRepository productLineRepository;
 
-    public void save(Category category) {
+    public void save(Category category) throws Exception {
         Long id = category.getId();
         if (category.getId() == null) {
             setAllParentIdsAndSave(category);
@@ -38,20 +43,28 @@ public class CategoryService {
             if (category.getParent() == null || category.getParent().getId() != oldCategory.get().getId()) {
                 setAllParentIdsAndSave(category);
             } else {
-                repository.save(category);
+                try {
+                    repository.save(category);
+                } catch (DataIntegrityViolationException e) {
+                    throw new Exception("Danh mục " + category.getName() + " đã tồn tại.");
+                }
             }
         }
 
     }
 
-    private void setAllParentIdsAndSave(Category category) {
+    private void setAllParentIdsAndSave(Category category) throws Exception {
         Category parent = category.getParent();
         if (parent != null) {
             String allParentIds = parent.getAllParentIds() == null ? "-" : parent.getAllParentIds();
             allParentIds += parent.getId() + "-";
             category.setAllParentIds(allParentIds);
         }
-        repository.save(category);
+        try {
+            repository.save(category);
+        } catch (DataIntegrityViolationException e) {
+            throw new Exception("Danh mục " + category.getName() + " đã tồn tại.");
+        }
         List<Category> children = category.getChildren();
         if (children != null) {
             for (Category child : children) {
@@ -64,9 +77,9 @@ public class CategoryService {
         try {
             repository.deleteById(id);
         } catch (DataIntegrityViolationException e) {
-            throw new Exception("Vẫn còn sản phẩm mang danh mục này.");
-        } catch (Exception e) {
-            throw new Exception("Lỗi xóa danh mục: " + e.getMessage());
+            throw new Exception("Vẫn còn sản phẩm thuộc danh mục này.");
+        } catch (EmptyResultDataAccessException e) {
+            throw new Exception("Không tìm thấy danh mục có id: " + id);
         }
     }
 
@@ -78,9 +91,9 @@ public class CategoryService {
                 .collect(Collectors.toList());
     }
 
-    public List<CategoryDto> listByPage(PaginationUtil<Category> pageInfo, int pageNum, String nameDir,
+    public List<CategoryDto> listByPage(PaginationUtil pageInfo, int pageNum, String sortDir,
                                         String name) {
-        Sort sort = Sort.by(nameDir.equals("asc") ?
+        Sort sort = Sort.by(sortDir.equals("asc") ?
                 Sort.Order.asc("name") :
                 Sort.Order.desc("name"));
 
@@ -92,7 +105,7 @@ public class CategoryService {
         if (name == null || name.isEmpty()) {
             pageCategories = repository.findByParentIsNull(pageable);
             categories = pageCategories.getContent();
-            categories = hierarchicalCategories(categories, nameDir);
+            categories = hierarchicalCategories(categories, sortDir);
         } else {
             pageCategories = repository.findByNameContainingIgnoreCase(pageable, name);
             categories = pageCategories.getContent();
@@ -101,7 +114,7 @@ public class CategoryService {
             }
         }
 
-        pageInfo.addAttribute(pageCategories);
+        pageInfo.addAttribute(pageCategories, sortDir, null, Pair.with("name",name ));
 
         return categories.stream()
                 .map(category -> mapper.map(category, CategoryDto.class))

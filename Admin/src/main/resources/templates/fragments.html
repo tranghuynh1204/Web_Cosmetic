@@ -6,7 +6,8 @@
     <title th:text="${title}"></title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link rel="stylesheet" th:href="@{/css/main.css}">
-    <script th:src="@{/js/index.js}"></script>
+    <link rel="stylesheet" th:href="@{/css/select.css}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.13.3/js/standalone/selectize.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <script th:inline="javascript">
         $(document).ready(function () {
@@ -18,27 +19,24 @@
             /*]]>*/
         });
     </script>
-    <style>/* CSS for ul */
-
-    </style>
 </head>
 <body>
 <div th:fragment="pagination(entityName,moduleURL)">
-    <div class="row-brand" th:if="${totalItems > 0}">
+    <div class="row" th:if="${totalItems > 0}">
         <span>[[${entityName}]] # [[${startCount}]] to [[${endCount}]] of [[${totalItems}]]</span>
     </div>
-    <div class="row-brand" th:unless="${totalItems > 0}">
+    <div class="row" th:unless="${totalItems > 0}">
         <span>Không tìm thấy</span>
     </div>
 
     <div th:if="${totalPages > 1}" class="container-pagination">
         <div class="go-page">
             <form th:action="@{${moduleURL} + '/page/'}" id="form-go">
-                <input th:if="${nameDir!=null}" type="hidden" name="nameDir" th:value="${nameDir}" />
+                <input th:if="${sortDir!=null}" type="hidden" name="sortDir" th:value="${sortDir}" />
                 <input th:if="${name!=null}" type="hidden" name="name" th:value="${name}" />
-                <input th:if="${categoryDir!=null}" type="hidden" name="nameDir" th:value="${categoryDir}" />
+                <input th:if="${categoryDir!=null}" type="hidden" name="sortDir" th:value="${categoryDir}" />
                 <input th:if="${categoryName!=null}" type="hidden" name="name" th:value="${categoryName}" />
-                <input th:if="${brandDir!=null}" type="hidden" name="nameDir" th:value="${brandDir}" />
+                <input th:if="${sortField!=null}" type="hidden" name="sortDir" th:value="${sortField}" />
                 <input th:if="${brandName!=null}" type="hidden" name="name" th:value="${brandName}" />
                 <input type="number" placeholder="Nhập page cần đến" id="input-go" min="1" th:max="${totalPages}" th:value="${currentPage}">
                 <button type="submit" id="button-go">Go</button>
@@ -72,14 +70,23 @@
         </ul>
     </div>
 </div>
-<a th:href="@{${moduleURL} + '/page/' + ${pageNum}  + '?nameDir=' + ${nameDir} +
+<a th:href="@{${moduleURL} + '/page/' + ${pageNum}  + '?sortDir=' + ${sortDir} +
+${sortField != null && sortField!='' ? '&sortField=' + sortField:''} +
 ${name != null && name!='' ? '&name=' + name : ''} +
-${categoryDir != null && categoryDir!='' ? '&categoryDir=' + categoryDir : ''} +
-${categoryName != null && categoryName!='' ? '&categoryName=' + categoryName : ''} +
-${brandDir != null && brandDir!='' ? '&brandDir=' + brandDir : ''} +
-${brandName != null && brandName!='' ? '&brandName=' + brandName : ''}    }"
+${categoryId != null and categoryId!=''? '&categoryId=' + categoryId : ''} +
+${brandId != null && brandId!='' ? '&brandId=' + brandId : ''}    }"
    th:fragment="page_link(moduleURL, pageNum, label)" class="page-link">
     [[${label}]]
 </a>
+<div th:fragment="filter-select(id,objects,nameSelect,oldSelect)" class="filter-product">
+    <label>
+        <select th:id="${id}" multiple th:name="${nameSelect}" >
+            <option th:selected="${object.id == oldSelect}" th:each="object : ${objects}" th:text="${object.name}" th:value="${object.id}"></option>
+        </select>
+    </label>
+    <script>
+
+    </script>
+</div>
 </body>
 </html>

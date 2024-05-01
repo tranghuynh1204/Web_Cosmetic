@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments :: page_head('Sản phẩm')">
+    <meta charset="UTF-8">
+</head>
+<body>
+
+<th:block th:replace="sidebar :: sidebar"></th:block>
+<div id="main-content">
+    <th:block th:replace="header :: header"></th:block>
+    <div id="crumbs">
+        <ul>
+            <li>
+                <a th:href="@{/}"><i class="fas fa-home"></i></a>
+            </li>
+            <li>
+                <a th:href="@{/product-lines}">Sản phẩm</a>
+            </li>
+            <li>
+                <a href="">[[${title}]]</a>
+            </li>
+        </ul>
+    </div>
+    <main>
+        <input type="hidden" th:value="${id}" id="idProductLine"></input>
+        <div id="table-container"></div>
+        <button onclick="addColumn()">Thêm cột</button>
+        <button onclick="addRow()">Thêm hàng</button>
+        <div class="row-button">
+            <button
+                    id="save-button"
+                    class="button"
+                    onclick="saveProducts()"
+            >
+                Lưu
+            </button>
+            <button id="cancel-button" class="button" type="button" th:data-default-link="@{'/product-lines'}">Huỷ
+            </button>
+        </div>
+    </main>
+    <div id="popup-images">
+        <div class="popup-image-content">
+            <label for="input-files" class="custom-files-upload">
+                Tải lên 1 hoặc nhiều ảnh
+            </label>
+            <input
+                    type="file"
+                    id="input-files"
+                    multiple
+                    onchange="selectFiles(this.files)"
+                    style="display: none;"
+            />
+
+            <span class="close-popup-image">&times;</span>
+            <div id="images-drop" ondrop="selectFiles(event.dataTransfer.files)" class="drop-zone">
+            </div>
+            <div class="row-button">
+                <button
+                        id="save-button-product"
+                        class="button"
+                        onclick="saveImages()"
+                >
+                    Lưu
+                </button>
+            </div>
+        </div>
+        <input type="hidden" id="id-product"/>
+    </div>
+    <th:block th:replace="footer :: footer"></th:block>
+</div>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    var classificationsString = /*[[${classifications}]]*/ "";
+    // Kiểm tra xem biến có là null không
+    if (classificationsString === null) {
+        classificationsString = 'Đơn vị';
+    }
+
+    var classificationsArray = classificationsString.split("-");
+    var productsMap = /*[[${products}]]*/ {};
+    const productsArray = Object.entries(productsMap);
+
+    // Sắp xếp mảng theo giá
+    productsArray.sort((a, b) => a[1].id - b[1].id);
+
+    const sortedProductsMap = new Map(productsArray);
+
+    $(document).ready(function () {
+
+        $(document).ready(function () {
+            var tableClassification = $('<table>').attr('id', 'classification-table').attr('contenteditable', true);
+            var theadClassification = $('<thead>');
+            var tbodyClassification = $('<tbody>');
+
+            var headerRowClassification = $('<tr>').append($('<th>'));
+            var buttonRow = $('<tr contenteditable="false"></tr>').append($('<th>'));
+
+            classificationsArray.forEach(function (classification) {
+                headerRowClassification.append($('<th>').text(classification));
+                buttonRow.append('<th><button class="fas fa-trash trash-icon" onclick="deleteColumn(this)"></button></th>');
+            });
+
+            theadClassification.append(buttonRow, headerRowClassification);
+            tableClassification.append(theadClassification, tbodyClassification);
+
+            var tableProduct = $('<table>').attr('id', 'product-table');
+            var theadProduct = $('<thead>').append('<tr>').append('<th>').append('<th>').append('<th>');
+            var tbodyProduct = $('<tbody>');
+
+            var headerRowProduct = $('<tr>')
+                .append($('<th>').text("Giá"))
+                .append($('<th>').text("Giá sau khi giảm"))
+                .append($('<th>').text("Hình ảnh"));
+            theadProduct.append(headerRowProduct);
+            tableProduct.append(theadProduct);
+
+            sortedProductsMap.forEach((value, key) => {
+                var classifications = key.split("-");
+                var rowClassification = $('<tr>').append($('<td contenteditable="false"><button onclick="deleteRow(this)" class="fas fa-trash trash-icon"></button></td>'));
+
+                classifications.forEach(function (classification) {
+                    rowClassification.append($('<td>').text(classification));
+                });
+
+                tbodyClassification.append(rowClassification);
+                var rowProduct = $('<tr>').data('images', value.images)
+                    .append($('<input type="hidden" value="' + value.id + '">'))
+                    .append($('<td>').append($('<input min="1" type="number" value="' + value.price + '">')))
+                    .append($('<td>').append($('<input min="1" type="number" value="' + value.salePrice + '">')))
+                    .append($('<td>').append($('<button>').text('Hình ảnh').click(function () {
+                        showImages(value.id, value.images);
+                    })));
+                tbodyProduct.append(rowProduct);
+            });
+
+            tableClassification.append(tbodyClassification);
+            tableProduct.append(tbodyProduct);
+
+            $('#table-container').append(tableClassification).append(tableProduct);
+        });
+    });
+    /*]]>*/
+</script>
+<script th:src="@{/js/index.js}"></script>
+</body>
+</html>

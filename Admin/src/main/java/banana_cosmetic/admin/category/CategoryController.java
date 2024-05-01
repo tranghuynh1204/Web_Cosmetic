@@ -25,14 +25,12 @@ public class CategoryController {
     }
 
     @GetMapping("/page/{pageNum}")
-    public String listByPage(@PathVariable int pageNum, String nameDir, String name, Model model) {
+    public String listByPage(@PathVariable int pageNum, String sortDir, String name, Model model) {
 
-        nameDir = (nameDir == null || nameDir.trim().isEmpty()) ? "asc" : nameDir;
-        PaginationUtil<Category> pageInfo = new PaginationUtil<>(model);
-        List<CategoryDto> categories = service.listByPage(pageInfo, pageNum, nameDir, name);
+        sortDir = (sortDir == null || sortDir.trim().isEmpty()) ? "asc" : sortDir;
+        PaginationUtil pageInfo = new PaginationUtil(model);
+        List<CategoryDto> categories = service.listByPage(pageInfo, pageNum, sortDir, name);
         model.addAttribute("categories", categories);
-        model.addAttribute("nameDir", nameDir);
-        model.addAttribute("name", name);
         return "category/categories";
     }
 

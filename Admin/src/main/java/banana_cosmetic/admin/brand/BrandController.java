@@ -26,14 +26,12 @@ public class BrandController {
     }
 
     @GetMapping("/page/{pageNum}")
-    public String listByPage(@PathVariable int pageNum, String nameDir, String name, Model model) {
+    public String listByPage(@PathVariable int pageNum, String sortDir, String name, Model model) {
 
-        nameDir = (nameDir == null || nameDir.trim().isEmpty()) ? "asc" : nameDir;
-        PaginationUtil<Brand> pageInfo = new PaginationUtil<>(model);
-        List<BrandDto> brands = service.listByPage(pageInfo, pageNum, nameDir, name);
+        sortDir = (sortDir == null || sortDir.trim().isEmpty()) ? "asc" : sortDir;
+        PaginationUtil pageInfo = new PaginationUtil(model);
+        List<BrandDto> brands = service.listByPage(pageInfo, pageNum, sortDir, name);
         model.addAttribute("brands", brands);
-        model.addAttribute("nameDir", nameDir);
-        model.addAttribute("name", name);
         return "brand/brands";
     }
 
@@ -63,7 +61,7 @@ public class BrandController {
         try {
             service.save(brand);
             if (image != null && !image.isEmpty()) {
-                CloudinaryUtil.uploadImage(image, brand.getId());
+                CloudinaryUtil.uploadImage(image, "brand_" + brand.getId());
             }
             return new ResponseEntity<>("Lưu thành công", HttpStatus.OK); // Trả về brand mới với mã trạng thái 200 OK
         } catch (Exception e) {

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments :: page_head('Sản phẩm')">
+    <meta charset="UTF-8"/>
+    <title>Title</title>
+</head>
+<body>
+<th:block th:replace="sidebar :: sidebar"></th:block>
+<div id="main-content">
+    <th:block th:replace="header :: header"></th:block>
+    <div id="crumbs">
+        <ul>
+            <li>
+                <a th:href="@{/}"><i class="fas fa-home"></i></a>
+            </li>
+            <li>
+                <a>Sản phẩm</a>
+            </li>
+        </ul>
+    </div>
+    <main>
+        <div class="row-search">
+            <div id="search-bar">
+                <form class="search-box" th:action="@{/product-lines/page/1}">
+                    <div th:replace="fragments :: filter-select('select-brand',${brands},'brandId',${brandId})"></div>
+                    <div th:replace="fragments :: filter-select('select-category',${categories},'categoryId',${categoryId})"></div>
+                    <div class="input-box">
+                        <input type="hidden" name="sortDir" th:value="${sortDir}">
+                        <input type="hidden" name="sortField" th:value="${sortField}">
+                        <input type="text" placeholder="Nhập tên sản phẩm..." name="name" id="input-search"
+                               th:value="${name}"/>
+                    </div>
+                    <div class="search-button">
+                        <button style="background-color: rgba(0,0,0,0);border-radius:50%;border: none">
+                            <img
+                                    th:src="@{/images/search-icon.png}"
+                                    alt="search"/>
+                        </button>
+                    </div>
+                    <div class="clear-button">
+                        <a th:href="@{/product-lines}">
+                            <img
+                                    th:src="@{/images/clear-icon.png}"
+                                    alt="search"/>
+                        </a>
+                    </div>
+                </form>
+            </div>
+            <a id="add-icon" th:href="@{'/product-lines/add'}">
+                <img th:src="@{/images/add-icon.png}">
+            </a>
+        </div>
+        <table id="table-productLines">
+            <thead>
+            <tr>
+                <th>
+                    <a th:href="@{'/product-lines/page/' + ${currentPage} + '?sortDir=' + ${sortDir == 'asc' ? 'desc' : 'asc'} +'&sortField=name'  + ${name != null? '&name=' + name : ''}+${categoryId != null? '&categoryId=' + categoryId : ''} +
+${brandId != null && brandId!='' ? '&brandId=' + brandId : ''} }">Tên</a>
+                </th>
+                <th>Ảnh</th>
+                <th><a th:href="@{'/product-lines/page/' + ${currentPage} + '?sortDir=' + ${sortDir == 'asc' ? 'desc' : 'asc'} +'&sortField=brand.name'  + ${name != null? '&name=' + name : ''}+${categoryId != null? '&categoryId=' + categoryId : ''} +
+${brandId != null && brandId!='' ? '&brandId=' + brandId : ''} }">Thương hiệu</a></th>
+                <th><a th:href="@{'/product-lines/page/' + ${currentPage} + '?sortDir=' + ${sortDir == 'asc' ? 'desc' : 'asc'} +'&sortField=category.name'  + ${name != null? '&name=' + name : ''}+${categoryId != null? '&categoryId=' + categoryId : ''} +
+${brandId != null && brandId!='' ? '&brandId=' + brandId : ''} }">Danh mục</a></th>
+                <th>Hành động</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="productLine : ${productLines}" th:data-product-line-id="${productLine.id}">
+                <td th:text="${productLine.name}"></td>
+                <td><img th:src="${productLine.image}"></td>
+                <td th:text="${productLine.brandName}"></td>
+                <td th:text="${productLine.categoryName}"></td>
+                <td>
+                    <a th:href="@{'/product-lines/edit/' + ${productLine.id}}" class="fas fa-edit edit-icon"></a>
+                    <button class="fas fa-trash trash-icon"
+                            th:onclick="deleteRequest([[${productLine}]],'sản phẩm','product-lines')">
+                    </button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </main>
+
+    <div th:replace="fragments :: pagination('Sản phẩm','/product-lines')"></div>
+    <th:block th:replace="footer :: footer"></th:block>
+</div>
+<script th:src="@{/js/index.js}"></script>
+</body>
+</html>

@@ -29,8 +29,8 @@
         >
           <div class="row-category">
             <input type="hidden" th:field="*{id}" id="id" />
-            <label for="name">Tên thương hiệu:</label>
-            <input type="text" th:field="*{name}" id="name" />
+            <label for="name">Tên danh mục:</label>
+            <input type="text" th:field="*{name}" id="name" required />
             <label for="category-parent">Danh mục cha:</label>
             <input
               type="text"
@@ -51,7 +51,7 @@
             >
               Lưu
             </button>
-            <button id="cancel-button" class="button" type="button">Huỷ</button>
+            <button id="cancel-button" class="button" type="button" th:data-default-link="@{'/categories'}">Huỷ</button>
           </div>
         </form>
       </main>
@@ -67,7 +67,7 @@
         let currentDepth = 0;
 
         categories.forEach(function (category) {
-          const depth = (category.name.lastIndexOf("-") + 1) / 2;
+          const depth = (category.name.match(/^(-+)/)?.[0].length || 0) / 2;
           const name = category.name.trim().replace(/^-+/, "");
           const ul = $("<ul></ul>");
           const span = $("<span></span>").html(name).attr("id", category.id);
@@ -88,5 +88,6 @@
       /*]]>*/
     </script>
     <script th:src="@{/js/category.js}"></script>
+    <script th:src="@{/js/index.js}"></script>
   </body>
 </html>

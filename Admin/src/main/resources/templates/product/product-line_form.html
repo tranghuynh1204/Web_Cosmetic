@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:replace="fragments :: page_head('Sản phẩm')">
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<th:block th:replace="sidebar :: sidebar"></th:block>
+<div id="main-content">
+    <th:block th:replace="header :: header"></th:block>
+    <div id="crumbs">
+        <ul>
+            <li>
+                <a th:href="@{/}"><i class="fas fa-home"></i></a>
+            </li>
+            <li>
+                <a th:href="@{/product-lines}">Sản phẩm</a>
+            </li>
+            <li>
+                <a href="">[[${title}]]</a>
+            </li>
+        </ul>
+    </div>
+    <main>
+        <form
+                th:action="@{/product-lines/save}"
+                th:object="${productLine}"
+                method="post"
+        >
+            <div class="row">
+                <div class="col">
+                    <label for="name">Tên sản phẩm:</label>
+                    <input type="hidden" th:field="*{id}">
+                    <input id="name" placeholder="Nhập tên sản phẩm" type="text" th:field="*{name}" required/>
+                    <label for="origin">Xuất xứ:</label>
+                    <input id="origin" placeholder="Nhập xuất xứ" type="text" th:field="*{origin}" required/>
+                    <label for="select-brand">Thương hiệu:</label>
+                    <select id="select-brand" multiple th:field="*{brand}">
+                        <option th:each="object : ${brands}" th:text="${object.name}" th:value="${object.id}"></option>
+                    </select>
+                    <label for="select-category">Danh mục:</label>
+                    <select id="select-category" multiple th:field="*{category}">
+                        <option th:each="object : ${categories}" th:text="${object.name}" th:value="${object.id}"></option>
+                    </select>
+                </div>
+                <div class="col">
+                    <label for="file-select" class="custom-file-upload">
+                        Tải ảnh lên
+                    </label>
+                    <input type="file" id="file-select" name="fileInput" accept="image/*"
+                           onchange="selectFile(this.files[0])"  style="display: none;"/>
+                    <div id="image-drop" ondrop="selectFile(event.dataTransfer.files[0])" class="drop-zone">
+                        <p id="img-label">Kéo và thả ảnh vào đây</p>
+                        <img id="img-preview" th:src="${productLine.image}"/>
+                        <input id="img-hidden" name="image" type="hidden"/>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row-button">
+                <button
+                        id="save-button"
+                        class="button"
+                        onclick="submitFormAndCheckImage(this.form, 'Dòng sản phẩm')"
+                >
+                    Lưu
+                </button>
+                <button id="cancel-button" class="button" type="button" th:data-default-link="@{'/product-lines'}">Huỷ</button>
+            </div>
+        </form>
+    </main>
+    <th:block th:replace="footer :: footer"></th:block>
+</div>
+<script th:src="@{/js/index.js}"></script>
+</body>
+</html>

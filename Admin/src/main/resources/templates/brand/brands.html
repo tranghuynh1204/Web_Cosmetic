@@ -23,7 +23,8 @@
           <div id="search-bar">
             <form class="search-box" th:action="@{/brands/page/1}">
               <div class="input-box">
-                <input type="hidden" name="nameDir" th:value="${nameDir}" />
+                <input type="hidden" name="sortDir" th:value="${sortDir}" />
+                <input th:if="${sortField!=null}" type="hidden" name="sortField" th:value="${sortField}">
                 <input
                   type="text"
                   placeholder="Nhập tên thương hiệu..."
@@ -43,6 +44,13 @@
                   <img th:src="@{/images/search-icon.png}" alt="search" />
                 </button>
               </div>
+              <div class="clear-button">
+                <a th:href="@{/brands}">
+                  <img
+                          th:src="@{/images/clear-icon.png}"
+                          alt="search"/>
+                </a>
+              </div>
             </form>
           </div>
           <a id="add-icon" th:href="@{'/brands/add'}">
@@ -50,10 +58,10 @@
           </a>
           <a
             id="sort-icon"
-            th:href="@{'/brands/page/' + ${currentPage} +'?nameDir=' + ${nameDir == 'asc' ? 'desc' : 'asc'} + ${name != null? '&name=' + name : ''}}"
+            th:href="@{'/brands/page/' + ${currentPage} +'?sortDir=' + ${sortDir == 'asc' ? 'desc' : 'asc'}+ ${ sortField != null && sortField!='' ?'&sortField=' + sortField:''}  + ${name != null? '&name=' + name : ''}}"
           >
             <img
-              th:src="@{${nameDir == 'asc' ? '/images/asc-icon.png' : '/images/desc-icon.png'}}"
+              th:src="@{${sortDir == 'asc' ? '/images/asc-icon.png' : '/images/desc-icon.png'}}"
               alt="Icon"
             />
           </a>
@@ -80,5 +88,6 @@
       <div th:replace="fragments :: pagination('Thương hiệu','/brands')"></div>
       <th:block th:replace="footer :: footer"></th:block>
     </div>
+    <script th:src="@{/js/index.js}"></script>
   </body>
 </html>

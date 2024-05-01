@@ -6,6 +6,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import lombok.Getter;
 import lombok.Setter;
+
 @Entity
 @Getter
 @Setter
@@ -17,8 +18,12 @@ public class Brand extends IdBasedEntity {
     private String description;
 
     public String getLogo() {
+        if (id == null) {
+            return null;
+        }
         return "https://res.cloudinary.com/bananacosmetic/image/upload/brand_" + id + "?" + GachaUtil.gachaNumber();
     }
+
     public Brand() {
     }
 

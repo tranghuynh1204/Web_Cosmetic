@@ -13,6 +13,7 @@ import java.util.List;
 @Entity
 public class Category extends IdBasedEntity implements Cloneable {
 
+    @Column(unique = true)
     private String name;
     private String allParentIds;
     @ManyToOne

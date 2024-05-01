@@ -22,8 +22,8 @@
     </div>
     <main>
         <form method="post" th:action="@{/brands/save}" th:object="${brand}" id="form-brand">
-            <div class="row-brand">
-                <div class="col-brand">
+            <div class="row">
+                <div class="col">
                     <input type="hidden" th:field="*{id}">
                     <label for="name">Tên thương hiệu:</label>
                     <input id="name" placeholder="Nhập tên thương hiệu" type="text" th:field="*{name}" required/>
@@ -31,11 +31,14 @@
                     <textarea id="description" placeholder="Nhập mô tả thương hiệu"
                               th:field="*{description}" required></textarea>
                 </div>
-                <div class="col-brand">
+                <div class="col">
+                    <label for="file-select" class="custom-file-upload">
+                        Tải ảnh lên
+                    </label>
                     <input type="file" id="file-select" name="fileInput" accept="image/*"
-                           onchange="selectFile(this.files[0])"/>
-                    <div id="image-drop" ondrop="selectFile(event.dataTransfer.files[0])">
-                        <p id="img-label">Kéo và thả ảnh vào đây hoặc</p>
+                           onchange="selectFile(this.files[0])"  style="display: none;"/>
+                    <div id="image-drop" ondrop="selectFile(event.dataTransfer.files[0])" class="drop-zone">
+                        <p id="img-label">Kéo và thả ảnh vào đây</p>
                         <img id="img-preview" th:src="${brand.logo}" loading="lazy" decoding="async"
                              referrerpolicy="no-referrer"/>
                         <input id="img-hidden" name="image" type="hidden"/>
@@ -43,14 +46,15 @@
                 </div>
             </div>
             <div class="row-button">
-                <button id="save-button" class="button" onclick="submitBrandForm(this.form)">
+                <button id="save-button" class="button" onclick="submitFormAndCheckImage(this.form,'Thương hiệu')">
                     Lưu
                 </button>
-                <button id="cancel-button" class="button" type="button" >Huỷ</button>
+                <button id="cancel-button" class="button" type="button" th:data-default-link="@{'/brands'}" >Huỷ</button>
             </div>
         </form>
     </main>
     <th:block th:replace="footer :: footer"></th:block>
 </div>
+<script th:src="@{/js/index.js}"></script>
 </body>
 </html>

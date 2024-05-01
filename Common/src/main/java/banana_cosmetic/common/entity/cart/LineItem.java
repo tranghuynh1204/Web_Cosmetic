@@ -7,6 +7,8 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Transient;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Getter
 @Setter
@@ -14,6 +16,7 @@ import lombok.Setter;
 public class LineItem extends IdBasedEntity {
 
     private int quantity;
+    @OnDelete(action = OnDeleteAction.SET_NULL)
     @ManyToOne
     private Product product;
 //    @Transient
