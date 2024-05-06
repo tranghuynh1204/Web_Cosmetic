@@ -20,4 +20,12 @@ public interface ProductLineRepository extends JpaRepository<ProductLine, Long> 
     )
     Page<ProductLine> getAll(Pageable pageable, String name, Long categoryId, Long brandId);
 
+    @Query("SELECT p FROM ProductLine p JOIN p.products pr WHERE " +
+            "pr.salePrice != 0 " +
+            "AND (:brandId IS NULL OR p.brand.id = :brandId) " +
+            "AND (:categoryId IS NULL OR p.category.id = :categoryId OR p.category.allParentIds LIKE CONCAT('%', :categoryId, '%')) " +
+            "AND (LOWER(p.name) LIKE LOWER(CONCAT('%', COALESCE(:name, ''), '%'))) "
+    )
+    Page<ProductLine> getAllSale(Pageable pageable, String name, Long categoryId, Long brandId);
+
 }

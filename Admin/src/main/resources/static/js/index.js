@@ -152,14 +152,18 @@ function validateForm() {
 function deleteRequest(model, nameEntity, action) {
     var isDelete = confirm("Bạn có chắc chắn muốn xoá " + nameEntity + " " + model.name.replace(/^[-]+/, "") + "?");
     if (isDelete) {
+        var overlay = $('#overlay');
+        overlay.show();
         $.ajax({
             url: "/admin/" + action + "/delete/" + model.id,
             type: "POST",
             success: function (response) {
+                overlay.hide();
                 alert(response);
                 location.reload();
             },
             error: function (xhr, status, error) {
+                overlay.hide();
                 alert(xhr.responseText);
             }
         });
@@ -223,10 +227,10 @@ $(document).ready(function () {
 function addColumn() {
 
     $("#classification-table thead tr:first").append("<th><button class='fas fa-trash trash-icon' onclick='deleteColumn(this)'></button></th>");
-    $("#classification-table thead tr:last").append("<th>Đơn vị</th>");
+    $("#classification-table thead tr:last").append("<th><input type='text' value='Đơn vị'></th>");
 
     $("#classification-table tbody tr").each(function () {
-        $(this).append('<td></td>');
+        $(this).append("<td><input type='text'></td>");
     });
 }
 
@@ -235,9 +239,9 @@ function addRow() {
     var numColumns = $('#classification-table th').length / 2;
 
     var newRow = $('<tr></tr>');
-    newRow.append($('<td contenteditable="false"><button onclick="deleteRow(this)" class="fas fa-trash trash-icon"></button></td>'));
+    newRow.append($('<td><button onclick="deleteRow(this)" class="fas fa-trash trash-icon"></button></td>'));
     for (var i = 0; i < numColumns - 1; i++) {
-        newRow.append('<td></td>');
+        newRow.append("<td><input type='text'></td>");
     }
 
     $('#classification-table tbody').append(newRow);
@@ -246,7 +250,7 @@ function addRow() {
     for (let i = 0; i < 2; i++) {
         newRow.append('<td><input min="1" type="number"></td>');
     }
-    newRow.append($('<td>').append($('<button>').text('Show Images').click(function () {
+    newRow.append($('<td>').append($('<button>').text('Hình ảnh').click(function () {
         alert('Sản phẩm chưa lưu không thể chỉnh sửa ảnh!');
     })));
     $("#product-table tbody").append(newRow);
@@ -278,20 +282,11 @@ function deleteRow(button) {
     }
 }
 
-$(document).ready(function () {
-    $('#table-container').on('keydown', '[contenteditable="true"]', function (event) {
-        if (event.key === 'Enter') {
-            event.preventDefault();
-            $(this).blur();
-        }
-    });
-});
-
 function checkEmptyCells() {
+
 
     var emptyCellFound = false;
 
-// Kiểm tra bảng sản phẩm
     $("#product-table tbody tr").each(function () {
         var cellText = $(this).find("input[type='number']:first").val();
         var cellNumber = parseInt(cellText);
@@ -319,8 +314,8 @@ function checkEmptyCells() {
     }
 // Kiểm tra bảng phân loại
     var seen = {};
-    $("#classification-table thead tr:last").find("th").slice(1).each(function () {
-        var cellText = $(this).text().trim().toLowerCase();
+    $("#classification-table thead tr:last").find("input").each(function () {
+        var cellText = $(this).val().trim().toLowerCase();
 
         if (cellText === '') {
             emptyCellFound = true;
@@ -347,8 +342,8 @@ function checkEmptyCells() {
     }
 // Kiểm tra bảng phân loại (tbody)
     $("#classification-table tbody tr").each(function () {
-        $(this).find("td").slice(1).each(function () {
-            if ($(this).text().trim() === '') {
+        $(this).find("input").each(function () {
+            if ($(this).val().trim() === '') {
                 emptyCellFound = true;
                 $(this).addClass("red-background").click(function () {
                     $(this).removeClass('red-background');
@@ -373,15 +368,15 @@ function saveProducts() {
     if (!checkEmptyCells()) {
         return;
     }
-    var classifications = $("#classification-table thead tr:last").find("th").slice(1).map(function () {
-        return $(this).text();
+    var classifications = $("#classification-table thead tr:last").find("input").map(function () {
+        return $(this).val();
     }).get().join("-");
     var idProductLine = $('#idProductLine').val();
     var products = {};
     var rows = $("#product-table tbody tr")
     $("#classification-table tbody tr").each(function (index) {
-        var key = $(this).find("td").slice(1).map(function () {
-            return $(this).text();
+        var key = $(this).find("input").map(function () {
+            return $(this).val();
         }).get().join("-");
         var id = rows.eq(index).find("input[type='hidden']").val();
         var price = rows.eq(index).find("td:eq(0) input").val();

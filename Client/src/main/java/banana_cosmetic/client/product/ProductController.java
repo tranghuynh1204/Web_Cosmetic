@@ -1,5 +1,7 @@
 package banana_cosmetic.client.product;
 
+import banana_cosmetic.client.cart.CartService;
+import banana_cosmetic.common.entity.cart.Cart;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class ProductController {
 
     @Autowired
-    ProductLineService service;
+    private CartService service;
 
     @GetMapping("")
     public String viewProduct(){
@@ -24,6 +26,9 @@ public class ProductController {
 //        model.addAttribute("products",productLine.getProducts());
 //        model.addAttribute("classifications",classifications);
 //        model.addAttribute("keys",keys);
+
+        Cart cart = new Cart();
+        service.save(cart);
         return "product";
     }
 }

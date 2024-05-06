@@ -88,15 +88,15 @@
     $(document).ready(function () {
 
         $(document).ready(function () {
-            var tableClassification = $('<table>').attr('id', 'classification-table').attr('contenteditable', true);
+            var tableClassification = $('<table>').attr('id', 'classification-table');
             var theadClassification = $('<thead>');
             var tbodyClassification = $('<tbody>');
 
             var headerRowClassification = $('<tr>').append($('<th>'));
-            var buttonRow = $('<tr contenteditable="false"></tr>').append($('<th>'));
+            var buttonRow = $('<tr></tr>').append($('<th>'));
 
             classificationsArray.forEach(function (classification) {
-                headerRowClassification.append($('<th>').text(classification));
+                headerRowClassification.append($('<th><input type="text" value="' + classification + '"></th>'));
                 buttonRow.append('<th><button class="fas fa-trash trash-icon" onclick="deleteColumn(this)"></button></th>');
             });
 
@@ -116,10 +116,10 @@
 
             sortedProductsMap.forEach((value, key) => {
                 var classifications = key.split("-");
-                var rowClassification = $('<tr>').append($('<td contenteditable="false"><button onclick="deleteRow(this)" class="fas fa-trash trash-icon"></button></td>'));
+                var rowClassification = $('<tr>').append($('<td><button onclick="deleteRow(this)" class="fas fa-trash trash-icon"></button></td>'));
 
                 classifications.forEach(function (classification) {
-                    rowClassification.append($('<td>').text(classification));
+                    rowClassification.append($('<td><input type="text" value="' + classification + '"></td>'));
                 });
 
                 tbodyClassification.append(rowClassification);

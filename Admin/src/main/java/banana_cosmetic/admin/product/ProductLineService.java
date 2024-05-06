@@ -27,15 +27,21 @@ public class ProductLineService {
     @Autowired
     private ModelMapper mapper;
 
-    public List<ProductLineDto> listByPage(PaginationUtil pageInfo, int pageNum, String sortDir, String sortField, String name, Long brandId, Long categoryId) {
+    public List<ProductLineDto> listByPage(PaginationUtil pageInfo, int pageNum, String sortDir, String sortField, String name, Long brandId, Long categoryId, boolean isSale) {
         Sort sort = Sort.by(sortDir.equals("asc") ?
                 Sort.Order.asc(sortField) :
                 Sort.Order.desc(sortField));
         Pageable pageable = PageRequest.of(pageNum - 1, PRODUCTLINE_PER_PAGE, sort);
 
-        Page<ProductLine> pageProductLines = repository.getAll(pageable, name, categoryId, brandId);
+        Page<ProductLine> pageProductLines;
+        if (isSale) {
+            pageProductLines = repository.getAllSale(pageable, name, categoryId, brandId);
+        }
+        else{
+            pageProductLines = repository.getAll(pageable, name, categoryId, brandId);
+        }
         List<ProductLine> productLines = pageProductLines.getContent();
-        pageInfo.addAttribute(pageProductLines, sortDir, sortField, Pair.with("name", name), Pair.with("brandId", brandId), Pair.with("categoryId", categoryId));
+        pageInfo.addAttribute(pageProductLines, sortDir, sortField, Pair.with("name", name), Pair.with("brandId", brandId), Pair.with("categoryId", categoryId),Pair.with("isSale",isSale));
         return productLines.stream()
                 .map(productLine -> mapper.map(productLine, ProductLineDto.class))
                 .collect(Collectors.toList());
