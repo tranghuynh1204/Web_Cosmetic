@@ -33,7 +33,7 @@ public class ProductLineController {
 
     @GetMapping("")
     public String listFirstPage(Model model) {
-        return listByPage(1, "asc", "name", null, null, null, model);
+        return listByPage(1, "asc", "name", null, null, null, false, model);
     }
 
     @GetMapping("/page/{pageNum}")
@@ -41,11 +41,12 @@ public class ProductLineController {
                              String sortDir,
                              String sortField,
                              String name, Long brandId, Long categoryId,
+                             @RequestParam(name = "isSale", required = false, defaultValue = "false") boolean isSale,
                              Model model) {
         sortDir = (sortDir == null || sortDir.trim().isEmpty()) ? "asc" : sortDir;
         sortField = (sortField == null || sortField.trim().isEmpty()) ? "name" : sortField;
         PaginationUtil pageInfo = new PaginationUtil(model);
-        List<ProductLineDto> productLines = productLineService.listByPage(pageInfo, pageNum, sortDir, sortField, name, brandId, categoryId);
+        List<ProductLineDto> productLines = productLineService.listByPage(pageInfo, pageNum, sortDir, sortField, name, brandId, categoryId, isSale);
         List<CategoryDto> categories = categoryService.getAll();
         List<BrandDto> brands = brandService.getAll();
         model.addAttribute("productLines", productLines);
@@ -136,6 +137,7 @@ public class ProductLineController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST); // Trả về thông báo lỗi với mã trạng thái 400 Bad Request
         }
     }
+
     @PostMapping("/{id}/product/save")
     @ResponseBody
     public ResponseEntity<String> saveProduct(@RequestBody Product productUpdate) {

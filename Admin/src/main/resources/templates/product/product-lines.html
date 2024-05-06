@@ -24,6 +24,10 @@
                 <form class="search-box" th:action="@{/product-lines/page/1}">
                     <div th:replace="fragments :: filter-select('select-brand',${brands},'brandId',${brandId})"></div>
                     <div th:replace="fragments :: filter-select('select-category',${categories},'categoryId',${categoryId})"></div>
+                    <label>
+                        Giảm giá:
+                        <input type="checkbox" name="isSale" id="is-sale" th:checked="${isSale}">
+                    </label>
                     <div class="input-box">
                         <input type="hidden" name="sortDir" th:value="${sortDir}">
                         <input type="hidden" name="sortField" th:value="${sortField}">
@@ -56,12 +60,20 @@
                 <th>
                     <a th:href="@{'/product-lines/page/' + ${currentPage} + '?sortDir=' + ${sortDir == 'asc' ? 'desc' : 'asc'} +'&sortField=name'  + ${name != null? '&name=' + name : ''}+${categoryId != null? '&categoryId=' + categoryId : ''} +
 ${brandId != null && brandId!='' ? '&brandId=' + brandId : ''} }">Tên</a>
+                    <span class="fas fa-sort-down"></span>
+                    <span class="fas fa-sort-up"></span>
                 </th>
                 <th>Ảnh</th>
                 <th><a th:href="@{'/product-lines/page/' + ${currentPage} + '?sortDir=' + ${sortDir == 'asc' ? 'desc' : 'asc'} +'&sortField=brand.name'  + ${name != null? '&name=' + name : ''}+${categoryId != null? '&categoryId=' + categoryId : ''} +
-${brandId != null && brandId!='' ? '&brandId=' + brandId : ''} }">Thương hiệu</a></th>
+${brandId != null && brandId!='' ? '&brandId=' + brandId : ''} }">Thương hiệu</a>
+                    <span class="fas fa-sort-down"></span>
+                    <span class="fas fa-sort-up"></span>
+                </th>
                 <th><a th:href="@{'/product-lines/page/' + ${currentPage} + '?sortDir=' + ${sortDir == 'asc' ? 'desc' : 'asc'} +'&sortField=category.name'  + ${name != null? '&name=' + name : ''}+${categoryId != null? '&categoryId=' + categoryId : ''} +
-${brandId != null && brandId!='' ? '&brandId=' + brandId : ''} }">Danh mục</a></th>
+${brandId != null && brandId!='' ? '&brandId=' + brandId : ''} }">Danh mục</a>
+                    <span class="fas fa-sort-down"></span>
+                    <span class="fas fa-sort-up"></span>
+                </th>
                 <th>Hành động</th>
             </tr>
             </thead>
