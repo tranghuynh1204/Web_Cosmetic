@@ -9,7 +9,8 @@ public class ProductLineService {
 
     @Autowired
     private ProductLineRepository repository;
-    public ProductLine get(String nameProductLine) {
-        return repository.findByName(nameProductLine);
+
+    public ProductLine get(Long id) {
+        return repository.findById(id).orElse(null);
     }
 }

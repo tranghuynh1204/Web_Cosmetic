@@ -14,14 +14,4 @@ public class CartController {
     @Autowired
     private CartService service;
 
-    @PostMapping("")
-    public Cart getCart(){
-        Cart cart = service.get(1L);
-        return cart;
-    }
-
-    @PostMapping("update")
-    public void updateCart(@RequestBody Cart cart){
-        service.save(cart);
-    }
 }

@@ -2,10 +2,7 @@ package banana_cosmetic.common.entity.cart;
 
 import banana_cosmetic.common.entity.IdBasedEntity;
 import banana_cosmetic.common.entity.User;
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -19,7 +16,7 @@ public class Cart extends IdBasedEntity {
     @OneToOne
     private User customer;
     @JoinColumn(name = "cart_id")
-    @OneToMany(orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL,orphanRemoval = true)
     private List<LineItem> items;
 
     public Cart() {}

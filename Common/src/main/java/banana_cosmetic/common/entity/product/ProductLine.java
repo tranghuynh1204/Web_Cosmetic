@@ -31,7 +31,8 @@ public class ProductLine extends IdBasedEntity {
     private Brand brand;
     @ManyToOne
     private Category category;
-    @OneToMany(mappedBy = "productLine", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "product_line_id")
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private Map<String, Product> products;
 
     public void updateProducts(Map<String, Product> products) {
@@ -39,7 +40,6 @@ public class ProductLine extends IdBasedEntity {
         for (Map.Entry<String, Product> entry : products.entrySet()) {
             String productId = entry.getKey();
             Product product = entry.getValue();
-            product.setProductLine(this);
             this.products.put(productId, product);
         }
     }

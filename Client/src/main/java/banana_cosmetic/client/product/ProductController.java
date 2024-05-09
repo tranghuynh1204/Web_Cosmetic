@@ -2,8 +2,12 @@ package banana_cosmetic.client.product;
 
 import banana_cosmetic.client.cart.CartService;
 import banana_cosmetic.common.entity.cart.Cart;
+import banana_cosmetic.common.entity.cart.LineItem;
+import banana_cosmetic.common.entity.product.Product;
+import banana_cosmetic.common.entity.product.ProductLine;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -12,23 +16,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class ProductController {
 
     @Autowired
-    private CartService service;
+    private ProductLineService service;
 
     @GetMapping("")
-    public String viewProduct(){
+    public String viewProduct(Model model){
 
-//        ProductLine productLine = service.get(nameProductLine);
-//        String[] classifications = productLine.getClassifications().split("-");
-//        String[][] keys = productLine.getProducts().keySet().stream()
-//                .map(key -> key.split("-"))
-//                .toArray(String[][]::new);
-//        model.addAttribute("productLine",productLine);
-//        model.addAttribute("products",productLine.getProducts());
-//        model.addAttribute("classifications",classifications);
-//        model.addAttribute("keys",keys);
-
-        Cart cart = new Cart();
-        service.save(cart);
+        ProductLine productLine = service.get(1L);
+        model.addAttribute("productLine",productLine);
         return "product";
     }
 }

@@ -10,14 +10,5 @@ public class CartService {
 
     @Autowired
     private CartRepository repository;
-    @Autowired
-    private ModelMapper mapper;
 
-    public Cart get(Long id) {
-        return repository.findById(id).orElse(null);
-    }
-
-    public void save(Cart cart) {
-        repository.save(cart);
-    }
 }

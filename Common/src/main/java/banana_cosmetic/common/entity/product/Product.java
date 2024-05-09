@@ -19,13 +19,9 @@ public class Product extends IdBasedEntity {
     @JoinColumn(name = "product_id")
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProductImage> images;
-    @ManyToOne
-    @JsonIgnore
-    private ProductLine productLine;
 
     public void updateImages(List<ProductImage> images) {
         this.images.clear();
         this.images.addAll(images);
-
     }
 }

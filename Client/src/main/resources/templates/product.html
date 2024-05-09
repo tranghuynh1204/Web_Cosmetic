@@ -4,45 +4,101 @@
     <meta charset="UTF-8">
     <title>product</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        button.active{
+            background-color: red;
+        }
+    </style>
 </head>
 <body>
+<div id="products"></div>
 
-<div th:each="c, iterStat : ${classifications}">
-    <div th:text="${c}" th:id="'container-'+${iterStat.index}"></div>
-</div>
+
 <script th:inline="javascript">
     /*<![CDATA[*/
-    var products = /*[[${products}]]*/ {};
-    const keys = /*[[${keys}]]*/ [];
-    document.addEventListener("DOMContentLoaded", function () {
-        for (let columnIndex = 0; columnIndex < keys[0].length; columnIndex++) {
-            const uniqueValuesInColumn = new Set();
-            const fragment = document.createDocumentFragment();
-            for (let rowIndex = 0; rowIndex < keys.length; rowIndex++) {
-                const cellValue = keys[rowIndex][columnIndex];
-                if (!uniqueValuesInColumn.has(cellValue)) {
-                    const button = document.createElement("button");
-                    button.type = "button";
-                    button.innerHTML = cellValue;
-                    button.classList.add('button-' + columnIndex);
-                    fragment.appendChild(button);
-                    uniqueValuesInColumn.add(cellValue);
+    var productLine = /*[[${productLine}]]*/ {};
+    var productMap = productLine.products;
+    var keys = Object.keys(productMap);
+
+    // Biến đổi danh sách thành mảng hai chiều
+    let keyArray = keys.map(item => item.split('-'));
+
+    // Chuyển vị mảng hai chiều
+    let lookupArray = keyArray[0].map((col, i) => keyArray.map(row => row[i]));
+
+    // Loại bỏ các phần tử trùng nhau trên cùng một hàng
+    var keyArrayRender = lookupArray.map(row => [...new Set(row)]);
+
+    var productsDiv = $('#products'); // Gán kết quả truy vấn vào biến
+    var fragment = $(document.createDocumentFragment()); // Tạo một fragment
+
+    for (var i = 0; i < keyArrayRender.length; i++) {
+        var container = $('<div>');
+        for (var j = 0; j < keyArrayRender[i].length; j++) {
+            $('<button>')
+                .attr('row-index', i)
+                .text(keyArrayRender[i][j])
+                .on('click', selectButton)
+                .appendTo(container);
+        }
+        fragment.append(container); // Thêm container vào fragment thay vì trực tiếp vào productsDiv
+    }
+    productsDiv.append(fragment);
+
+    function selectButton() {
+
+        // Nếu nút được nhấp vào chưa có lớp 'active'
+        if (!$(this).hasClass('active')) {
+            // Xóa lớp 'active' khỏi tất cả các button bên trong div cha gần nhất
+            $(this).closest('div').find('button').removeClass('active');
+
+            // Thêm lớp 'active' cho nút được nhấp vào
+            $(this).addClass('active');
+        } else {
+            // Nếu nút đang active, xoá lớp 'active' khỏi tất cả các button bên trong div cha gần nhất
+            $(this).closest('div').find('button').removeClass('active');
+        }
+
+        $('#products button').prop('disabled', false);
+
+        // Chọn tất cả các nút có lớp 'active' và hiển thị trong console
+        var activeButtons = $('#products button.active');
+
+        // if (activeButtons.length === lookupArray.length) {
+        //     const key = activeButtons.map(function() {
+        //         return $(this).text();
+        //     }).get().join('-');
+        //     console.log(productMap[key]);
+        // }
+
+        var enableButtons = [];
+        var disableButtons = [];
+        var rowIndex;
+        var text;
+        activeButtons.each(function () {
+            rowIndex = $(this).attr('row-index');
+            text = $(this).text();
+            for (var i = 0; i < lookupArray.length; i++) {
+                if (i !== parseInt(rowIndex)) {
+                    enableButtons = [];
+                    for (var j = 0; j < lookupArray[i].length; j++) {
+                        if (lookupArray[rowIndex][j] === text) {
+                            enableButtons.push(lookupArray[i][j]);
+                        }
+                    }
+                    lookupArray[i].forEach(item => {
+                        if (!enableButtons.includes(item)) {
+                            disableButtons.push(item);
+                        }
+                    });
                 }
             }
-            $('#container-'+columnIndex).append(fragment);
-            $('.button-' + columnIndex).on('click', function () {
-                $('.button-' + columnIndex).removeClass('active');
-                $(this).addClass('active');
-                const activeButtons = $('.active');
-                if (activeButtons.length===keys[0].length){
-                    const result = activeButtons.map(function() {
-                        return $(this).text();
-                    }).get().join('-');
-                    console.log(products[result]);
-                }
-            });
-        }
-    });
+        });
+        disableButtons = [...new Set(disableButtons)];
+        disableButtons.forEach(function(value) {
+            $("#products button:contains('" + value + "')").prop("disabled", true);
+        });
+    }
     /*]]>*/
 </script>
 </body>
