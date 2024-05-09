@@ -22,10 +22,10 @@ public class Order extends IdBasedEntity {
     private String address;
     private Long total;
 
-    @ManyToOne
+    @OneToOne
     private User customer;
     @JoinColumn(name = "order_id")
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL,orphanRemoval = true)
     private List<OrderDetail> details;
 
     @Enumerated(EnumType.STRING)

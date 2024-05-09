@@ -14,6 +14,7 @@ public class OrderDetail extends IdBasedEntity {
 
     private int quantity;
     private Long price;
-    @ManyToOne
-    private Product product;
+    private String name;
+    private String classification;
+    private Long idProductLine;
 }
