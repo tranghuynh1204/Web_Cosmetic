@@ -21,7 +21,7 @@ public class CartService {
     }
 
     public Cart getCart() {
-        // Lấy ID người dùng hiện tại
+        // Lấy ID người dùng hiện tại.
         Long userId = 2L; // chưa viết
         return repository.findByCustomerId(userId);
     }
