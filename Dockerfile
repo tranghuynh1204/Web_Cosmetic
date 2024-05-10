@@ -25,6 +25,6 @@ CMD ["java", "-jar", "/app/Admin/target/Admin-0.0.1-SNAPSHOT.jar"]
 WORKDIR /app/Client
 RUN mvn clean package -DskipTests
 
-EXPOSE 9090
+EXPOSE 8081
 
 CMD ["java", "-jar", "/app/Client/target/Client-0.0.1-SNAPSHOT.jar"]

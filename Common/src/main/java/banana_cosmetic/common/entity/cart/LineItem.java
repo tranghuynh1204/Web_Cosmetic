@@ -19,10 +19,14 @@ public class LineItem extends IdBasedEntity {
     @OnDelete(action = OnDeleteAction.SET_NULL)
     @ManyToOne
     private Product product;
-//    @Transient
-//    private ProductWithClassificationsDto productLine;
 
-    public LineItem() {}
+    @Transient
+    private String nameProductLine;
+    @Transient
+    private String classification;
+
+    public LineItem() {
+    }
 
     public LineItem(int quantity, Product product) {
         this.quantity = quantity;
