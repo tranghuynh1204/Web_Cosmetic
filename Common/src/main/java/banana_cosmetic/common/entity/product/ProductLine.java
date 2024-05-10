@@ -25,8 +25,6 @@ public class ProductLine extends IdBasedEntity {
     private String name;
     private String origin;
     private String classifications;
-    @Column(columnDefinition = "TEXT")
-    private String description;
     @ManyToOne
     private Brand brand;
     @ManyToOne
