@@ -26,6 +26,7 @@ public class CartController {
         }
 
     }
+    //thật sưj cay nha
     @DeleteMapping("/remove")
     public ResponseEntity<String> removeFromCart(@RequestBody List<Long> lineItemIds){
         try{
