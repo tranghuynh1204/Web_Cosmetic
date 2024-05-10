@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/product-lines")
@@ -70,6 +71,8 @@ public class ProductLineController {
     @ResponseBody
     public ResponseEntity<String> saveProductLine(ProductLine productLine, @RequestParam("image") String image) {
         try {
+            ProductLine oldProductLine = productLineService.get(productLine.getId());
+            productLine.setProducts(oldProductLine.getProducts());
             productLineService.save(productLine);
             if (image != null && !image.isEmpty()) {
                 CloudinaryUtil.uploadImage(image, "productline_" + productLine.getId());

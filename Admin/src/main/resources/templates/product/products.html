@@ -126,7 +126,7 @@
                 var rowProduct = $('<tr>').data('images', value.images)
                     .append($('<input type="hidden" value="' + value.id + '">'))
                     .append($('<td>').append($('<input min="1" type="number" value="' + value.price + '">')))
-                    .append($('<td>').append($('<input min="1" type="number" value="' + value.salePrice + '">')))
+                    .append($('<td>').append($('<input min="0" type="number" value="' + value.salePrice + '">')))
                     .append($('<td>').append($('<button>').text('Hình ảnh').click(function () {
                         showImages(value.id, value.images);
                     })));

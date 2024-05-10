@@ -113,7 +113,7 @@ function submitForm(form) {
     event.preventDefault();
     if (validateForm()) {
         var savebtn = $('#save-button');
-        var cancelbtn = $("cancel-button");
+        var cancelbtn = $("#cancel-button");
         savebtn.html(`<div class="loader"></div>`)
         savebtn.attr('disabled', 'disabled');
         cancelbtn.attr('disabled', 'disabled');
@@ -124,7 +124,7 @@ function submitForm(form) {
             data: formData,
             success: function (response) {
                 alert(response);
-                window.location.href = document.referrer;
+                cancelbtn.click();
             },
             error: function (xhr, status, error) {
                 alert(xhr.responseText);
@@ -381,9 +381,6 @@ function saveProducts() {
         var id = rows.eq(index).find("input[type='hidden']").val();
         var price = rows.eq(index).find("td:eq(0) input").val();
         var salePrice = rows.eq(index).find("td:eq(1) input").val();
-        if (salePrice === '') {
-            salePrice = 0;
-        }
         var images = rows.eq(index).data('images');
         products[key] = {
             id: id,

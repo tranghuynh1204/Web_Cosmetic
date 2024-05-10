@@ -38,6 +38,7 @@ public class ProductLine extends IdBasedEntity {
         for (Map.Entry<String, Product> entry : products.entrySet()) {
             String productId = entry.getKey();
             Product product = entry.getValue();
+            product.setProductLine(this);
             this.products.put(productId, product);
         }
     }
