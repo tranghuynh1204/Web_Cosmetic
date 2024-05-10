@@ -28,5 +28,6 @@ public class User extends IdBasedEntity {
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
     private List<Role> roles;
+    //
 
 }
