@@ -20,18 +20,35 @@ public class ProductController {
     @Autowired
     private ProductLineService service;
 
-    @GetMapping("")
-    public String viewProduct(Model model){
-
-        ProductLine productLine = service.get(1L);
-        model.addAttribute("productLine",productLine);
+    @GetMapping("/{productId}")
+    public String viewProduct(@PathVariable Long productId, Model model) {
+        ProductLine productLine = service.get(productId);
+        model.addAttribute("productLine", productLine);
         return "product";
     }
+
+//    @GetMapping("/{productId}")
+//    public String viewProduct2(@PathVariable("productId") Long productId, Model model) {
+//        ProductLine productLine = service.get(productId);
+//        model.addAttribute("productLine", productLine);
+//        return "product";
+//    }
 
     @PostMapping("/search")
     public String searchProduct(@RequestParam("keyword") String keyword, Model model) {
         List<ProductLine> productLines = service.searchProductLines(keyword);
-        model.addAttribute("productLines", productLines);
-        return "search-result"; // Tạo trang giao diện để hiển thị kết quả tìm kiếm
+        if (productLines.isEmpty()) {
+            model.addAttribute("noResults", true);
+        } else {
+            model.addAttribute("productLines", productLines);
+        }
+        // Set the keyword variable in the model
+        model.addAttribute("keyword", keyword);
+        return "searchProduct/search-result"; // Returns the name of the HTML template to display search results
+    }
+
+    @GetMapping("/search-index")
+    public String showSearchPage() {
+        return "searchProduct/search"; // Returns the name of the HTML template to display the search page
     }
 }

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Header</title>
+    <style>
+        /* CSS để chỉnh sửa header */
+        header {
+            background-color: #007bff; /* Màu xanh dương */
+            color: white;
+            text-align: center; /* Căn giữa nội dung */
+            padding: 20px; /* Khoảng cách phía trên và dưới */
+        }
+
+        .search-keyword {
+            border: 2px solid white; /* Viền trắng */
+            border-radius: 5px; /* Đường cong viền */
+            padding: 5px 10px; /* Khoảng cách bên trong */
+            background-color: rgba(255, 255, 255, 0.2); /* Nền mờ */
+            display: inline-block; /* Hiển thị inline */
+        }
+    </style>
+</head>
+<body>
+<header>
+<!--    <h1>Header</h1>-->
+    <!-- Kiểm tra và hiển thị keyword -->
+    <div th:if="${keyword}">
+        <span class="search-keyword" th:text="'Search keyword: ' + ${keyword}"></span>
+    </div>
+</header>
+</body>
+</html>

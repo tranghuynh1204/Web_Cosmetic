@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Result</title>
+    <style>
+        /* CSS styles */
+        /* CSS để chỉnh sửa header */
+        header {
+            background-color: #007bff; /* Màu xanh dương */
+            color: white;
+            text-align: center; /* Căn giữa nội dung */
+            padding: 20px; /* Khoảng cách phía trên và dưới */
+        }
+
+        .search-keyword {
+            border: 2px solid white; /* Viền trắng */
+            border-radius: 5px; /* Đường cong viền */
+            padding: 5px 10px; /* Khoảng cách bên trong */
+            background-color: rgba(255, 255, 255, 0.2); /* Nền mờ */
+            font-size: 20px; /* Kích thước chữ lớn hơn */
+        }
+
+        /* CSS để chia main ra làm 2 phần */
+        .main-content {
+            display: flex; /* Sử dụng flexbox */
+        }
+
+        .left-panel {
+            width: 25%; /* Độ rộng của góc bên trái */
+            background-color: #f0f0f0; /* Màu nền của góc bên trái */
+            padding: 20px; /* Khoảng cách phía trên và dưới */
+        }
+
+        .right-panel {
+            flex: 1; /* Phần còn lại chiếm toàn bộ phần lớn bên phải */
+            padding: 20px; /* Khoảng cách phía trên và dưới */
+            display: flex;
+            flex-wrap: wrap; /* Cho phép các sản phẩm xuống hàng khi không đủ không gian */
+            justify-content: space-between; /* Căn giữa các sản phẩm */
+        }
+
+        .product {
+            flex-basis: calc(33.33% - 20px); /* Kích thước cơ bản cho mỗi sản phẩm */
+            margin-bottom: 20px; /* Khoảng cách phía dưới */
+            text-align: center;
+            cursor: pointer; /* Biến con trỏ thành hình cấp chỉ */
+        }
+
+
+        .product img {
+            max-width: 100%; /* Đảm bảo ảnh không vượt quá kích thước của khung sản phẩm */
+            height: auto; /* Cho phép ảnh co dãn theo chiều ngang */
+        }
+
+        .product-name {
+            font-weight: bold;
+            margin-top: 5px;
+        }
+
+        .product-price {
+            color: green;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Header -->
+<header>
+    <!-- Display search keyword -->
+    <div th:if="${keyword}">
+        <span class="search-keyword" th:text="'Search keyword: ' + ${keyword}"></span>
+    </div>
+</header>
+
+<!-- Main content -->
+<div class="container main-content">
+    <!-- Left panel -->
+    <div class="left-panel">
+        <!-- Filter section -->
+        <h3>Bộ lọc sản phẩm</h3>
+        <!-- Add filter categories here -->
+    </div>
+
+    <div class="right-panel">
+        <!-- Display no results message if applicable -->
+        <div th:if="${noResults}">
+            <p>No results found.</p>
+        </div>
+        <!-- Display products -->
+        <div th:if="${productLines != null}">
+            <!-- Iterate over product lines -->
+            <div th:each="productLine : ${productLines}" class="product">
+                <!-- Display product image -->
+                <img th:src="${productLine.getImage()}" alt="Product Image">
+                <!-- Display product name -->
+                <div class="product-name" th:text="${productLine.name}"></div>
+                <!-- Display product price -->
+                <div class="product-price" th:text="'Price: ' + ${productLine.getDisplayPrice()}"></div>
+                <!-- Submit button -->
+                <a th:href="@{/product/{productId}(productId=${productLine.id})}">
+                    <input type="button" value="View Details">
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
