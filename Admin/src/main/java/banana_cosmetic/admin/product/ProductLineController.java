@@ -71,8 +71,11 @@ public class ProductLineController {
     @ResponseBody
     public ResponseEntity<String> saveProductLine(ProductLine productLine, @RequestParam("image") String image) {
         try {
-            ProductLine oldProductLine = productLineService.get(productLine.getId());
-            productLine.setProducts(oldProductLine.getProducts());
+            if(productLine.getId()!=null){
+                ProductLine oldProductLine = productLineService.get(productLine.getId());
+                productLine.setProducts(oldProductLine.getProducts());
+                productLine.setClassifications(oldProductLine.getClassifications());
+            }
             productLineService.save(productLine);
             if (image != null && !image.isEmpty()) {
                 CloudinaryUtil.uploadImage(image, "productline_" + productLine.getId());
