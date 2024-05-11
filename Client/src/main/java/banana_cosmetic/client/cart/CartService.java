@@ -22,7 +22,7 @@ public class CartService {
 
     public Cart getCart() {
         // Lấy ID người dùng hiện tại
-        Long userId = 2L; // chưa viết
+        Long userId = 102L; // chưa viết
         return repository.findByCustomerId(userId);
     }
     public void deleteFromCart(List<Long> lineItemIds) {

@@ -20,11 +20,6 @@ public class LineItem extends IdBasedEntity {
     @ManyToOne
     private Product product;
 
-    @Transient
-    private String nameProductLine;
-    @Transient
-    private String classification;
-
     public LineItem() {
     }
 
