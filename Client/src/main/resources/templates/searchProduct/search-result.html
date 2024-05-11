@@ -82,6 +82,15 @@
         <!-- Filter section -->
         <h3>Bộ lọc sản phẩm</h3>
         <!-- Add filter categories here -->
+        <form th:action="@{/product/search-classify}" method="post">
+            <input type="hidden" name="keyword" th:value="${keyword}">
+            <!-- Input for category -->
+            <input type="text" name="category" placeholder="Category" style="width: 100%; margin-bottom: 10px;">
+            <!-- Input for brand -->
+            <input type="text" name="brand" placeholder="Brand" style="width: 100%; margin-bottom: 10px;">
+            <!-- Search button -->
+            <button type="submit" style="width: 100%;">Search</button>
+        </form>
     </div>
 
     <div class="right-panel">

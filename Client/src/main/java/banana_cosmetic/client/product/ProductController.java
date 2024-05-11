@@ -36,6 +36,42 @@ public class ProductController {
         return "searchProduct/search-result"; // Returns the name of the HTML template to display search results
     }
 
+
+    @PostMapping("/search-classify")
+    public String searchProductByBrand(@RequestParam("keyword") String keyword,@RequestParam("category") String category, @RequestParam("brand") String brand, Model model) {
+        if (category.isEmpty()) {
+            List<ProductLineDto> productLines = service.searchProductLinesByBrand(keyword, brand);
+
+            if (productLines.isEmpty()) {
+                model.addAttribute("noResults", true);
+            } else {
+                model.addAttribute("productLines", productLines);
+            }
+            model.addAttribute("keyword", keyword);
+        } else if (brand.isEmpty()) {
+            List<ProductLineDto> productLines = service.searchProductLinesByCategory(keyword, category);
+
+            if (productLines.isEmpty()) {
+                model.addAttribute("noResults", true);
+            } else {
+                model.addAttribute("productLines", productLines);
+            }
+            model.addAttribute("keyword", keyword);
+        }
+        else if (!brand.isEmpty() && !category.isEmpty()) {
+            List<ProductLineDto> productLines = service.searchProductLinesByCategoryAndBrand(keyword, category,brand);
+
+            if (productLines.isEmpty()) {
+                model.addAttribute("noResults", true);
+            } else {
+                model.addAttribute("productLines", productLines);
+            }
+            model.addAttribute("keyword", keyword);
+        }
+
+        return "searchProduct/search-result";
+    }
+
     @GetMapping("/search-index")
     public String showSearchPage() {
         return "searchProduct/search"; // Returns the name of the HTML template to display the search page
