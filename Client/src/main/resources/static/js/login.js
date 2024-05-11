@@ -64,7 +64,7 @@ $(document).ready(function () {
         $.ajax({
             type: 'POST',
             url: '/user/login',
-            data: $('#login-button').serialize(),
+            data: $('#login-form').serialize(),
             success: function(response){
                 if(document.referrer !== ""){
                     window.history.back();

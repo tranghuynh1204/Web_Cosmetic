@@ -21,7 +21,7 @@ public class UserController {
 
     @PostMapping("/register")
     @ResponseBody
-    public HttpEntity<String> addUser(HttpServletRequest request, User user, String otp) {
+    public ResponseEntity<String> addUser(HttpServletRequest request, User user, String otp) {
         try {
             HttpSession session = request.getSession();
             String otpCheck = (String) session.getAttribute("otp");
@@ -36,10 +36,16 @@ public class UserController {
     }
 
 
-//    @PostMapping("/login")
-//    @ResponseBody
-//    public String login(User user) {
-//        service.checkEsixt(user);
-//    }
+    @PostMapping("/login")
+    @ResponseBody
+    public ResponseEntity<String> login(User user) {
+        if (service.checkExist(user.getMail(), user.getPassword())) {
+            // Người dùng tồn tại, xử lý đăng nhập ở đây
+            return new ResponseEntity<>("Login successful", HttpStatus.OK);
+        } else {
+            // Người dùng không tồn tại, trả về lỗi
+            return new ResponseEntity<>("Email or password incorrect", HttpStatus.BAD_REQUEST);
+        }
+    }
 
 }

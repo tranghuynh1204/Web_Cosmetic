@@ -53,6 +53,7 @@
         .product-details {
             text-align: center;
         }
+
         .quantity-input {
             display: flex;
             align-items: center;
@@ -75,6 +76,7 @@
         .quantity-input button:hover {
             background-color: #e0e0e0;
         }
+
         .add-to-cart-button {
             background-color: #4caf50;
             color: white;
@@ -93,6 +95,13 @@
             background-color: #45a049;
         }
 
+        #add-to-cart.active {
+            background-color: black;
+        }
+
+        #products button.active {
+            background-color: red;
+        }
     </style>
 </head>
 <body>
@@ -100,7 +109,7 @@
     <th:block th:fragment="recursiveCategory(category)">
         <a th:text="${category.name}"></a>
         <th:block th:if="${category.parent != null}">
-            <th:block  th:replace="this::recursiveCategory(${category.parent})"></th:block >
+            <th:block th:replace="this::recursiveCategory(${category.parent})"></th:block>
         </th:block>
     </th:block>
 </th:block>
@@ -110,45 +119,37 @@
     <div class="bottom">
         <div class="left">
             <div class="product-images">
-            <img th:src="${productLine.getImage()}" alt="" id="main-img"/>
-            <div th:each="entry : ${productLine.products}">
-                <div th:each="image : ${entry.value.images}">
-                    <img th:src="${image.link}" alt="Image" class="thumbnail"/>
+                <img th:src="${productLine.getImage()}" alt="" id="main-img"/>
+                <div th:each="entry : ${productLine.products}">
+                    <div th:each="image : ${entry.value.images}">
+                        <img th:src="${image.link}" alt="Image" class="thumbnail"/>
+                    </div>
                 </div>
-            </div>
             </div>
         </div>
-            <div class="right">
-                <div class="product-details">
-                    <a th:text="${productLine.brand.name}" th:href="@{'/brands/' + ${productLine.brand.id}}">View Brand</a>
-                    <h2 th:text="${productLine.name}">Product Line Name</h2>
-                    <p th:text="'Price: ' + ${productLine.getDisplayPrice()}">Price</p>
-                    <div id="products"></div>
-                    <div class="quantity-input">
-                        <button id="decrease">-</button>
-                        <input type="number" id="quantity" value="1" min="1">
-                        <button id="increase">+</button>
-                    </div>
-                    <button class="add-to-cart-button">Add to Cart</button>
+        <div class="right">
+            <div class="product-details">
+                <a th:text="${productLine.brand.name}" th:href="@{'/brands/' + ${productLine.brand.id}}">View Brand</a>
+                <h2 th:text="${productLine.name}">Product Line Name</h2>
+                <p th:text="'Price: ' + ${productLine.getDisplayPrice()}">Price</p>
+                <div id="products"></div>
+                <div class="quantity-input">
+                    <button id="decrease">-</button>
+                    <input type="number" id="quantity" value="1" min="1">
+                    <button id="increase">+</button>
                 </div>
+                <button class="add-to-cart-button active" id="add-to-cart" disabled>Add to Cart</button>
             </div>
         </div>
     </div>
-
-
-
-
-
-
-
+</div>
 
 <script th:inline="javascript">
     /*<![CDATA[*/
     var productLine = /*[[${productLine}]]*/ {};
     var productMap = productLine.products;
-    var classifications=productLine.classifications;
-    console.log(classifications);
-    var classificatioArray=classifications.split('-');
+    var classifications = productLine.classifications;
+    var classificatioArray = classifications.split('-');
     var keys = Object.keys(productMap);
 
     // Biến đổi danh sách thành mảng hai chiều
@@ -195,12 +196,13 @@
         // Chọn tất cả các nút có lớp 'active' và hiển thị trong console
         var activeButtons = $('#products button.active');
 
-        // if (activeButtons.length === lookupArray.length) {
-        //     const key = activeButtons.map(function() {
-        //         return $(this).text();
-        //     }).get().join('-');
-        //     console.log(productMap[key]);
-        // }
+        if (activeButtons.length === lookupArray.length) {
+            $('#add-to-cart').prop('disabled', false);
+            $('#add-to-cart').removeClass('active');
+        } else {
+            $('#add-to-cart').prop('disabled', true);
+            $('#add-to-cart').addClass('active');
+        }
 
         var enableButtons = [];
         var disableButtons = [];
@@ -226,15 +228,16 @@
             }
         });
         disableButtons = [...new Set(disableButtons)];
-        disableButtons.forEach(function(value) {
+        disableButtons.forEach(function (value) {
             $("#products button:contains('" + value + "')").prop("disabled", true);
         });
     }
-    document.getElementById("increase").addEventListener("click", function() {
+
+    document.getElementById("increase").addEventListener("click", function () {
         increaseQuantity();
     });
 
-    document.getElementById("decrease").addEventListener("click", function() {
+    document.getElementById("decrease").addEventListener("click", function () {
         decreaseQuantity();
     });
 
@@ -251,6 +254,41 @@
             quantityInput.value = currentValue - 1;
         }
     }
+
+    $(document).ready(function () {
+        $("#add-to-cart").click(function (event) {
+            var activeButtons = $('#products button.active');
+            const key = activeButtons.map(function () {
+                return $(this).text();
+            }).get().join('-');
+            var id = productMap[key].id;
+            var quantity = parseInt($('#quantity').val());
+            if(quantity < 1){
+                $('#quantity').val(1);
+                quantity = 1;
+            }
+            $.ajax({
+                url: "/cart/add",
+                type: "POST",
+                contentType: "application/json",
+                data: JSON.stringify(
+                    {
+                        quantity: quantity,
+                        product:{
+                            id:id
+                        }
+                    }),
+                success: function(response) {
+                    console.log(response); // Log kết quả phản hồi từ API
+                    // Cập nhật lại giao diện hoặc thông tin khác nếu cần
+                },
+                error: function(xhr, status, error) {
+                    console.error("Lỗi khi cập nhật số lượng: " + error);
+                }
+            });
+        });
+    });
+
     /*]]>*/
 </script>
 </body>
