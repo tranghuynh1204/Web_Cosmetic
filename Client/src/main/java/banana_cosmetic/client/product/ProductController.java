@@ -20,10 +20,6 @@ public class ProductController {
     @Autowired
     private ProductLineService service;
 
-    @PostMapping("a")
-    public String view(@RequestBody LineItem lineItem ){
-        return "product";
-    }
     @GetMapping("")
     public String viewProduct(Model model){
 

@@ -27,5 +27,9 @@ public class Product extends IdBasedEntity {
         this.images.addAll(images);
     }
 
+    public Long getCurrentPrice(){
+        return (salePrice != null) ? salePrice : price;
+    }
+
 
 }

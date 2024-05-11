@@ -5,19 +5,150 @@
     <title>product</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
-        button.active{
-            background-color: red;
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
+
+        .bottom {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .left {
+            flex: 1;
+            padding-right: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product-images {
+            position: relative;
+            display: flex;
+            align-items: center;
+            overflow-x: auto; /* Thanh cuộn ngang */
+            margin-bottom: 20px;
+        }
+
+        .thumbnail {
+            width: 50px;
+            height: 50px;
+            margin-right: 5px;
+        }
+
+        #main-img {
+            max-width: 400px; /* Kích thước tối đa của hình ảnh lớn */
+            height: auto;
+        }
+
+        .right {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .product-details {
+            text-align: center;
+        }
+        .quantity-input {
+            display: flex;
+            align-items: center;
+        }
+
+        .quantity-input input[type="number"] {
+            width: 50px;
+            text-align: center;
+            margin: 0 5px;
+        }
+
+        .quantity-input button {
+            background-color: #f0f0f0;
+            border: 1px solid #ccc;
+            cursor: pointer;
+            padding: 5px 10px;
+            transition: background-color 0.3s ease;
+        }
+
+        .quantity-input button:hover {
+            background-color: #e0e0e0;
+        }
+        .add-to-cart-button {
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            cursor: pointer;
+            transition-duration: 0.4s;
+            margin-bottom: 20px;
+        }
+
+        .add-to-cart-button:hover {
+            background-color: #45a049;
+        }
+
     </style>
 </head>
 <body>
-<div id="products"></div>
+<th:block th:with="category=${productLine.category}">
+    <th:block th:fragment="recursiveCategory(category)">
+        <a th:text="${category.name}"></a>
+        <th:block th:if="${category.parent != null}">
+            <th:block  th:replace="this::recursiveCategory(${category.parent})"></th:block >
+        </th:block>
+    </th:block>
+</th:block>
+
+<div class="container">
+    <div class="upper"></div>
+    <div class="bottom">
+        <div class="left">
+            <div class="product-images">
+            <img th:src="${productLine.getImage()}" alt="" id="main-img"/>
+            <div th:each="entry : ${productLine.products}">
+                <div th:each="image : ${entry.value.images}">
+                    <img th:src="${image.link}" alt="Image" class="thumbnail"/>
+                </div>
+            </div>
+            </div>
+        </div>
+            <div class="right">
+                <div class="product-details">
+                    <a th:text="${productLine.brand.name}" th:href="@{'/brands/' + ${productLine.brand.id}}">View Brand</a>
+                    <h2 th:text="${productLine.name}">Product Line Name</h2>
+                    <p th:text="'Price: ' + ${productLine.getDisplayPrice()}">Price</p>
+                    <div id="products"></div>
+                    <div class="quantity-input">
+                        <button id="decrease">-</button>
+                        <input type="number" id="quantity" value="1" min="1">
+                        <button id="increase">+</button>
+                    </div>
+                    <button class="add-to-cart-button">Add to Cart</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
 
 
 <script th:inline="javascript">
     /*<![CDATA[*/
     var productLine = /*[[${productLine}]]*/ {};
     var productMap = productLine.products;
+    var classifications=productLine.classifications;
+    console.log(classifications);
+    var classificatioArray=classifications.split('-');
     var keys = Object.keys(productMap);
 
     // Biến đổi danh sách thành mảng hai chiều
@@ -33,7 +164,7 @@
     var fragment = $(document.createDocumentFragment()); // Tạo một fragment
 
     for (var i = 0; i < keyArrayRender.length; i++) {
-        var container = $('<div>');
+        var container = $('<div>').append($('<span>').text(classificatioArray[i]));
         for (var j = 0; j < keyArrayRender[i].length; j++) {
             $('<button>')
                 .attr('row-index', i)
@@ -98,6 +229,27 @@
         disableButtons.forEach(function(value) {
             $("#products button:contains('" + value + "')").prop("disabled", true);
         });
+    }
+    document.getElementById("increase").addEventListener("click", function() {
+        increaseQuantity();
+    });
+
+    document.getElementById("decrease").addEventListener("click", function() {
+        decreaseQuantity();
+    });
+
+    function increaseQuantity() {
+        var quantityInput = document.getElementById("quantity");
+        var currentValue = parseInt(quantityInput.value);
+        quantityInput.value = currentValue + 1;
+    }
+
+    function decreaseQuantity() {
+        var quantityInput = document.getElementById("quantity");
+        var currentValue = parseInt(quantityInput.value);
+        if (currentValue > 1) {
+            quantityInput.value = currentValue - 1;
+        }
     }
     /*]]>*/
 </script>

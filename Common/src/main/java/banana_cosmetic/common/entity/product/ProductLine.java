@@ -53,4 +53,21 @@ public class ProductLine extends IdBasedEntity {
 
     public ProductLine() {
     }
+
+    public String getDisplayPrice(){
+        Long minCurrentPrice = Long.MAX_VALUE;
+        Long maxCurrentPrice = Long.MIN_VALUE;
+
+        for (Product value : products.values()) {
+            Long currentPrice = value.getCurrentPrice(); // Giả sử getCurrentPrice() là phương thức để lấy current price trong mỗi đối tượng
+            if (currentPrice < minCurrentPrice) {
+                minCurrentPrice = currentPrice;
+            }
+            if (currentPrice > maxCurrentPrice) {
+                maxCurrentPrice = currentPrice;
+            }
+        }
+        return minCurrentPrice.toString() + " - " + maxCurrentPrice.toString();
+
+    }
 }

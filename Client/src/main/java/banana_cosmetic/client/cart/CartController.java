@@ -1,5 +1,6 @@
 package banana_cosmetic.client.cart;
 
+import banana_cosmetic.common.entity.cart.Cart;
 import banana_cosmetic.common.entity.cart.LineItem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,6 +16,11 @@ public class CartController {
 
     @Autowired
     private CartService service;
+
+    @GetMapping("")
+    public Cart viewCart() {
+        return service.getCart();
+    }
 
     @PostMapping("/add")
     public ResponseEntity<String> addToCart(@RequestBody LineItem lineitem){

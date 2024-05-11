@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<!-- Define fragment -->
+<th:block th:replace="::generateLink(cate)"></th:block>
+
+<!-- Define fragment -->
+<th:block th:fragment="generateLink(cate)">
+    <a th:text="${cate.name}"></a>
+    <th:block th:if="${cate.parent != null}" th:replace="::generateLink(${cate.parent})"></th:block>
+</th:block>
+<ul>
+    <!-- Khai báo biến đếm -->
+        <!-- Bắt đầu vòng lặp while -->
+        <th:block th:while="${productLine.category != null}">
+            <!-- Hiển thị giá trị của biến đếm -->
+            <a th:text="${productLine.category.name}"></a>
+            <!-- Tăng biến đếm lên mỗi lần lặp -->
+            <th:block th:with="${productLine.category}==${productLine.category.parent}"></th:block>
+        </th:block>
+    </th:block>
+</ul>
+
+
+</body>
+</html>
