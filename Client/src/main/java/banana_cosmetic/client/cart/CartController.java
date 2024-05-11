@@ -24,8 +24,10 @@ public class CartController {
     private CartService service;
 
     @GetMapping("")
-    public String viewCart(Model model) {
-        Cart cart = service.getCart(id);
+    public String viewCart(Model model,HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        User customer = (User) session.getAttribute("customer");
+        Cart cart = service.getCart(customer.getId());
         List<LineItemDto> items = new ArrayList<>();
         for (LineItem item : cart.getItems()) {
             LineItemDto dto = new LineItemDto();
