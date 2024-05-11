@@ -564,6 +564,7 @@
             success: function(response) {
                 // Xử lý khi API trả về thành công
                 console.log("Xoá sản phẩm thành công");
+                updateTotalPrice();
                 // Cập nhật lại giao diện hoặc thông tin khác nếu cần
             },
             error: function(xhr, status, error) {
@@ -580,6 +581,7 @@
         $('input[name="selectedProduct"]:checked').each(function() {
             selectedItems.push($(this).val());
             $(this).closest('tr').remove();
+
         });
 
         // Gọi API để xoá tất cả sản phẩm
@@ -591,6 +593,7 @@
             success: function(response) {
                 // Xử lý khi API trả về thành công
                 console.log("Xoá tất cả sản phẩm thành công");
+                updateTotalPrice();
                 // Cập nhật lại giao diện hoặc thông tin khác nếu cần
             },
             error: function(xhr, status, error) {
@@ -613,7 +616,7 @@
         console.log(newTotal);
         tr.find('.total-price').text(newTotal);
 
-
+        updateTotalPrice(); // Cập nhật tổng tiền
             // Gọi hàm cập nhật số lượng sản phẩm
         updateQuantityInCart(lineItemId, newQuantity);
 
@@ -633,7 +636,7 @@
         var newTotal = price*newQuantity;
         tr.find('.total-price').text(newTotal);
 
-
+        updateTotalPrice(); // Cập nhật tổng tiền
         // Gọi hàm cập nhật số lượng sản phẩm
         updateQuantityInCart(lineItemId, newQuantity);
     });
@@ -653,6 +656,40 @@
             }
         });
     }
+    function updateTotalPrice() {
+        var total = 0;
+        // Lặp qua tất cả các checkbox
+        $('input[name="selectedProduct"]:checked').each(function() {
+            var price = parseFloat($(this).closest('tr').find('.total-price').text());
+            total += price;
+        });
+        // Hiển thị tổng tiền
+        $('#price-total').text(total);
+    }
+    $(document).ready(function() {
+        // Gọi hàm cập nhật tổng tiền khi trang web được tải lên
+        updateTotalPrice();
+
+        // Gắn sự kiện cho checkbox
+        $('input[name="selectedProduct"]').change(function() {
+            updateTotalPrice();
+        });
+
+        // Gắn sự kiện cho nút giảm số lượng
+        $('.decrease-btn').click(function() {
+            // Các dòng mã xử lý giảm số lượng ở đây...
+            updateTotalPrice(); // Cập nhật tổng tiền
+        });
+
+        // Gắn sự kiện cho nút tăng số lượng
+        $('.increase-btn').click(function() {
+            // Các dòng mã xử lý tăng số lượng ở đây...
+            updateTotalPrice(); // Cập nhật tổng tiền
+        });
+        $('.delete-button').click(function() {
+            removeFromCart($(this)); // Gọi hàm xoá sản phẩm và cập nhật tổng tiền
+        });
+    });
 
 
 
