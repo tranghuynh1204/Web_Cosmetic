@@ -36,13 +36,10 @@ public class UserService {
         }
     }
 
-//    public void checkEsixt(User user) {
-//        if (service.checkUserExist(user.getEmail(), user.getPassword())) {
-//            // Người dùng tồn tại, xử lý đăng nhập ở đây
-//            return new ResponseEntity<>("Login successful", HttpStatus.OK);
-//        } else {
-//            // Người dùng không tồn tại, trả về lỗi
-//            return new ResponseEntity<>("Email or password incorrect", HttpStatus.BAD_REQUEST);
-//        }
-//    }
+
+
+    public boolean checkExist(String mail, String password) {
+        User user = userRepository.findByMailAndPassword(mail, password);
+        return user != null;
+    }
 }
