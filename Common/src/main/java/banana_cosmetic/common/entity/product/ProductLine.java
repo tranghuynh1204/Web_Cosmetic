@@ -67,7 +67,6 @@ public class ProductLine extends IdBasedEntity {
                 maxCurrentPrice = currentPrice;
             }
         }
-        return minCurrentPrice.toString() + " - " + maxCurrentPrice.toString();
-
+        return minCurrentPrice + " - " + maxCurrentPrice;
     }
 }

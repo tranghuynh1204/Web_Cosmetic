@@ -11,4 +11,8 @@ public class Role extends IdBasedEntity{
 
     private String name;
     private String description;
+
+    public Role() {
+
+    }
 }

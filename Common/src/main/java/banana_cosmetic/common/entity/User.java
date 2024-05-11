@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Date;
 import java.util.List;
 @Entity
 @Getter
@@ -15,12 +14,10 @@ public class User extends IdBasedEntity {
     private String name;
     @Column(unique = true)
     private String phone;
-    @Column(unique = true)
     private String address;
+    @Column(unique = true)
     private String mail;
-    private Date birth;
     private String password;
-    private String photo;
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "users_roles",
