@@ -14,25 +14,23 @@ public class CartService {
     private CartRepository repository;
 
 
-    public void addLineItemToCart(LineItem lineitem) {
-        Cart cart = getCart();
+    public void addLineItemToCart(LineItem lineitem, Long id) {
+        Cart cart = getCart(id);
         cart.addLineItem(lineitem);
         repository.save(cart);
     }
 
-    public Cart getCart() {
-        // Lấy ID người dùng hiện tại
-        Long userId = 102L; // chưa viết
-        return repository.findByCustomerId(userId);
+    public Cart getCart(Long id) {
+        return repository.findByCustomerId(id);
     }
-    public void deleteFromCart(List<Long> lineItemIds) {
-        Cart cart = getCart();
+    public void deleteFromCart(List<Long> lineItemIds, Long id) {
+        Cart cart = getCart(id);
         cart.removeLineItemsByIds(lineItemIds);
         repository.save(cart);
     }
 
-    public void updateQuantityInCart(Long lineItemId, int quantity) {
-        Cart cart = getCart();
+    public void updateQuantityInCart(Long lineItemId, int quantity, Long id) {
+        Cart cart = getCart(id);
         cart.updateLineItemQuantity(lineItemId, quantity);
         repository.save(cart);
     }

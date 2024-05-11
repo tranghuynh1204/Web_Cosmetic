@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -38,8 +37,7 @@ public class UserService {
 
 
 
-    public boolean checkExist(String mail, String password) {
-        User user = userRepository.findByMailAndPassword(mail, password);
-        return user != null;
+    public User findByMailAndPassword(String mail, String password) {
+        return userRepository.findByMailAndPassword(mail, password);
     }
 }

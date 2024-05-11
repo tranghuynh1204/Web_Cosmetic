@@ -1,7 +1,10 @@
 package banana_cosmetic.client.cart;
 
+import banana_cosmetic.common.entity.User;
 import banana_cosmetic.common.entity.cart.Cart;
 import banana_cosmetic.common.entity.cart.LineItem;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +25,7 @@ public class CartController {
 
     @GetMapping("")
     public String viewCart(Model model) {
-        Cart cart = service.getCart();
+        Cart cart = service.getCart(id);
         List<LineItemDto> items = new ArrayList<>();
         for (LineItem item : cart.getItems()) {
             LineItemDto dto = new LineItemDto();
@@ -45,9 +48,12 @@ public class CartController {
 
     @PostMapping("/add")
     @ResponseBody
-    public ResponseEntity<String> addToCart(@RequestBody LineItem lineitem){
+    public ResponseEntity<String> addToCart(@RequestBody LineItem lineitem, HttpServletRequest request){
         try{
-            service.addLineItemToCart(lineitem);
+            HttpSession session = request.getSession();
+            User customer = (User) session.getAttribute("customer");
+
+            service.addLineItemToCart(lineitem,customer.getId());
             return new ResponseEntity<>("Thêm thành công", HttpStatus.OK); // Trả về brand mới với mã trạng thái 200 OK
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST); // Trả về thông báo lỗi với mã trạng thái 400 Bad Request
@@ -56,9 +62,11 @@ public class CartController {
     }
     @DeleteMapping("/remove")
     @ResponseBody
-    public ResponseEntity<String> removeFromCart(@RequestBody List<Long> lineItemIds){
+    public ResponseEntity<String> removeFromCart(@RequestBody List<Long> lineItemIds,HttpServletRequest request){
         try{
-            service.deleteFromCart(lineItemIds);
+            HttpSession session = request.getSession();
+            User customer = (User) session.getAttribute("customer");
+            service.deleteFromCart(lineItemIds,customer.getId());
             return new ResponseEntity<>("Xoá thành công", HttpStatus.OK); // Trả về brand mới với mã trạng thái 200 OK.
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST); // Trả về thông báo lỗi với mã trạng thái 400 Bad Request
@@ -68,9 +76,11 @@ public class CartController {
 
     @PutMapping("/update")
     @ResponseBody
-    public ResponseEntity<String> updateQuantityInCart(@RequestBody LineItem lineitem) {
+    public ResponseEntity<String> updateQuantityInCart(@RequestBody LineItem lineitem,HttpServletRequest request) {
         try{
-            service.updateQuantityInCart(lineitem.getId(), lineitem.getQuantity());
+            HttpSession session = request.getSession();
+            User customer = (User) session.getAttribute("customer");
+            service.updateQuantityInCart(lineitem.getId(), lineitem.getQuantity(),customer.getId());
             return new ResponseEntity<>("Cập nhật thành công", HttpStatus.OK); // Trả về brand mới với mã trạng thái 200 OK
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST); // Trả về thông báo lỗi với mã trạng thái 400 Bad Request
