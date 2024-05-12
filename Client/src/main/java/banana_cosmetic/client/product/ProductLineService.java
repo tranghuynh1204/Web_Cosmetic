@@ -26,4 +26,28 @@ public class ProductLineService {
                 .map(brand -> mapper.map(brand, ProductLineDto.class))
                 .collect(Collectors.toList());
     }
+
+    public List<ProductLineDto> searchProductLinesByBrand(String keyword) {
+        return repository.findByBrandNameContainingIgnoreCase(keyword).stream()
+                .map(brand -> mapper.map(brand, ProductLineDto.class))
+                .collect(Collectors.toList());
+    }
+
+    public List<ProductLineDto> searchProductLinesByBrand(String keyword, String brand) {
+        return repository.findByBrandNameContainingIgnoreCaseAndNameContainingIgnoreCase(brand, keyword).stream()
+                .map(productLine -> mapper.map(productLine, ProductLineDto.class))
+                .collect(Collectors.toList());
+    }
+
+    public List<ProductLineDto> searchProductLinesByCategory(String keyword, String category) {
+        return repository.findByCategoryNameContainingIgnoreCaseAndNameContainingIgnoreCase(category, keyword).stream()
+                .map(productLine -> mapper.map(productLine, ProductLineDto.class))
+                .collect(Collectors.toList());
+    }
+
+    public List<ProductLineDto> searchProductLinesByCategoryAndBrand(String keyword, String category, String brand) {
+        return repository.findByCategoryNameContainingIgnoreCaseAndBrandNameContainingIgnoreCaseAndNameContainingIgnoreCase(category,brand,keyword).stream()
+                .map(productLine -> mapper.map(productLine, ProductLineDto.class))
+                .collect(Collectors.toList());
+    }
 }
