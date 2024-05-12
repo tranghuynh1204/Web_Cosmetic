@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Your Order History</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inconsolata&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<div id="order_history">
+
+    <table>
+        <thead>
+        <tr>
+            <th>Status</th>
+            <th>Order Time</th>
+            <th>Image</th>
+            <th>Product Name</th>
+            <th>Classification</th>
+            <th>Price</th>
+            <th>Quantity</th>
+        </tr>
+        </thead>
+        <tbody>
+        <div th:each="order : ${orders}">
+            <span th:each="detail : ${order.details}">
+                <tr>
+                    <td th:text="${order.status}"></td>
+                    <td th:text="${order.orderTime}"></td>
+                    <img th:src="${detail.image}" style="width: 100px; height: auto;">
+                    <td><a th:href="@{'/product/' + ${detail.idProductLine}}" th:text="${detail.name}"></a></td>
+                    <td th:text="${detail.classification}"></td>
+                    <td th:text="${detail.price}"></td>
+                    <td th:text="${detail.quantity}"></td>
+                </tr>
+            </span>
+        </div>
+        </tbody>
+    </table>
+
+
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="scripts/script.js"></script>
+</body>
+</html>

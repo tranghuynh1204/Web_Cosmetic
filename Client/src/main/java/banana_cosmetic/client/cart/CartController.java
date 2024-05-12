@@ -28,7 +28,7 @@ public class CartController {
     public String viewCart(Model model, HttpServletRequest request) {
         HttpSession session = request.getSession();
         User customer = (User) session.getAttribute("customer");
-        if(customer == null) {
+        if (customer == null) {
             return "login";
         }
         Cart cart = service.getCart(customer.getId());
@@ -38,17 +38,17 @@ public class CartController {
             dto.setId(item.getId());
             dto.setQuantity(item.getQuantity());
             Product product = item.getProduct();
-            if (product != null) {
-                dto.setProductLineName(product.getProductLine().getName());
-                dto.setImageProductLine(product.getProductLine().getImage());
-                dto.setPrice(product.getCurrentPrice());
-                for (var entry : product.getProductLine().getProducts().entrySet()) {
-                    if (entry.getValue().getId().equals(product.getId())) {
-                        dto.setClassification(entry.getKey());
-                        break;
-                    }
+            dto.setProductId(product.getId());
+            dto.setProductLineName(product.getProductLine().getName());
+            dto.setImageProductLine(product.getProductLine().getImage());
+            dto.setPrice(product.getCurrentPrice());
+            for (var entry : product.getProductLine().getProducts().entrySet()) {
+                if (entry.getValue().getId().equals(product.getId())) {
+                    dto.setClassification(entry.getKey());
+                    break;
                 }
             }
+
             items.add(dto);
         }
         model.addAttribute("items", items);
@@ -62,7 +62,7 @@ public class CartController {
 
             HttpSession session = request.getSession();
             User customer = (User) session.getAttribute("customer");
-            if(customer == null) {
+            if (customer == null) {
                 return new ResponseEntity<>("Login", HttpStatus.OK);
             }
             service.addLineItemToCart(lineitem, customer.getId());

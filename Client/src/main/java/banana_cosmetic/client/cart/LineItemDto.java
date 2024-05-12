@@ -9,6 +9,7 @@ public class LineItemDto {
     private String productLineName;
     private String classification;
     private String imageProductLine;
+    private Long productId;
     private Long price;
     public long getTotal() {
         return quantity * price;
