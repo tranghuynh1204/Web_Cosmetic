@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:replace="fragments :: page_head('Đơn hàng')">
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div class="overlay" id="overlay"></div>
+<th:block th:replace="sidebar :: sidebar"></th:block>
+<div id="main-content">
+    <th:block th:replace="header :: header"></th:block>
+    <div id="crumbs">
+        <ul>
+            <li>
+                <a th:href="@{/}"><i class="fas fa-home"></i></a>
+            </li>
+            <li>
+                <a>Đơn hàng</a>
+            </li>
+        </ul>
+    </div>
+    <main>
+        <div class="row-search">
+            <a th:href="@{'/orders/page/1' + '?sortDir=' + ${sortDir} +${ sortField != null && sortField!='' ?'&sortField=' + sortField:''} + '&status=PROCESSING'}"
+               class='a-status'
+               th:classappend="${status == 'PROCESSING' ? 'active' : ''}">
+                PROCESSING
+            </a>
+            <a th:href="@{'/orders/page/1' + '?sortDir=' + ${sortDir} +${ sortField != null && sortField!='' ?'&sortField=' + sortField:''} + '&status=CONFIRMED'}"
+               class='a-status'
+               th:classappend="${status == 'CONFIRMED' ? 'active' : ''}">
+                CONFIRMED
+            </a>
+            <a th:href="@{'/orders/page/1' + '?sortDir=' + ${sortDir} +${ sortField != null && sortField!='' ?'&sortField=' + sortField:''} + '&status=DELIVERING'}"
+               class='a-status' th:classappend="${status == 'DELIVERING' ? 'active' : ''}">
+                DELIVERING
+            </a>
+            <a th:href="@{'/orders/page/1' + '?sortDir=' + ${sortDir} +${ sortField != null && sortField!='' ?'&sortField=' + sortField:''} + '&status=DELIVERED'}"
+               class='a-status' th:classappend="${status == 'DELIVERED' ? 'active' : ''}">
+                DELIVERED
+            </a>
+            <a th:href="@{'/orders/page/1' + '?sortDir=' + ${sortDir} +${ sortField != null && sortField!='' ?'&sortField=' + sortField:''} + '&status=CANCELLED'}"
+               class='a-status' th:classappend="${status == 'CANCELLED' ? 'active' : ''}">
+                CANCELLED
+            </a>
+            <a id="sort-icon"
+               th:href="@{'/orders/page/' + ${currentPage} + '?sortDir=' + ${sortDir == 'asc' ? 'desc' : 'asc'} +${ sortField != null && sortField!='' ?'&sortField=' + sortField:''} + ${status != null? '&status=' + status : ''}}">
+                <img th:src="@{${sortDir == 'asc' ? '/images/asc-icon.png' : '/images/desc-icon.png'}}" alt="Icon">
+            </a>
+        </div>
+        <table id="table-orders">
+            <thead>
+            <tr>
+                <th>Thời gian đặt hàng</th>
+                <th>Thời gian nhận</th>
+                <th>Tên người nhận</th>
+                <th>SĐT</th>
+                <th>Địa chỉ</th>
+                <th>Tổng tiền</th>
+                <th>Trạng thái</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="order : ${orders}" th:data-order-id="${order.id}">
+                <td th:text="${#dates.format(order.orderTime, 'yyyy-MM-dd')}"></td>
+                <td th:text="${#dates.format(order.timeReceived, 'yyyy-MM-dd')}"></td>
+                <td th:text="${order.nameCustomer}"></td>
+                <td th:text="${order.phone}"></td>
+                <td th:text="${order.address}"></td>
+                <td th:text="${order.total}"></td>
+                <td>
+                    <select class="statusSelect">
+                        <option th:selected="${order.status=='PROCESSING'}" value="PROCESSING">PROCESSING</option>
+                        <option th:selected="${order.status=='CONFIRMED'}" value="CONFIRMED">CONFIRMED</option>
+                        <option th:selected="${order.status=='DELIVERING'}" value="DELIVERING">DELIVERING</option>
+                        <option th:selected="${order.status=='DELIVERED'}" value="DELIVERED">DELIVERED</option>
+                        <option th:selected="${order.status=='CANCELLED'}" value="CANCELLED">CANCELLED</option>
+                    </select>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </main>
+
+    <div th:replace="fragments :: pagination('Đơn hàng','/orders')"></div>
+    <th:block th:replace="footer :: footer"></th:block>
+</div>
+<script th:src="@{/js/index.js}"></script>
+</body>
+</html>

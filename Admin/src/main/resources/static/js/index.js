@@ -226,6 +226,13 @@ $(document).ready(function () {
     window.location.href = url;
   });
 });
+$(document).ready(function () {
+  $("#table-orders tbody tr").dblclick(function () {
+    var orderId = $(this).data("order-id");
+    var url = "/admin/orders/detail/" + orderId;
+    window.location.href = url;
+  });
+});
 
 function addColumn() {
   $("#classification-table thead tr:first").append(
@@ -529,5 +536,32 @@ function saveImages() {
       alert(error);
       alert(xhr.responseText);
     },
+  });
+}
+
+
+$(document).ready(function(){
+  $('.statusSelect').change(function(){
+    var orderId = $(this).closest('tr').data('order-id');
+    var newStatus = $(this).val();
+    updateOrderStatus(orderId, newStatus);
+  });
+});
+
+function updateOrderStatus(orderId, newStatus) {
+  $.ajax({
+    url: '/admin/orders/save',
+    method: 'POST',
+    contentType: 'application/json',
+    data: JSON.stringify({
+      id: orderId,
+      status: newStatus
+    }),
+    success: function(response) {
+      console.log('Status updated successfully');
+    },
+    error: function(xhr, status, error) {
+      console.error('Status update failed');
+    }
   });
 }

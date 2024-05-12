@@ -319,8 +319,8 @@ footer {
     align-items: center;
     justify-content: center;
     position: absolute;
-    box-shadow: 0 0 0 10px aliceblue;
-; cursor: pointer;
+    box-shadow: 0 0 0 10px aliceblue;;
+    cursor: pointer;
     right: 0;
     transition: width 0.3s ease-in-out, height 0.3s ease-in-out;
 }
@@ -335,8 +335,8 @@ footer {
     justify-content: center;
     position: absolute;
     right: -50px;
-    box-shadow: 0 0 0 10px aliceblue;
-; cursor: pointer;
+    box-shadow: 0 0 0 10px aliceblue;;
+    cursor: pointer;
     transition: width 0.3s ease-in-out, height 0.3s ease-in-out;
 }
 
@@ -822,7 +822,7 @@ form #tree-categories {
 }
 
 /*productLine*/
-#table-productLines {
+#table-productLines, #table-orders {
     width: 100%;
     border-collapse: collapse;
     margin-top: 30px;
@@ -840,16 +840,24 @@ form #tree-categories {
     height: 150px;
 }
 
+#table-orders td, #table-orders th {
+    border: 1px solid #000;
+    padding: 10px;
+    text-align: center;
+    vertical-align: middle;
+}
+
 #table-productLines img {
     width: 150px;
     height: 150px;
     display: block;
     margin: auto;
 }
+
 #table-productLines th a {
->>>>>>> d7d3df4c93e5ba805036196d320d4d39529d2de6
+
     text-decoration: none;
-    color:black;
+    color: black;
 }
 
 #is-sale {
@@ -857,6 +865,7 @@ form #tree-categories {
     margin-right: 20px;
     margin-top: 5px;
 }
+
 .fa-sort-down {
     position: relative;
 
@@ -864,8 +873,9 @@ form #tree-categories {
 
 .fa-sort-up {
     position: relative;
-    left:-13.9px;
+    left: -13.9px;
 }
+
 .trash-icon {
     border: none;
     margin-top: 1px;
@@ -898,6 +908,14 @@ form #tree-categories {
 }
 
 #table-productLines tbody tr:hover {
+    background-color: rgba(255, 0, 0, 0.5);
+}
+
+#table-orders tbody tr {
+    cursor: pointer;
+}
+
+#table-orders tbody tr:hover {
     background-color: rgba(255, 0, 0, 0.5);
 }
 
@@ -1059,6 +1077,7 @@ form #tree-categories {
     left: 50%;
     transform: translate(-50%, -50%);
 }
+
 .overlay {
     position: fixed;
     top: 0;
@@ -1077,4 +1096,22 @@ form #tree-categories {
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 10000;
+}
+.a-status {
+    text-decoration: none;
+    display: inline-flex;
+    height:30px;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid transparent;
+    color: #000;
+    padding:10px;
+    margin: 5px;
+}
+
+.a-status.active {
+    border-color: red;
+}
+.a-status:hover {
+    border-color: red;
 }

@@ -384,13 +384,14 @@
             const key = activeButtons.map(function () {
                 return $(this).text();
             }).get().join('-');
-            var newPrice = productMap[key].price;
+            var newPrice = productMap[key].currentPrice;
             $('#product-price').text(newPrice);
-            $('#add-to-cart').prop('disabled', false);
-            $('#add-to-cart').removeClass('active');
+            var button = $('#add-to-cart');
+            button.prop('disabled', false);
+            button.removeClass('active');
         } else {
-            $('#add-to-cart').prop('disabled', true);
-            $('#add-to-cart').addClass('active');
+            button.prop('disabled', true);
+            button.addClass('active');
         }
 
         var enableButtons = [];
