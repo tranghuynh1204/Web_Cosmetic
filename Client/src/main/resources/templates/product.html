@@ -385,14 +385,15 @@
             const key = activeButtons.map(function () {
                 return $(this).text();
             }).get().join('-');
-            var newPrice = productMap[key].currentPrice;
+            var newPrice = productMap[key].price;
             $('#product-price').text(newPrice);
-            var button = $('#add-to-cart');
-            button.prop('disabled', false);
-            button.removeClass('active');
+            $('#add-to-cart').prop('disabled', false);
+            $('#add-to-cart').removeClass('active');
         } else {
-            button.prop('disabled', true);
-            button.addClass('active');
+            var newPrice = productLine.displayPrice;
+            $('#product-price').text(newPrice);
+            $('#add-to-cart').prop('disabled', true);
+            $('#add-to-cart').addClass('active');
         }
 
         var enableButtons = [];
