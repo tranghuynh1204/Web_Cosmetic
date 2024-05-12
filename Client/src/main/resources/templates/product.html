@@ -102,9 +102,20 @@
         #products button.active {
             background-color: red;
         }
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 9999;
+            display: none;
+        }
     </style>
 </head>
 <body>
+<div class="overlay" id="overlay"></div>
 <th:block th:with="category=${productLine.category}">
     <th:block th:fragment="recursiveCategory(category)">
         <a th:text="${category.name}"></a>
@@ -267,6 +278,8 @@
                 $('#quantity').val(1);
                 quantity = 1;
             }
+            var overlay = $('#overlay');
+            overlay.show();
             $.ajax({
                 url: "/cart/add",
                 type: "POST",
@@ -279,13 +292,15 @@
                         }
                     }),
                 success: function(response) {
-                    console.log(response); // Log kết quả phản hồi từ API
-                    // Cập nhật lại giao diện hoặc thông tin khác nếu cần
+                    overlay.hide();
+                    alert("Thêm thành công");
                 },
                 error: function(xhr, status, error) {
-                    console.error("Lỗi khi cập nhật số lượng: " + error);
+                    overlay.hide();
                 }
+
             });
+
         });
     });
 
