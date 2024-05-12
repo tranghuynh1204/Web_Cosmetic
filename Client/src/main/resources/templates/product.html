@@ -102,6 +102,7 @@
         #products button.active {
             background-color: red;
         }
+
         .overlay {
             position: fixed;
             top: 0;
@@ -150,6 +151,7 @@
                     <button id="increase">+</button>
                 </div>
                 <button class="add-to-cart-button active" id="add-to-cart" disabled>Add to Cart</button>
+
             </div>
         </div>
     </div>
@@ -266,43 +268,45 @@
         }
     }
 
-    $(document).ready(function () {
-        $("#add-to-cart").click(function (event) {
-            var activeButtons = $('#products button.active');
-            const key = activeButtons.map(function () {
-                return $(this).text();
-            }).get().join('-');
-            var id = productMap[key].id;
-            var quantity = parseInt($('#quantity').val());
-            if(quantity < 1){
-                $('#quantity').val(1);
-                quantity = 1;
-            }
-            var overlay = $('#overlay');
-            overlay.show();
-            $.ajax({
-                url: "/cart/add",
-                type: "POST",
-                contentType: "application/json",
-                data: JSON.stringify(
-                    {
-                        quantity: quantity,
-                        product:{
-                            id:id
-                        }
-                    }),
-                success: function(response) {
-                    overlay.hide();
-                    alert("Thêm thành công");
-                },
-                error: function(xhr, status, error) {
-                    overlay.hide();
-                }
+    function callLogin(){
+        window.location.href = '/login';
+    }
 
-            });
+    function addToCart() {
+        var activeButtons = $('#products button.active');
+        const key = activeButtons.map(function () {
+            return $(this).text();
+        }).get().join('-');
+        var id = productMap[key].id;
+        var quantity = parseInt($('#quantity').val());
+        if (quantity < 1) {
+            $('#quantity').val(1);
+            quantity = 1;
+        }
+        var overlay = $('#overlay');
+        overlay.show();
+        $.ajax({
+            url: "/cart/add",
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify(
+                {
+                    quantity: quantity,
+                    product: {
+                        id: id
+                    }
+                }),
+            success: function (response) {
+                overlay.hide();
+                alert("Thêm thành công");
+            },
+            error: function (xhr, status, error) {
+                overlay.hide();
+            }
 
         });
-    });
+
+    }
 
     /*]]>*/
 </script>
