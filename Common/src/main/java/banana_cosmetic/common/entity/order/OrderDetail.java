@@ -17,4 +17,5 @@ public class OrderDetail extends IdBasedEntity {
     private String name;
     private String classification;
     private Long idProductLine;
+    private String image;
 }
