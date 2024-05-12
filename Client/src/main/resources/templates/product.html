@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>product</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inconsolata&display=swap" rel="stylesheet">
     <style>
         body{
             background: rgb(249, 245, 246);
+            font-family: 'Inconsolata', monospace;
         }
         .container {
             display: flex;
@@ -147,6 +150,7 @@
             display: flex;
             flex-direction: column;
             gap: 10px; /* Khoảng cách giữa các div con */
+            font-family: 'Inconsolata', monospace;
         }
 
         /* Định dạng các div con */
@@ -154,6 +158,7 @@
             display: flex;
             align-items: center;
             gap: 10px; /* Khoảng cách giữa các phần tử trong div */
+            font-family: 'Inconsolata', monospace;
         }
 
         /* Định dạng các nút */
@@ -162,28 +167,41 @@
             border: none;
             background-color: #f0f0f0;
             cursor: pointer;
+            width: 100px; /* Độ rộng của nút Add to Cart */
+            font-family: 'Inconsolata', monospace;
+            height: 40px;
         }
 
         /* Định dạng các span */
         #products span {
             font-weight: bold;
+            font-family: 'Inconsolata', monospace;
         }
         .right .product-details a {
             font-size: 16px; /* Kích thước chữ của liên kết */
         }
 
         .right .product-details h2 {
-            font-size: 20px; /* Kích thước chữ của tiêu đề */
+            font-size: 25px; /* Kích thước chữ của tiêu đề */
         }
 
         .right .product-details p {
-            font-size: 14px; /* Kích thước chữ của đoạn văn */
+            font-size: 25px; /* Kích thước chữ của đoạn văn */
         }
 
-        .right .product-details button {
-            width: 100px; /* Độ rộng của nút */
-            height: 40px; /* Độ cao của nút */
-            font-size: 16px; /* Kích thước chữ của nút */
+        .right .product-details button#decrease {
+            width: 60px; /* Độ rộng của nút decrease */
+            height: 40px; /* Độ cao của nút decrease */
+        }
+
+        .right .product-details button#increase {
+            width: 60px; /* Độ rộng của nút increase */
+            height: 40px; /* Độ cao của nút increase */
+        }
+
+        .right .product-details button.add-to-cart-button {
+            width: 130px; /* Độ rộng của nút Add to Cart */
+            height: 50px; /* Độ cao của nút Add to Cart */
         }
 
 
@@ -270,6 +288,7 @@
 <th:block th:with="category=${productLine.category}">
     <th:block th:fragment="recursiveCategory(category)">
         <a th:text="${category.name}"></a>
+        <span>></span> <!-- In ra dấu ">" -->
         <th:block th:if="${category.parent != null}">
             <th:block th:replace="this::recursiveCategory(${category.parent})"></th:block>
         </th:block>
