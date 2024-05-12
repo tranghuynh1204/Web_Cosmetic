@@ -400,6 +400,8 @@ function saveProducts() {
   if (!checkEmptyCells()) {
     return;
   }
+  var overlay = $("#overlay");
+  overlay.show();
   var classifications = $("#classification-table thead tr:last")
     .find("input")
     .map(function () {
@@ -440,11 +442,12 @@ function saveProducts() {
       classifications: classifications,
     }),
     success: function (response) {
+      overlay.hide();
       alert(response);
       location.reload();
     },
     error: function (xhr, status, error) {
-      alert(error);
+      overlay.hide();
       alert(xhr.responseText);
     },
   });
