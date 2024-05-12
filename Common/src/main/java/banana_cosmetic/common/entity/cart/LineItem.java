@@ -16,16 +16,11 @@ import org.hibernate.annotations.OnDeleteAction;
 public class LineItem extends IdBasedEntity {
 
     private int quantity;
-    @OnDelete(action = OnDeleteAction.SET_NULL)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @ManyToOne
     private Product product;
 
     public LineItem() {
-    }
-
-    public LineItem(int quantity, Product product) {
-        this.quantity = quantity;
-        this.product = product;
     }
 
 }
