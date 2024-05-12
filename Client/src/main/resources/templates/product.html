@@ -380,6 +380,12 @@
         var activeButtons = $('#products button.active');
 
         if (activeButtons.length === lookupArray.length) {
+
+            const key = activeButtons.map(function () {
+                return $(this).text();
+            }).get().join('-');
+            var newPrice = productMap[key].price;
+            $('#product-price').text(newPrice);
             $('#add-to-cart').prop('disabled', false);
             $('#add-to-cart').removeClass('active');
         } else {
@@ -466,6 +472,7 @@
                 success: function(response) {
                     if (response==='Login'){
                         window.location.href = '/login';
+                        overlay.hide();
                     }
                     else{
                         overlay.hide();
