@@ -67,4 +67,9 @@ public class UserService {
     public User findByMail(String customerMail) {
         return userRepository.findUserByMailIgnoreCase(customerMail);
     }
+
+    public void savePassword(User user) {
+        // Lưu mật khẩu mới vào cơ sở dữ liệu
+        userRepository.save(user);
+    }
 }

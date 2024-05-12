@@ -1,6 +1,7 @@
 package banana_cosmetic.client.user;
 
 import banana_cosmetic.common.entity.User;
+import org.springframework.http.HttpEntity;
 import org.springframework.ui.Model;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -9,6 +10,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.Random;
 
 @Controller
 @RequestMapping("/user")
@@ -47,22 +51,6 @@ public class UserController {
             return new ResponseEntity<>("Email or password incorrect", HttpStatus.BAD_REQUEST);
         }
     }
-
-//    @GetMapping("/profile")
-//    public String showProfile(Model model, HttpSession session) {
-//        // Lấy thông tin khách hàng từ session
-//        User customer = (User) session.getAttribute("customer");
-//
-//        // Kiểm tra xem người dùng đã đăng nhập hay chưa
-//        if (customer != null) {
-//            // Truyền thông tin khách hàng vào model để hiển thị trên trang profile
-//            model.addAttribute("customer", customer);
-//            return "profile/profile-index"; // Trả về trang profile
-//        } else {
-//            // Nếu người dùng chưa đăng nhập, chuyển hướng đến trang đăng nhập
-//            return "redirect:/login";
-//        }
-//    }
 
     @GetMapping("/profile")
     public String showProfile(Model model, HttpSession session) {
@@ -113,9 +101,48 @@ public class UserController {
         }
     }
 
+    @PostMapping("/change-password")
+    public String changePassword(
+                                 @RequestParam("currentPassword") String currentPassword,
+                                 @RequestParam("newPassword") String newPassword,
+                                 @RequestParam("confirmPassword") String confirmPassword,
+                                 RedirectAttributes redirectAttributes, HttpSession session) {
+
+        User sessionUser = (User) session.getAttribute("customer");
+        String customerMail = sessionUser.getMail();
+        // Tìm kiếm người dùng bằng email
+        User user = service.findByMail(customerMail);
+
+        // Kiểm tra người dùng tồn tại và mật khẩu cũ đúng
+        if (user != null && user.getPassword().equals(currentPassword)) {
+            // Kiểm tra mật khẩu mới và nhập lại mật khẩu mới có giống nhau không
+            if (newPassword.equals(confirmPassword)) {
+                // Cập nhật mật khẩu mới cho người dùng
+                user.setPassword(newPassword);
+                service.savePassword(user);
+                redirectAttributes.addFlashAttribute("successMessage", "Password changed successfully.");
+            } else {
+                redirectAttributes.addFlashAttribute("errorMessage", "Error message here.");
+            }
+        } else {
+            redirectAttributes.addFlashAttribute("errorMessage", "Invalid current password.");
+        }
+
+        return "redirect:/user/profile";
+    }
 
     @GetMapping("/test")
     public String showTestPage() {
         return "profile/test"; // Returns the name of the HTML template to display the search page
+    }
+
+    @PostMapping("/logout")
+    public String logout(HttpServletRequest request) {
+        // Xóa session
+        HttpSession session = request.getSession();
+        session.invalidate();
+
+        // Chuyển hướng về trang đăng nhập
+        return "redirect:/home";
     }
 }

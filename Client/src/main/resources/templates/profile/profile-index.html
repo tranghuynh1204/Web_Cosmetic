@@ -1,116 +1,3 @@
-<!--<!DOCTYPE html>-->
-<!--<html lang="en" xmlns:th="http://www.thymeleaf.org">-->
-<!--<head>-->
-<!--    <meta charset="UTF-8">-->
-<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
-<!--    <title>User Profile</title>-->
-<!--    <style>-->
-<!--        /* CSS styles */-->
-<!--        /* CSS để chỉnh sửa header */-->
-<!--        header {-->
-<!--            background-color: #007bff; /* Màu xanh dương */-->
-<!--            color: white;-->
-<!--            text-align: center; /* Căn giữa nội dung */-->
-<!--            padding: 20px; /* Khoảng cách phía trên và dưới */-->
-<!--        }-->
-
-<!--        .search-keyword {-->
-<!--            border: 2px solid white; /* Viền trắng */-->
-<!--            border-radius: 5px; /* Đường cong viền */-->
-<!--            padding: 5px 10px; /* Khoảng cách bên trong */-->
-<!--            background-color: rgba(255, 255, 255, 0.2); /* Nền mờ */-->
-<!--            font-size: 20px; /* Kích thước chữ lớn hơn */-->
-<!--        }-->
-
-<!--        /* CSS để chia main ra làm 2 phần */-->
-<!--        .main-content {-->
-<!--            display: flex; /* Sử dụng flexbox */-->
-<!--        }-->
-
-<!--        .left-panel {-->
-<!--            width: 25%; /* Độ rộng của góc bên trái */-->
-<!--            background-color: #f0f0f0; /* Màu nền của góc bên trái */-->
-<!--            padding: 20px; /* Khoảng cách phía trên và dưới */-->
-<!--        }-->
-
-<!--        .right-panel {-->
-<!--            flex: 1; /* Phần còn lại chiếm toàn bộ phần lớn bên phải */-->
-<!--            padding: 20px; /* Khoảng cách phía trên và dưới */-->
-<!--            display: flex;-->
-<!--            flex-wrap: wrap; /* Cho phép các sản phẩm xuống hàng khi không đủ không gian */-->
-<!--            justify-content: space-between; /* Căn giữa các sản phẩm */-->
-<!--        }-->
-
-<!--        .profile-image {-->
-<!--            width: 200px; /* Độ rộng của ảnh */-->
-<!--            height: auto; /* Chiều cao tự điều chỉnh */-->
-<!--            margin-bottom: 20px; /* Khoảng cách phía dưới */-->
-<!--            border-radius: 50%; /* Đường cong viền */-->
-<!--        }-->
-
-<!--        .profile-info {-->
-<!--            margin-bottom: 20px; /* Khoảng cách phía dưới */-->
-<!--        }-->
-
-<!--        .profile-info p {-->
-<!--            margin-bottom: 10px; /* Khoảng cách giữa các dòng */-->
-<!--        }-->
-<!--    </style>-->
-<!--</head>-->
-<!--<body>-->
-
-<!--&lt;!&ndash; Header &ndash;&gt;-->
-<!--<header>-->
-<!--    &lt;!&ndash; Display search keyword &ndash;&gt;-->
-<!--    <div th:if="${keyword}">-->
-<!--        <span class="search-keyword" th:text="'Mail: ' + ${keyword}"></span>-->
-<!--    </div>-->
-<!--</header>-->
-
-<!--&lt;!&ndash; Main content &ndash;&gt;-->
-<!--<div class="container main-content">-->
-<!--    &lt;!&ndash; Left panel &ndash;&gt;-->
-<!--    <div class="left-panel">-->
-<!--        &lt;!&ndash; Button Edit, Đăng xuất, thay đổi mật khẩu, thiết kế các button này thật đẹp &ndash;&gt;-->
-<!--&lt;!&ndash;        <img class="profile-image" th:src="${customer.image}" alt="Profile Image">&ndash;&gt;-->
-<!--        <div>-->
-<!--            &lt;!&ndash; Button Edit &ndash;&gt;-->
-<!--            <button th:onclick="'/profile/edit'">Edit Profile</button>-->
-<!--        </div>-->
-<!--        <div>-->
-<!--            &lt;!&ndash; Button Change Password &ndash;&gt;-->
-<!--            <button th:onclick="'/profile/change-password'">Change Password</button>-->
-<!--        </div>-->
-<!--        <div>-->
-<!--            &lt;!&ndash; Button Logout &ndash;&gt;-->
-<!--            <form th:action="@{/logout}" method="post">-->
-<!--                <button type="submit">Logout</button>-->
-<!--            </form>-->
-<!--        </div>-->
-<!--    </div>-->
-
-<!--    <div class="right-panel">-->
-<!--        &lt;!&ndash; Display no results message if applicable &ndash;&gt;-->
-<!--        &lt;!&ndash; Display profile information &ndash;&gt;-->
-<!--        <div class="profile-info">-->
-<!--            <p><strong>Name:</strong> [[${userProfile.name}]]</p>-->
-<!--            <p><strong>Email:</strong> [[${userProfile.mail}]]</p>-->
-<!--            <p><strong>Phone:</strong> [[${userProfile.phone}]]</p>-->
-<!--            <p><strong>Address:</strong> [[${userProfile.address}]]</p>-->
-<!--            &lt;!&ndash; Add more fields as needed &ndash;&gt;-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</div>-->
-
-<!--</body>-->
-<!--</html>-->
-
-
-
-
-
-
-
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
@@ -119,57 +6,57 @@
     <title>User Profile</title>
     <style>
         /* CSS styles */
-        /* CSS để chỉnh sửa header */
         header {
-            background-color: #007bff; /* Màu xanh dương */
+            background-color: #007bff;
             color: white;
-            text-align: center; /* Căn giữa nội dung */
-            padding: 20px; /* Khoảng cách phía trên và dưới */
+            text-align: center;
+            padding: 20px;
         }
 
         .search-keyword {
-            border: 2px solid white; /* Viền trắng */
-            border-radius: 5px; /* Đường cong viền */
-            padding: 5px 10px; /* Khoảng cách bên trong */
-            background-color: rgba(255, 255, 255, 0.2); /* Nền mờ */
-            font-size: 20px; /* Kích thước chữ lớn hơn */
+            border: 2px solid white;
+            border-radius: 5px;
+            padding: 5px 10px;
+            background-color: rgba(255, 255, 255, 0.2);
+            font-size: 20px;
         }
 
-        /* CSS để chia main ra làm 2 phần */
         .main-content {
-            display: flex; /* Sử dụng flexbox */
+            display: flex;
         }
 
         .left-panel {
-            width: 25%; /* Độ rộng của góc bên trái */
-            background-color: #f0f0f0; /* Màu nền của góc bên trái */
-            padding: 20px; /* Khoảng cách phía trên và dưới */
+            width: 25%;
+            background-color: #f0f0f0;
+            padding: 20px;
+            font-size: 20px;
         }
 
         .right-panel {
-            flex: 1; /* Phần còn lại chiếm toàn bộ phần lớn bên phải */
-            padding: 20px; /* Khoảng cách phía trên và dưới */
+            flex: 1;
+            padding: 20px;
             display: flex;
-            flex-wrap: wrap; /* Cho phép các sản phẩm xuống hàng khi không đủ không gian */
-            justify-content: space-between; /* Căn giữa các sản phẩm */
+            flex-wrap: wrap;
+            justify-content: space-between;
         }
 
         .profile-image {
-            width: 200px; /* Độ rộng của ảnh */
-            height: auto; /* Chiều cao tự điều chỉnh */
-            margin-bottom: 20px; /* Khoảng cách phía dưới */
-            border-radius: 50%; /* Đường cong viền */
+            width: 200px;
+            height: auto;
+            margin-bottom: 20px;
+            border-radius: 50%;
         }
 
         .profile-info {
-            margin-bottom: 20px; /* Khoảng cách phía dưới */
+            margin-bottom: 20px;
         }
 
         .profile-info p {
-            margin-bottom: 10px; /* Khoảng cách giữa các dòng */
+            margin-bottom: 10px;
+            font-size: 18px;
         }
 
-        /* CSS cho hộp thoại */
+        /* CSS for Change Password Dialog */
         .dialog-container {
             display: none;
             position: fixed;
@@ -189,6 +76,11 @@
             border-radius: 10px;
             width: 400px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .button-group button.send-otp {
+            background-color: #FF0000;
+            color: black;
         }
 
         .input-group {
@@ -225,7 +117,12 @@
             color: white;
         }
 
-        .button-group button.edit {
+        .left-panel .edit,
+        .left-panel .change-password,
+        .left-panel .logout {
+            font-size: 20px; /* Tăng kích thước của các nút chỉ định */
+        }
+        .button-group button.change-password {
             background-color: #007bff;
             color: white;
         }
@@ -248,9 +145,9 @@
         <!-- Button Edit -->
         <button onclick="openEditDialog()">Edit Profile</button>
         <!-- Button Change Password -->
-        <button th:onclick="'/profile/change-password'">Change Password</button>
+        <button onclick="openChangePasswordDialog()">Change Password</button>
         <!-- Button Logout -->
-        <form th:action="@{/logout}" method="post">
+        <form th:action="@{/user/logout}" method="post">
             <button type="submit">Logout</button>
         </form>
     </div>
@@ -297,6 +194,48 @@
     </div>
 </div>
 
+<!-- Change Password Dialog -->
+<div class="dialog-container" id="changePasswordDialog">
+    <div class="dialog-box">
+        <h2>Change Password</h2>
+        <form th:action="@{/user/change-password}" method="post">
+            <div class="input-group">
+                <label for="currentPassword">Current Password:</label>
+                <input type="password" id="currentPassword" name="currentPassword" required>
+            </div>
+            <div class="input-group">
+                <label for="newPassword">New Password:</label>
+                <input type="password" id="newPassword" name="newPassword" required>
+            </div>
+            <div class="input-group">
+                <label for="confirmPassword">Confirm Password:</label>
+                <input type="password" id="confirmPassword" name="confirmPassword" required>
+            </div>
+            <div th:if="${successMessage}" class="alert alert-success" role="alert">
+                <span th:text="${successMessage}"></span>
+            </div>
+
+            <!-- Display error message -->
+            <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
+                <span th:text="${errorMessage}"></span>
+            </div>
+<!--            <div class="input-group">-->
+<!--                <label for="otp">OTP:</label>-->
+<!--                <input type="text" id="otp" name="otp" required>-->
+<!--            </div>-->
+<!--            <div class="button-group">-->
+<!--                <button type="button" id="sendOtp">Gửi OTP</button>-->
+<!--                <input type="text" placeholder="EnterOTP" name="otp" id="otpInput" required>-->
+<!--            </div>-->
+            <div class="button-group">
+                <button type="submit" class="change-password">Change Password</button>
+                <button type="button" class="cancel" onclick="closeChangePasswordDialog()">Cancel</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
 <script>
     // JavaScript function to open the edit dialog
     function openEditDialog() {
@@ -306,6 +245,16 @@
     // JavaScript function to close the edit dialog
     function closeEditDialog() {
         document.getElementById('editDialog').style.display = 'none';
+    }
+
+    // JavaScript function to open the change password dialog
+    function openChangePasswordDialog() {
+        document.getElementById('changePasswordDialog').style.display = 'flex';
+    }
+
+    // JavaScript function to close the change password dialog
+    function closeChangePasswordDialog() {
+        document.getElementById('changePasswordDialog').style.display = 'none';
     }
 </script>
 
