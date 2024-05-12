@@ -5,42 +5,98 @@
     <title>product</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
+        body{
+            background: rgb(249, 245, 246);
+        }
         .container {
             display: flex;
             flex-direction: column;
-            align-items: center;
+            margin-left: 150px;   /* Bỏ bên trái 5px */
+            margin-right: 150px;  /* Bỏ bên phải 5px */
+            margin-bottom: 20px; /* Bỏ dưới 10px */
+            border-radius: 5px;  /* Bo góc 5px */
+            overflow: hidden;
+            border: 2px solid rgb(243, 208, 215);
+            background: rgb(248, 232, 238);
+        }
+
+        .upper {
+            margin-top: 0px; /* Điều chỉnh giá trị này để tạo khoảng trống phù hợp */
+            display: flex;
+            flex-direction: column;
         }
 
         .bottom {
             display: flex;
-            justify-content: center;
-            width: 100%;
+            flex: 1; /* Phần dưới chiếm phần tỉ lệ linh hoạt của container */
         }
 
-        .left {
-            flex: 1;
-            padding-right: 20px;
-            display: flex;
-            flex-direction: column;
+        .left, .right {
+            flex: 1; /* Phần trái và phải chiếm bằng nhau */
+        }
+        .select-detail {
+            padding: 10px 20px;
+            font-size: 16px;
+            border: 2px solid transparent;
+            transition: border 0.3s ease;
         }
 
-        .product-images {
-            position: relative;
+        .select-detail.active {
+            border: 2px solid #3498db;
+        }
+
+        .quantity-controls {
             display: flex;
             align-items: center;
-            overflow-x: auto; /* Thanh cuộn ngang */
-            margin-bottom: 20px;
         }
 
-        .thumbnail {
-            width: 50px;
-            height: 50px;
-            margin-right: 5px;
+        .quantity-controls button {
+            border: none;
+            color: rgb(0, 0, 0); /* Màu chữ */
+            padding: 5px 5px;
+            margin: 0;
+            border-radius: 10px;
         }
 
-        #main-img {
-            max-width: 400px; /* Kích thước tối đa của hình ảnh lớn */
+        .quantity-controls input {
+            margin: 0;
+            padding: 6px;
+            width: 35px;
+            text-align: center;
+
+        }
+
+        .quantity-controls input:focus {
+            border-color: #555; /* Màu đường viền khi input được focus */
+        }
+
+        .quantity-controls button:active {
+            transform: scale(0.9); /* Giảm kích thước khi nút được nhấn */
+        }
+
+
+        .product-images {
+            margin: 10px;
+        }
+
+        .product-images img {
+
+            max-width: 100%;
             height: auto;
+        }
+
+        #secondary-img {
+            margin-top:10px;
+
+            display: flex;
+            gap: 10px; /* Khoảng cách giữa các ảnh */
+            max-width: 400px; /* Độ cao tối đa */
+            overflow-x: auto; /* Hiển thị thanh cuộn nếu chiều cao vượt quá max-height */
+        }
+
+        #secondary-img img {
+            width: 80px;
+            height: 80px;
         }
 
         .right {
@@ -48,10 +104,20 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            justify-content: flex-start; /* Canh lề trái */
         }
 
         .product-details {
             text-align: center;
+        }
+        .right .product-details > * {
+            margin-bottom: 50px; /* Khoảng cách giữa các phần tử con */
+        }
+        .right .product-details {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start; /* Canh lề trái */
+            align-items: flex-start; /* Canh lề trái */
         }
 
         .quantity-input {
@@ -76,9 +142,53 @@
         .quantity-input button:hover {
             background-color: #e0e0e0;
         }
+        /* Định dạng container */
+        #products {
+            display: flex;
+            flex-direction: column;
+            gap: 10px; /* Khoảng cách giữa các div con */
+        }
+
+        /* Định dạng các div con */
+        #products > div {
+            display: flex;
+            align-items: center;
+            gap: 10px; /* Khoảng cách giữa các phần tử trong div */
+        }
+
+        /* Định dạng các nút */
+        #products button {
+            padding: 5px 10px;
+            border: none;
+            background-color: #f0f0f0;
+            cursor: pointer;
+        }
+
+        /* Định dạng các span */
+        #products span {
+            font-weight: bold;
+        }
+        .right .product-details a {
+            font-size: 16px; /* Kích thước chữ của liên kết */
+        }
+
+        .right .product-details h2 {
+            font-size: 20px; /* Kích thước chữ của tiêu đề */
+        }
+
+        .right .product-details p {
+            font-size: 14px; /* Kích thước chữ của đoạn văn */
+        }
+
+        .right .product-details button {
+            width: 100px; /* Độ rộng của nút */
+            height: 40px; /* Độ cao của nút */
+            font-size: 16px; /* Kích thước chữ của nút */
+        }
+
 
         .add-to-cart-button {
-            background-color: #4caf50;
+            background-color: rgb(242, 190, 209);
             color: white;
             border: none;
             padding: 10px 20px;
@@ -92,7 +202,7 @@
         }
 
         .add-to-cart-button:hover {
-            background-color: #45a049;
+            background-color: rgb(242, 190, 209);
         }
 
         #add-to-cart.active {
@@ -100,9 +210,8 @@
         }
 
         #products button.active {
-            background-color: red;
+            background-color: rgb(242, 190, 209)
         }
-
         .overlay {
             position: fixed;
             top: 0;
@@ -113,6 +222,47 @@
             z-index: 9999;
             display: none;
         }
+
+        #main-img {
+            width: 500px;
+            height: 500px;
+        }
+
+        #product-price {
+            font-weight: bold;
+            color: red; /* Màu chữ đỏ */
+        }
+
+        .quantity-input {
+            display: flex;
+            align-items: center;
+        }
+
+        .quantity-input button {
+            border: none;
+            color: rgb(0, 0, 0); /* Màu chữ */
+            padding: 5px 5px;
+            margin: 20px;
+            border-radius: 10px;
+        }
+
+        .quantity-input input {
+            margin: 0px;
+            padding: 6px;
+            width: 35px;
+            text-align: center;
+
+        }
+
+        .quantity-input input:focus {
+            border-color: #555; /* Màu đường viền khi input được focus */
+        }
+
+        .quantity-input button:active {
+            transform: scale(0.9); /* Giảm kích thước khi nút được nhấn */
+        }
+
+
     </style>
 </head>
 <body>
@@ -132,10 +282,12 @@
         <div class="left">
             <div class="product-images">
                 <img th:src="${productLine.getImage()}" alt="" id="main-img"/>
-                <div th:each="entry : ${productLine.products}">
-                    <div th:each="image : ${entry.value.images}">
-                        <img th:src="${image.link}" alt="Image" class="thumbnail"/>
-                    </div>
+
+                <div id="secondary-img">
+                    <img th:src="${productLine.getImage()}" alt=""  onclick="changeImg(this)"/>
+                    <th:block th:each="entry : ${productLine.products}">
+                        <img th:each="image : ${entry.value.images}" th:src="${image.link}" alt="Image" class="thumbnail" onclick="changeImg(this)"/>
+                    </th:block>
                 </div>
             </div>
         </div>
@@ -143,15 +295,14 @@
             <div class="product-details">
                 <a th:text="${productLine.brand.name}" th:href="@{'/brands/' + ${productLine.brand.id}}">View Brand</a>
                 <h2 th:text="${productLine.name}">Product Line Name</h2>
-                <p th:text="'Price: ' + ${productLine.getDisplayPrice()}">Price</p>
+                <p th:text="${productLine.getDisplayPrice()}" id = "product-price">Price</p>
                 <div id="products"></div>
-                <div class="quantity-input">
+                <div class="quantity-input" >
                     <button id="decrease">-</button>
                     <input type="number" id="quantity" value="1" min="1">
                     <button id="increase">+</button>
                 </div>
                 <button class="add-to-cart-button active" id="add-to-cart" disabled>Add to Cart</button>
-
             </div>
         </div>
     </div>
@@ -268,43 +419,52 @@
         }
     }
 
-    function callLogin(){
-        window.location.href = '/login';
-    }
-
-    function addToCart() {
-        var activeButtons = $('#products button.active');
-        const key = activeButtons.map(function () {
-            return $(this).text();
-        }).get().join('-');
-        var id = productMap[key].id;
-        var quantity = parseInt($('#quantity').val());
-        if (quantity < 1) {
-            $('#quantity').val(1);
-            quantity = 1;
-        }
-        var overlay = $('#overlay');
-        overlay.show();
-        $.ajax({
-            url: "/cart/add",
-            type: "POST",
-            contentType: "application/json",
-            data: JSON.stringify(
-                {
-                    quantity: quantity,
-                    product: {
-                        id: id
-                    }
-                }),
-            success: function (response) {
-                overlay.hide();
-                alert("Thêm thành công");
-            },
-            error: function (xhr, status, error) {
-                overlay.hide();
+    $(document).ready(function () {
+        $("#add-to-cart").click(function (event) {
+            var activeButtons = $('#products button.active');
+            const key = activeButtons.map(function () {
+                return $(this).text();
+            }).get().join('-');
+            var id = productMap[key].id;
+            var quantity = parseInt($('#quantity').val());
+            if(quantity < 1){
+                $('#quantity').val(1);
+                quantity = 1;
             }
+            var overlay = $('#overlay');
+            overlay.show();
+            $.ajax({
+                url: "/cart/add",
+                type: "POST",
+                contentType: "application/json",
+                data: JSON.stringify(
+                    {
+                        quantity: quantity,
+                        product:{
+                            id:id
+                        }
+                    }),
+                success: function(response) {
+                    if (response==='Login'){
+                        window.location.href = '/login';
+                    }
+                    else{
+                        overlay.hide();
+                        alert("Thêm thành công");
+                    }
+
+                },
+                error: function(xhr, status, error) {
+                    overlay.hide();
+                }
+
+            });
 
         });
+    });
+    function changeImg(img) {
+        // Tìm phần tử hình ảnh chính
+       document.getElementById('main-img').src=img.getAttribute('src');
 
     }
 

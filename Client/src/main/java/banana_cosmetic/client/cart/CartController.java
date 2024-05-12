@@ -3,6 +3,7 @@ package banana_cosmetic.client.cart;
 import banana_cosmetic.common.entity.User;
 import banana_cosmetic.common.entity.cart.Cart;
 import banana_cosmetic.common.entity.cart.LineItem;
+import banana_cosmetic.common.entity.product.Product;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,19 +28,25 @@ public class CartController {
     public String viewCart(Model model, HttpServletRequest request) {
         HttpSession session = request.getSession();
         User customer = (User) session.getAttribute("customer");
+        if(customer == null) {
+            return "login";
+        }
         Cart cart = service.getCart(customer.getId());
         List<LineItemDto> items = new ArrayList<>();
         for (LineItem item : cart.getItems()) {
             LineItemDto dto = new LineItemDto();
             dto.setId(item.getId());
             dto.setQuantity(item.getQuantity());
-            dto.setProductLineName(item.getProduct().getProductLine().getName());
-            dto.setImageProductLine(item.getProduct().getProductLine().getImage());
-            dto.setPrice(item.getProduct().getCurrentPrice());
-            for (var entry : item.getProduct().getProductLine().getProducts().entrySet()) {
-                if (entry.getValue().getId().equals(item.getProduct().getId())) {
-                    dto.setClassification(entry.getKey());
-                    break;
+            Product product = item.getProduct();
+            if (product != null) {
+                dto.setProductLineName(product.getProductLine().getName());
+                dto.setImageProductLine(product.getProductLine().getImage());
+                dto.setPrice(product.getCurrentPrice());
+                for (var entry : product.getProductLine().getProducts().entrySet()) {
+                    if (entry.getValue().getId().equals(product.getId())) {
+                        dto.setClassification(entry.getKey());
+                        break;
+                    }
                 }
             }
             items.add(dto);
@@ -52,8 +59,12 @@ public class CartController {
     @ResponseBody
     public ResponseEntity<String> addToCart(@RequestBody LineItem lineitem, HttpServletRequest request) {
         try {
+
             HttpSession session = request.getSession();
             User customer = (User) session.getAttribute("customer");
+            if(customer == null) {
+                return new ResponseEntity<>("Login", HttpStatus.OK);
+            }
             service.addLineItemToCart(lineitem, customer.getId());
             return new ResponseEntity<>("Thêm thành công", HttpStatus.OK); // Trả về brand mới với mã trạng thái 200 OK
         } catch (Exception e) {
