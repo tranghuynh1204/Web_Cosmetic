@@ -36,8 +36,35 @@ public class UserService {
     }
 
 
+    public void save1(User user, String customerMail) {
+        try {
+            // Tìm kiếm người dùng trong cơ sở dữ liệu bằng ID
+            User existingUser = userRepository.findUserByMailIgnoreCase(customerMail);
+            // Kiểm tra xem người dùng có tồn tại không
+            if(existingUser != null) {
+                // Cập nhật thông tin người dùng
+                existingUser.setName(user.getName());
+                existingUser.setPhone(user.getPhone());
+                existingUser.setAddress(user.getAddress());
+//                existingUser.setMail(user.getMail());
+                // Lưu thông tin người dùng đã cập nhật vào cơ sở dữ liệu
+                userRepository.save(existingUser);
+            } else {
+                throw new IllegalArgumentException("User not found");
+            }
+        } catch (DataIntegrityViolationException e) {
+            throw new DataIntegrityViolationException("Phone number or email đã được sử dụng");
+        } catch (Exception e) {
+            throw e;
+        }
+    }
+
 
     public User findByMailAndPassword(String mail, String password) {
         return userRepository.findByMailAndPassword(mail, password);
+    }
+
+    public User findByMail(String customerMail) {
+        return userRepository.findUserByMailIgnoreCase(customerMail);
     }
 }

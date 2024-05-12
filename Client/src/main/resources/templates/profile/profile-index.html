@@ -1,0 +1,313 @@
+<!--<!DOCTYPE html>-->
+<!--<html lang="en" xmlns:th="http://www.thymeleaf.org">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+<!--    <title>User Profile</title>-->
+<!--    <style>-->
+<!--        /* CSS styles */-->
+<!--        /* CSS để chỉnh sửa header */-->
+<!--        header {-->
+<!--            background-color: #007bff; /* Màu xanh dương */-->
+<!--            color: white;-->
+<!--            text-align: center; /* Căn giữa nội dung */-->
+<!--            padding: 20px; /* Khoảng cách phía trên và dưới */-->
+<!--        }-->
+
+<!--        .search-keyword {-->
+<!--            border: 2px solid white; /* Viền trắng */-->
+<!--            border-radius: 5px; /* Đường cong viền */-->
+<!--            padding: 5px 10px; /* Khoảng cách bên trong */-->
+<!--            background-color: rgba(255, 255, 255, 0.2); /* Nền mờ */-->
+<!--            font-size: 20px; /* Kích thước chữ lớn hơn */-->
+<!--        }-->
+
+<!--        /* CSS để chia main ra làm 2 phần */-->
+<!--        .main-content {-->
+<!--            display: flex; /* Sử dụng flexbox */-->
+<!--        }-->
+
+<!--        .left-panel {-->
+<!--            width: 25%; /* Độ rộng của góc bên trái */-->
+<!--            background-color: #f0f0f0; /* Màu nền của góc bên trái */-->
+<!--            padding: 20px; /* Khoảng cách phía trên và dưới */-->
+<!--        }-->
+
+<!--        .right-panel {-->
+<!--            flex: 1; /* Phần còn lại chiếm toàn bộ phần lớn bên phải */-->
+<!--            padding: 20px; /* Khoảng cách phía trên và dưới */-->
+<!--            display: flex;-->
+<!--            flex-wrap: wrap; /* Cho phép các sản phẩm xuống hàng khi không đủ không gian */-->
+<!--            justify-content: space-between; /* Căn giữa các sản phẩm */-->
+<!--        }-->
+
+<!--        .profile-image {-->
+<!--            width: 200px; /* Độ rộng của ảnh */-->
+<!--            height: auto; /* Chiều cao tự điều chỉnh */-->
+<!--            margin-bottom: 20px; /* Khoảng cách phía dưới */-->
+<!--            border-radius: 50%; /* Đường cong viền */-->
+<!--        }-->
+
+<!--        .profile-info {-->
+<!--            margin-bottom: 20px; /* Khoảng cách phía dưới */-->
+<!--        }-->
+
+<!--        .profile-info p {-->
+<!--            margin-bottom: 10px; /* Khoảng cách giữa các dòng */-->
+<!--        }-->
+<!--    </style>-->
+<!--</head>-->
+<!--<body>-->
+
+<!--&lt;!&ndash; Header &ndash;&gt;-->
+<!--<header>-->
+<!--    &lt;!&ndash; Display search keyword &ndash;&gt;-->
+<!--    <div th:if="${keyword}">-->
+<!--        <span class="search-keyword" th:text="'Mail: ' + ${keyword}"></span>-->
+<!--    </div>-->
+<!--</header>-->
+
+<!--&lt;!&ndash; Main content &ndash;&gt;-->
+<!--<div class="container main-content">-->
+<!--    &lt;!&ndash; Left panel &ndash;&gt;-->
+<!--    <div class="left-panel">-->
+<!--        &lt;!&ndash; Button Edit, Đăng xuất, thay đổi mật khẩu, thiết kế các button này thật đẹp &ndash;&gt;-->
+<!--&lt;!&ndash;        <img class="profile-image" th:src="${customer.image}" alt="Profile Image">&ndash;&gt;-->
+<!--        <div>-->
+<!--            &lt;!&ndash; Button Edit &ndash;&gt;-->
+<!--            <button th:onclick="'/profile/edit'">Edit Profile</button>-->
+<!--        </div>-->
+<!--        <div>-->
+<!--            &lt;!&ndash; Button Change Password &ndash;&gt;-->
+<!--            <button th:onclick="'/profile/change-password'">Change Password</button>-->
+<!--        </div>-->
+<!--        <div>-->
+<!--            &lt;!&ndash; Button Logout &ndash;&gt;-->
+<!--            <form th:action="@{/logout}" method="post">-->
+<!--                <button type="submit">Logout</button>-->
+<!--            </form>-->
+<!--        </div>-->
+<!--    </div>-->
+
+<!--    <div class="right-panel">-->
+<!--        &lt;!&ndash; Display no results message if applicable &ndash;&gt;-->
+<!--        &lt;!&ndash; Display profile information &ndash;&gt;-->
+<!--        <div class="profile-info">-->
+<!--            <p><strong>Name:</strong> [[${userProfile.name}]]</p>-->
+<!--            <p><strong>Email:</strong> [[${userProfile.mail}]]</p>-->
+<!--            <p><strong>Phone:</strong> [[${userProfile.phone}]]</p>-->
+<!--            <p><strong>Address:</strong> [[${userProfile.address}]]</p>-->
+<!--            &lt;!&ndash; Add more fields as needed &ndash;&gt;-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+
+<!--</body>-->
+<!--</html>-->
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <style>
+        /* CSS styles */
+        /* CSS để chỉnh sửa header */
+        header {
+            background-color: #007bff; /* Màu xanh dương */
+            color: white;
+            text-align: center; /* Căn giữa nội dung */
+            padding: 20px; /* Khoảng cách phía trên và dưới */
+        }
+
+        .search-keyword {
+            border: 2px solid white; /* Viền trắng */
+            border-radius: 5px; /* Đường cong viền */
+            padding: 5px 10px; /* Khoảng cách bên trong */
+            background-color: rgba(255, 255, 255, 0.2); /* Nền mờ */
+            font-size: 20px; /* Kích thước chữ lớn hơn */
+        }
+
+        /* CSS để chia main ra làm 2 phần */
+        .main-content {
+            display: flex; /* Sử dụng flexbox */
+        }
+
+        .left-panel {
+            width: 25%; /* Độ rộng của góc bên trái */
+            background-color: #f0f0f0; /* Màu nền của góc bên trái */
+            padding: 20px; /* Khoảng cách phía trên và dưới */
+        }
+
+        .right-panel {
+            flex: 1; /* Phần còn lại chiếm toàn bộ phần lớn bên phải */
+            padding: 20px; /* Khoảng cách phía trên và dưới */
+            display: flex;
+            flex-wrap: wrap; /* Cho phép các sản phẩm xuống hàng khi không đủ không gian */
+            justify-content: space-between; /* Căn giữa các sản phẩm */
+        }
+
+        .profile-image {
+            width: 200px; /* Độ rộng của ảnh */
+            height: auto; /* Chiều cao tự điều chỉnh */
+            margin-bottom: 20px; /* Khoảng cách phía dưới */
+            border-radius: 50%; /* Đường cong viền */
+        }
+
+        .profile-info {
+            margin-bottom: 20px; /* Khoảng cách phía dưới */
+        }
+
+        .profile-info p {
+            margin-bottom: 10px; /* Khoảng cách giữa các dòng */
+        }
+
+        /* CSS cho hộp thoại */
+        .dialog-container {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .dialog-box {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            width: 400px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        .input-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .input-group input {
+            width: calc(100% - 10px);
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .button-group {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .button-group button {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .button-group button.cancel {
+            background-color: #ccc;
+            color: white;
+        }
+
+        .button-group button.edit {
+            background-color: #007bff;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Header -->
+<header>
+    <!-- Display search keyword -->
+    <div th:if="${keyword}">
+        <span class="search-keyword" th:text="'Mail: ' + ${keyword}"></span>
+    </div>
+</header>
+
+<!-- Main content -->
+<div class="container main-content">
+    <!-- Left panel -->
+    <div class="left-panel">
+        <!-- Button Edit -->
+        <button onclick="openEditDialog()">Edit Profile</button>
+        <!-- Button Change Password -->
+        <button th:onclick="'/profile/change-password'">Change Password</button>
+        <!-- Button Logout -->
+        <form th:action="@{/logout}" method="post">
+            <button type="submit">Logout</button>
+        </form>
+    </div>
+
+    <div class="right-panel">
+        <!-- Display no results message if applicable -->
+        <!-- Display profile information -->
+        <div class="profile-info">
+            <p><strong>Name:</strong> [[${userProfile.name}]]</p>
+            <p><strong>Email:</strong> [[${userProfile.mail}]]</p>
+            <p><strong>Phone:</strong> [[${userProfile.phone}]]</p>
+            <p><strong>Address:</strong> [[${userProfile.address}]]</p>
+            <!-- Add more fields as needed -->
+        </div>
+    </div>
+</div>
+
+<!-- Edit Profile Dialog -->
+<div class="dialog-container" id="editDialog">
+    <div class="dialog-box">
+        <h2>Edit Profile</h2>
+        <form th:action="@{/user/edit}" method="post">
+            <div class="input-group">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" th:value="${userProfile.name}" required>
+            </div>
+            <div class="input-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" th:value="${userProfile.mail}" required>
+            </div>
+            <div class="input-group">
+                <label for="phone">Phone:</label>
+                <input type="text" id="phone" name="phone" th:value="${userProfile.phone}" required>
+            </div>
+            <div class="input-group">
+                <label for="address">Address:</label>
+                <input type="text" id="address" name="address" th:value="${userProfile.address}" required>
+            </div>
+            <div class="button-group">
+                <button type="submit" class="edit">Save</button>
+                <button type="button" class="cancel" onclick="closeEditDialog()">Cancel</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    // JavaScript function to open the edit dialog
+    function openEditDialog() {
+        document.getElementById('editDialog').style.display = 'flex';
+    }
+
+    // JavaScript function to close the edit dialog
+    function closeEditDialog() {
+        document.getElementById('editDialog').style.display = 'none';
+    }
+</script>
+
+</body>
+</html>

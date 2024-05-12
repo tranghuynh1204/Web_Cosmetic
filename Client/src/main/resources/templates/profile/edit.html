@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Profile</title>
+    <style>
+        /* CSS styles */
+        .dialog-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5); /* Màu nền và độ mờ */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999; /* Z-index cao để đè lên phần nội dung */
+        }
+
+        .dialog-box {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            width: 400px; /* Độ rộng của hộp thoại */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); /* Đổ bóng */
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        .input-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .input-group input {
+            width: calc(100% - 10px);
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .button-group {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .button-group button {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .button-group button.cancel {
+            background-color: #ccc;
+            color: white;
+        }
+
+        .button-group button.edit {
+            background-color: #007bff;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Dialog Box -->
+<div class="dialog-container">
+    <div class="dialog-box">
+        <h2>Edit Profile</h2>
+        <form th:action="@{/profile/edit}" method="post">
+            <div class="input-group">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" th:value="${userProfile.name}" required>
+            </div>
+            <div class="input-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" th:value="${userProfile.mail}" required>
+            </div>
+            <div class="input-group">
+                <label for="phone">Phone:</label>
+                <input type="text" id="phone" name="phone" th:value="${userProfile.phone}" required>
+            </div>
+            <div class="input-group">
+                <label for="address">Address:</label>
+                <input type="text" id="address" name="address" th:value="${userProfile.address}" required>
+            </div>
+            <div class="button-group">
+                <button type="submit" class="edit">Edit</button>
+                <button type="button" class="cancel" onclick="closeDialog()">Cancel</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    // JavaScript function to close the dialog box
+    function closeDialog() {
+        document.querySelector('.dialog-container').style.display = 'none';
+    }
+</script>
+
+</body>
+</html>
