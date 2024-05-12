@@ -517,12 +517,12 @@
 
             <tr th:each="item : ${items}" th:id="${item.id}">
                 <td>
-                    <input type="checkbox" name="selectedProduct" th:value="${item.id}">
+                    <input type="checkbox" name="selectedProduct" th:value="${item.id}" th:disabled="${item.getProductLineName() == null}">
                 </td>
                 <td>
                     <img th:src="${item.getImageProductLine()}" alt="" width="80px">
                 </td>
-                <td th:text="${item.getProductLineName()}">
+                <td th:text="${item.getProductLineName() != null ? item.getProductLineName():'Ngừng kinh doanh'}" th:class = "${item.getProductLineName()==null ? 'disabled-row':''}">
                 </td>
                 <td>
                     <div class="quantity-controls">
